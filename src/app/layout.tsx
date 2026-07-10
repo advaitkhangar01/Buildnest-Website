@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import LenisProvider from "@/components/LenisProvider";
@@ -48,11 +48,26 @@ const oswald = Oswald({
   variable: "--font-proxima-nova-excn",
 });
 
+export const viewport: Viewport = {
+  themeColor: "#0F5C69",
+};
+
 export const metadata: Metadata = {
   title: "Buildnest | Premium Architecture, Interior & Construction Solutions",
   description: "Buildnest offers bespoke turnkey architecture, construction, and interior design solutions in Nagpur. Crafting timeless spaces with engineering precision.",
   keywords: ["Architecture", "Interior Design", "Construction", "Nagpur", "Premium", "Turnkey Projects", "Buildnest"],
   authors: [{ name: "Buildnest" }],
+  icons: {
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+    ],
+    apple: [
+      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+    ],
+  },
+  manifest: "/site.webmanifest",
   openGraph: {
     title: "Buildnest | Premium Architecture, Interior & Construction Solutions",
     description: "Bespoke turnkey architecture, construction, and interior design in Nagpur. Crafting timeless spaces with engineering precision.",
