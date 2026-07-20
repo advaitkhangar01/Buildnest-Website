@@ -86,7 +86,7 @@ npm run build
 
 ## 5. Configure Nginx Reverse Proxy
 
-Nginx acts as a reverse proxy, accepting external traffic on ports 80/443 and routing it to the internal Next.js server on port 3000.
+Nginx acts as a reverse proxy, accepting external traffic on ports 80/443 and routing it to the internal Next.js server on port 3001.
 
 1. Copy the template Nginx configuration:
    ```bash
