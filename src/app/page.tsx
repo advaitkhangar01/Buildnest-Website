@@ -7,6 +7,7 @@ import Process from "@/components/Process";
 import WhyBuildnest from "@/components/WhyBuildnest";
 import QualityPromise from "@/components/QualityPromise";
 import Testimonials from "@/components/Testimonials";
+import BlogSection from "@/components/BlogSection";
 import CTA from "@/components/CTA";
 import Footer from "@/components/Footer";
 
@@ -42,7 +43,10 @@ export default function Home() {
         {/* 07 / Testimonials quote slider */}
         <Testimonials />
 
-        {/* 08 / Dark luxury contact CTA block */}
+        {/* 08 / Editorial & Journal Insights */}
+        <BlogSection />
+
+        {/* 09 / Dark luxury contact CTA block */}
         <CTA />
       </main>
 

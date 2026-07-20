@@ -4,6 +4,7 @@ import Image from "next/image";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 import { MoveHorizontal, Ruler, Compass, CheckCircle2 } from "lucide-react";
+import TiltCard3D from "@/components/TiltCard3D";
 
 const hotspots = [
   {
@@ -121,13 +122,13 @@ export default function BrandIntro() {
     <section
       id="about"
       ref={sectionRef}
-      className="relative py-20 sm:py-28 lg:py-32 bg-bg-luxury border-b border-border-luxury/50 overflow-hidden"
+      className="relative py-20 sm:py-24 lg:py-32 bg-bg-luxury border-b border-border-luxury/50 overflow-hidden"
     >
       {/* Background Graphics & Depth Lights */}
       <div className="absolute inset-0 pointer-events-none select-none overflow-hidden">
         {/* Soft Radial Ambient Lights */}
-        <div className="absolute top-[-10%] right-[-10%] w-[600px] h-[600px] rounded-full bg-primary/3 blur-[140px]" />
-        <div className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] rounded-full bg-accent/3 blur-[120px]" />
+        <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] rounded-full bg-primary/3 blur-3xl [transform:translateZ(0)]" />
+        <div className="absolute bottom-[-10%] left-[-10%] w-[400px] h-[400px] rounded-full bg-accent/3 blur-3xl [transform:translateZ(0)]" />
         
         {/* CAD Grid Coordinates */}
         <div className="absolute top-[8%] right-[5%] text-text-luxury/10 text-[9px] font-mono tracking-[0.2em] uppercase">
@@ -173,15 +174,15 @@ export default function BrandIntro() {
       </div>
 
       <div className="mx-auto max-w-[1440px] px-5 sm:px-10 lg:px-16 relative">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-start">
           
           {/* Left Column: Index and Section Meta */}
-          <div className="lg:col-span-4 flex flex-col gap-6">
-            <span className="text-[11px] font-bold tracking-[0.2em] text-accent uppercase flex items-center gap-3">
+          <div className="lg:col-span-4 flex flex-col gap-5 sm:gap-6">
+            <span className="text-xs font-bold tracking-[0.2em] text-accent uppercase flex items-center gap-3">
               <span className="w-8 h-[1px] bg-accent inline-block" />
               01 / Introduction
             </span>
-            <h2 className="section-heading text-[clamp(42px,6vw,68px)] text-text-luxury leading-[1.05] font-bold tracking-tight">
+            <h2 className="section-heading text-[clamp(32px,5.5vw,68px)] text-text-luxury leading-[1.08] font-bold tracking-tight">
               {headingWords.map((word, idx) => (
                 <span key={idx} className="inline-block overflow-hidden mr-[0.22em] pb-1">
                   <motion.span
@@ -196,55 +197,43 @@ export default function BrandIntro() {
                 </span>
               ))}
             </h2>
-            <div className="flex items-center gap-4 mt-2">
-              <span className="flex items-center gap-1.5 font-mono text-[9px] text-muted-luxury uppercase">
-                <Compass className="w-3.5 h-3.5 text-accent" />
+            <div className="flex flex-wrap items-center gap-3 sm:gap-4 mt-1">
+              <span className="flex items-center gap-1.5 font-mono text-xs font-bold text-text-luxury uppercase">
+                <Compass className="w-4 h-4 text-accent shrink-0" />
                 Precision Engineered
               </span>
-              <span className="w-1.5 h-1.5 rounded-full bg-border-luxury" />
-              <span className="flex items-center gap-1.5 font-mono text-[9px] text-muted-luxury uppercase">
-                <Ruler className="w-3.5 h-3.5 text-accent" />
+              <span className="w-1.5 h-1.5 rounded-full bg-border-luxury hidden sm:inline-block" />
+              <span className="flex items-center gap-1.5 font-mono text-xs font-bold text-text-luxury uppercase">
+                <Ruler className="w-4 h-4 text-accent shrink-0" />
                 Bespoke Craft
               </span>
             </div>
           </div>
 
           {/* Right Column: Narrative Block */}
-          <div className="lg:col-span-8 flex flex-col gap-12 sm:gap-16">
-            <div className="flex flex-col gap-6">
+          <div className="lg:col-span-8 flex flex-col gap-6 sm:gap-10">
+            <div className="flex flex-col gap-4 sm:gap-5">
               {/* Animated Paragraph 1 */}
-              <div className="text-text-luxury text-[19px] sm:text-[24px] font-light leading-[1.65] max-w-[65ch] flex flex-wrap">
-                {p1Words.map((word, idx) => (
-                  <span key={idx} className="inline-block overflow-hidden mr-[0.2em] py-0.5">
-                    <motion.span
-                      initial={{ y: "105%", opacity: 0 }}
-                      whileInView={{ y: 0, opacity: 1 }}
-                      viewport={{ once: true, margin: "-80px" }}
-                      transition={{ duration: 0.8, delay: idx * 0.012, ease: [0.16, 1, 0.3, 1] }}
-                      className="inline-block"
-                    >
-                      {word}
-                    </motion.span>
-                  </span>
-                ))}
-              </div>
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                className="text-text-luxury text-[17px] sm:text-[24px] font-medium leading-[1.6] max-w-[65ch]"
+              >
+                {paragraph1}
+              </motion.p>
 
               {/* Animated Paragraph 2 */}
-              <div className="text-muted-luxury text-[15px] sm:text-[17px] leading-[1.8] font-light max-w-[65ch] flex flex-wrap">
-                {p2Words.map((word, idx) => (
-                  <span key={idx} className="inline-block overflow-hidden mr-[0.2em] py-0.5">
-                    <motion.span
-                      initial={{ y: "105%", opacity: 0 }}
-                      whileInView={{ y: 0, opacity: 1 }}
-                      viewport={{ once: true, margin: "-80px" }}
-                      transition={{ duration: 0.8, delay: 0.3 + idx * 0.008, ease: [0.16, 1, 0.3, 1] }}
-                      className="inline-block"
-                    >
-                      {word}
-                    </motion.span>
-                  </span>
-                ))}
-              </div>
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                className="text-muted-luxury text-[15px] sm:text-[18px] leading-[1.7] font-normal max-w-[65ch]"
+              >
+                {paragraph2}
+              </motion.p>
             </div>
 
             {/* Immersive Architectural Photo & CAD Grid */}
@@ -263,7 +252,7 @@ export default function BrandIntro() {
                   {/* Bottom Layer: The Reality Photo */}
                   <div className="absolute inset-0 z-0">
                     <Image
-                      src="/images/about_detail.png"
+                      src="/images/about_detail.webp"
                       alt="Minimalist Architectural Detail"
                       fill
                       sizes="(max-width: 1024px) 100vw, 50vw"
@@ -489,81 +478,85 @@ export default function BrandIntro() {
                 </div>
               </div>
 
-              {/* Stats Card */}
+              {/* Stats Card wrapped in 3D Tilt */}
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-100px" }}
                 transition={{ duration: 1.2, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                className="sm:col-span-4 border border-border-luxury rounded-[24px] p-6 flex flex-col justify-between bg-white/40 backdrop-blur-md relative overflow-hidden shadow-sm"
+                className="sm:col-span-4"
               >
-                {/* CAD style corner brackets */}
-                <div className="absolute top-0 left-0 w-3.5 h-3.5 border-t border-l border-accent/25" />
-                <div className="absolute top-0 right-0 w-3.5 h-3.5 border-t border-r border-accent/25" />
-                <div className="absolute bottom-0 left-0 w-3.5 h-3.5 border-b border-l border-accent/25" />
-                <div className="absolute bottom-0 right-0 w-3.5 h-3.5 border-b border-r border-accent/25" />
+                <TiltCard3D maxTilt={7} className="h-full">
+                  <div className="border border-border-luxury rounded-[24px] p-6 flex flex-col justify-between bg-white/80 backdrop-blur-md relative overflow-hidden shadow-3d-md preserve-3d h-full specular-border">
+                    {/* CAD style corner brackets */}
+                    <div className="absolute top-0 left-0 w-3.5 h-3.5 border-t border-l border-accent/25" />
+                    <div className="absolute top-0 right-0 w-3.5 h-3.5 border-t border-r border-accent/25" />
+                    <div className="absolute bottom-0 left-0 w-3.5 h-3.5 border-b border-l border-accent/25" />
+                    <div className="absolute bottom-0 right-0 w-3.5 h-3.5 border-b border-r border-accent/25" />
 
-                <div className="flex flex-col gap-4">
-                  <div className="flex items-center justify-between border-b border-border-luxury/50 pb-2">
-                    <span className="text-[10px] font-mono tracking-[0.15em] text-accent uppercase font-bold">
-                      Specification Sheet
-                    </span>
-                    <span className="text-[8px] font-mono text-muted-luxury">REF: BN-SPEC-01</span>
-                  </div>
-                  
-                  <div className="flex flex-col gap-1">
-                    <span className="text-[9px] font-mono tracking-wider text-muted-luxury uppercase">
-                      01 / Location
-                    </span>
-                    <span className="text-[14px] font-bold text-text-luxury uppercase font-heading tracking-wide">
-                      Nagpur, India
-                    </span>
-                    <span className="text-[8px] font-mono text-accent/60">21.1458° N, 79.0882° E</span>
-                  </div>
+                    <div className="flex flex-col gap-4 preserve-3d">
+                      <div className="flex items-center justify-between border-b border-border-luxury/50 pb-2 translate-z-10">
+                        <span className="text-[10px] font-mono tracking-[0.15em] text-accent uppercase font-bold">
+                          Specification Sheet
+                        </span>
+                        <span className="text-[8px] font-mono text-muted-luxury">REF: BN-SPEC-01</span>
+                      </div>
+                      
+                      <div className="flex flex-col gap-1 translate-z-20">
+                        <span className="text-[9px] font-mono tracking-wider text-muted-luxury uppercase">
+                          01 / Location
+                        </span>
+                        <span className="text-[14px] font-bold text-text-luxury uppercase font-heading tracking-wide">
+                          Nagpur, India
+                        </span>
+                        <span className="text-[8px] font-mono text-accent/60">21.1458° N, 79.0882° E</span>
+                      </div>
 
-                  <div className="w-full h-[1px] bg-border-luxury/50 my-0.5" />
+                      <div className="w-full h-[1px] bg-border-luxury/50 my-0.5" />
 
-                  <div className="flex flex-col gap-1">
-                    <span className="text-[9px] font-mono tracking-wider text-muted-luxury uppercase">
-                      02 / Design Paradigm
-                    </span>
-                    <span className="text-[14px] font-bold text-text-luxury uppercase font-heading tracking-wide">
-                      Modernist / Minimal
-                    </span>
-                    <span className="text-[8px] font-mono text-accent/60 font-medium">Restraint &amp; Permanence</span>
-                  </div>
+                      <div className="flex flex-col gap-1 translate-z-20">
+                        <span className="text-[9px] font-mono tracking-wider text-muted-luxury uppercase">
+                          02 / Design Paradigm
+                        </span>
+                        <span className="text-[14px] font-bold text-text-luxury uppercase font-heading tracking-wide">
+                          Modernist / Minimal
+                        </span>
+                        <span className="text-[8px] font-mono text-accent/60 font-medium">Restraint &amp; Permanence</span>
+                      </div>
 
-                  <div className="w-full h-[1px] bg-border-luxury/50 my-0.5" />
+                      <div className="w-full h-[1px] bg-border-luxury/50 my-0.5" />
 
-                  <div className="flex flex-col gap-1">
-                    <span className="text-[9px] font-mono tracking-wider text-muted-luxury uppercase">
-                      03 / Focus Areas
-                    </span>
-                    <span className="text-[14px] font-bold text-text-luxury uppercase font-heading tracking-wide">
-                      Architecture &amp; Turnkey
-                    </span>
-                    <span className="text-[8px] font-mono text-accent/60">Specs to Key Handover</span>
-                  </div>
-                </div>
+                      <div className="flex flex-col gap-1 translate-z-20">
+                        <span className="text-[9px] font-mono tracking-wider text-muted-luxury uppercase">
+                          03 / Focus Areas
+                        </span>
+                        <span className="text-[14px] font-bold text-text-luxury uppercase font-heading tracking-wide">
+                          Architecture &amp; Turnkey
+                        </span>
+                        <span className="text-[8px] font-mono text-accent/60">Specs to Key Handover</span>
+                      </div>
+                    </div>
 
-                <div className="mt-8 flex flex-col gap-2">
-                  <div className="flex justify-between text-[8px] font-mono text-muted-luxury">
-                    <span>TOLERANCE THRESHOLD</span>
-                    <span className="flex items-center gap-1 font-bold text-accent">
-                      <CheckCircle2 className="w-2.5 h-2.5 text-accent" />
-                      &lt;0.5mm PRECISION
-                    </span>
+                    <div className="mt-8 flex flex-col gap-2 translate-z-30">
+                      <div className="flex justify-between text-[8px] font-mono text-muted-luxury">
+                        <span>TOLERANCE THRESHOLD</span>
+                        <span className="flex items-center gap-1 font-bold text-accent">
+                          <CheckCircle2 className="w-2.5 h-2.5 text-accent" />
+                          &lt;0.5mm PRECISION
+                        </span>
+                      </div>
+                      <div className="w-full h-1 bg-border-luxury rounded-full overflow-hidden">
+                        <motion.div 
+                          initial={{ width: 0 }}
+                          whileInView={{ width: "99.98%" }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 1.5, delay: 0.5, ease: "easeOut" }}
+                          className="h-full bg-accent"
+                        />
+                      </div>
+                    </div>
                   </div>
-                  <div className="w-full h-1 bg-border-luxury rounded-full overflow-hidden">
-                    <motion.div 
-                      initial={{ width: 0 }}
-                      whileInView={{ width: "99.98%" }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 1.5, delay: 0.5, ease: "easeOut" }}
-                      className="h-full bg-accent"
-                    />
-                  </div>
-                </div>
+                </TiltCard3D>
               </motion.div>
             </div>
           </div>

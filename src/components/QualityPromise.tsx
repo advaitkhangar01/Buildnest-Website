@@ -2,6 +2,7 @@
 
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
+import TiltCard3D from "@/components/TiltCard3D";
 
 const promises = [
   {
@@ -33,7 +34,7 @@ export default function QualityPromise() {
     <section
       id="quality"
       ref={sectionRef}
-      className="relative py-16 sm:py-20 lg:py-24 bg-white border-b border-border-luxury/50 overflow-hidden"
+      className="relative py-20 sm:py-24 lg:py-28 bg-white border-b border-border-luxury/50 overflow-hidden"
     >
       <div className="absolute inset-0 blueprint-grid opacity-[0.2]" />
 
@@ -102,25 +103,29 @@ export default function QualityPromise() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-50px" }}
               transition={{ duration: 1, delay: idx * 0.15, ease: [0.16, 1, 0.3, 1] }}
-              className="border border-border-luxury rounded-[24px] p-8 bg-bg-luxury/40 hover:bg-bg-luxury transition-colors duration-500 flex flex-col gap-6"
+              className="h-full"
             >
-              {/* Graphic Element resembling CAD dimension line */}
-              <div className="flex items-center gap-4">
-                <span className="w-2 h-2 rounded-full bg-accent" />
-                <div className="flex-1 h-[1px] bg-border-luxury" />
-                <span className="text-[10px] font-bold tracking-[0.1em] text-muted-luxury/40 font-heading">
-                  SPEC: 0{idx + 1}
-                </span>
-              </div>
+              <TiltCard3D maxTilt={7} className="h-full">
+                <div className="border border-border-luxury rounded-[24px] p-8 bg-bg-luxury/80 backdrop-blur-md shadow-3d-md specular-border flex flex-col gap-6 h-full preserve-3d">
+                  {/* Graphic Element resembling CAD dimension line */}
+                  <div className="flex items-center gap-4 translate-z-10">
+                    <span className="w-2 h-2 rounded-full bg-accent" />
+                    <div className="flex-1 h-[1px] bg-border-luxury" />
+                    <span className="text-[10px] font-bold tracking-[0.1em] text-muted-luxury/40 font-heading">
+                      SPEC: 0{idx + 1}
+                    </span>
+                  </div>
 
-              <div className="flex flex-col gap-3">
-                <h3 className="text-[20px] font-bold tracking-tight text-text-luxury font-heading">
-                  {promise.title}
-                </h3>
-                <p className="text-muted-luxury text-[14px] leading-[1.65] font-light">
-                  {promise.description}
-                </p>
-              </div>
+                  <div className="flex flex-col gap-3 translate-z-20">
+                    <h3 className="text-[20px] font-bold tracking-tight text-text-luxury font-heading">
+                      {promise.title}
+                    </h3>
+                    <p className="text-muted-luxury text-[14px] leading-[1.65] font-light translate-z-10">
+                      {promise.description}
+                    </p>
+                  </div>
+                </div>
+              </TiltCard3D>
             </motion.div>
           ))}
         </div>

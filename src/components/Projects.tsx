@@ -4,35 +4,40 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
+import TiltCard3D from "@/components/TiltCard3D";
 
 const projects = [
   {
     title: "The Glass Ribbon Facade",
+    slug: "the-glass-ribbon-facade",
     category: "Commercial Architecture",
-    image: "/images/project_1.png",
+    image: "/images/project_1.webp",
     location: "Nagpur, Commercial District",
-    span: "lg:col-span-7 aspect-[3/2.2]",
+    span: "lg:col-span-7 aspect-[4/3] sm:aspect-[16/11] lg:aspect-[3/2.2]",
   },
   {
     title: "Residence of Concrete Elements",
+    slug: "residence-of-concrete-elements",
     category: "Bespoke Residence",
-    image: "/images/project_2.png",
+    image: "/images/project_2.webp",
     location: "Nagpur, Civil Lines",
-    span: "lg:col-span-5 aspect-[4/5]",
+    span: "lg:col-span-5 aspect-[4/3] sm:aspect-[4/5]",
   },
   {
     title: "Brutalist Pavilion Villa",
+    slug: "brutalist-pavilion-villa",
     category: "Turnkey Villa",
-    image: "/images/project_3.png",
+    image: "/images/project_3.webp",
     location: "Nagpur, Wardha Road",
-    span: "lg:col-span-5 aspect-[4/5]",
+    span: "lg:col-span-5 aspect-[4/3] sm:aspect-[4/5]",
   },
   {
     title: "The Floating Penthouse",
+    slug: "the-floating-penthouse",
     category: "Bespoke Interior",
-    image: "/images/project_4.png",
+    image: "/images/project_4.webp",
     location: "Nagpur, Ramdaspeth",
-    span: "lg:col-span-7 aspect-[3/2.2]",
+    span: "lg:col-span-7 aspect-[4/3] sm:aspect-[16/11] lg:aspect-[3/2.2]",
   },
 ];
 
@@ -51,13 +56,13 @@ export default function Projects() {
     <section
       id="projects"
       ref={sectionRef}
-      className="relative py-16 sm:py-20 lg:py-24 bg-bg-luxury border-b border-border-luxury/50 overflow-hidden"
+      className="relative py-20 sm:py-24 lg:py-32 bg-bg-luxury border-b border-border-luxury/50 overflow-hidden"
     >
       {/* Background Graphics & Depth Lights */}
       <div className="absolute inset-0 pointer-events-none select-none overflow-hidden">
         {/* Soft Radial Ambient Lights */}
-        <div className="absolute top-[-10%] left-[20%] w-[600px] h-[600px] rounded-full bg-primary/3 blur-[140px] pointer-events-none" />
-        <div className="absolute bottom-[-10%] right-[10%] w-[500px] h-[500px] rounded-full bg-accent/3 blur-[120px] pointer-events-none" />
+        <div className="absolute top-[-10%] left-[20%] w-[500px] h-[500px] rounded-full bg-primary/3 blur-3xl [transform:translateZ(0)] pointer-events-none" />
+        <div className="absolute bottom-[-10%] right-[10%] w-[400px] h-[400px] rounded-full bg-accent/3 blur-3xl [transform:translateZ(0)] pointer-events-none" />
         
         {/* Horizontal structural axis line */}
         <motion.div
@@ -84,9 +89,9 @@ export default function Projects() {
       <div className="mx-auto max-w-[1440px] px-5 sm:px-10 lg:px-16">
         
         {/* Header */}
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-10 lg:mb-14">
-          <div className="flex flex-col gap-6 max-w-[640px]">
-            <span className="text-[11px] font-bold tracking-[0.16em] text-accent uppercase flex items-center gap-3">
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-6 lg:mb-8">
+          <div className="flex flex-col gap-5 max-w-[640px]">
+            <span className="text-xs font-bold tracking-[0.16em] text-accent uppercase flex items-center gap-3">
               <span className="w-6 h-[1px] bg-accent inline-block" />
               03 / Selected Works
             </span>
@@ -96,8 +101,8 @@ export default function Projects() {
           </div>
           <div>
             <Link
-              href="#contact"
-              className="text-[12px] font-bold tracking-[0.15em] text-text-luxury hover:text-accent uppercase flex items-center gap-3 group transition-colors"
+              href="/projects"
+              className="text-xs font-bold tracking-[0.15em] text-text-luxury hover:text-accent uppercase flex items-center gap-3 group transition-colors"
             >
               View All Commissions
               <svg
@@ -109,8 +114,8 @@ export default function Projects() {
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  strokeWidth="1.5"
-                  d="M14 5l7 7m0 0l-7 7m7-7H3"
+                  strokeWidth="2"
+                  d="M17 8l4 4m0 0l-4 4m4-4H3"
                 />
               </svg>
             </Link>
@@ -126,59 +131,65 @@ export default function Projects() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 1.2, delay: idx * 0.1, ease: [0.16, 1, 0.3, 1] }}
-              className={`relative overflow-hidden rounded-[20px] bg-border-luxury group ${project.span}`}
+              className={`${project.span}`}
             >
-              {/* Image Container with Parallax Zoom */}
-              <div className="relative w-full h-full overflow-hidden">
-                <Image
-                  src={project.image}
-                  alt={project.title}
-                  fill
-                  sizes="(max-width: 1024px) 100vw, 50vw"
-                  className="object-cover transition-transform duration-[2.5s] ease-[0.16, 1, 0.3, 1] group-hover:scale-105"
-                />
-                
-                {/* Soft Vignette and Gradient Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/10 opacity-60 group-hover:opacity-85 transition-opacity duration-500 ease-in-out" />
-              </div>
-
-              {/* Text Info - Bottom Left */}
-              <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8 flex flex-col justify-end text-bg-luxury z-10">
-                <span className="text-[10px] font-bold tracking-[0.15em] text-accent uppercase mb-2">
-                  {project.category}
-                </span>
-                
-                <h3 className="text-[24px] sm:text-[28px] font-bold tracking-tight text-white font-heading mb-4 translate-y-0 lg:translate-y-2 lg:group-hover:translate-y-0 transition-transform duration-500 ease-out">
-                  {project.title}
-                </h3>
-                
-                {/* Hidden Meta Information revealed on Hover (Visible by default on mobile) */}
-                <div className="h-auto opacity-80 mt-2 lg:mt-0 lg:h-0 lg:opacity-0 lg:group-hover:h-auto lg:group-hover:opacity-80 overflow-hidden transition-all duration-500 ease-out flex items-center justify-between">
-                  <span className="text-[13px] font-light tracking-wide text-bg-luxury/70">
-                    {project.location}
-                  </span>
-                  
-                  <span className="text-[11px] font-bold tracking-[0.15em] text-white uppercase flex items-center gap-2">
-                    Explore
-                    <svg
-                      className="w-3.5 h-3.5 stroke-white"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="1.8"
-                        d="M14 5l7 7m0 0l-7 7m7-7H3"
+              <TiltCard3D maxTilt={7} className="h-full">
+                <Link href={`/projects/${project.slug}`} className="block h-full cursor-pointer">
+                  <div className="relative w-full h-full overflow-hidden rounded-[20px] bg-border-luxury group preserve-3d shadow-3d-md specular-border">
+                    {/* Image Container with Parallax Zoom */}
+                    <div className="relative w-full h-full overflow-hidden">
+                      <Image
+                        src={project.image}
+                        alt={project.title}
+                        fill
+                        sizes="(max-width: 1024px) 100vw, 50vw"
+                        className="object-cover transition-transform duration-[2.5s] ease-[0.16, 1, 0.3, 1] group-hover:scale-105"
                       />
-                    </svg>
-                  </span>
-                </div>
-              </div>
+                      
+                      {/* Soft Vignette and Gradient Overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/10 opacity-70 group-hover:opacity-90 transition-opacity duration-500 ease-in-out" />
+                    </div>
 
-              {/* Accent Highlight lines */}
-              <div className="absolute inset-0 border border-white/5 pointer-events-none rounded-[20px] transition-all duration-500 group-hover:border-accent/20" />
+                    {/* Text Info - Bottom Left Floating on Z-Axis */}
+                    <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-8 flex flex-col justify-end text-bg-luxury z-10 preserve-3d">
+                      <span className="text-[11px] sm:text-xs font-bold tracking-[0.15em] text-accent uppercase mb-1.5 translate-z-20">
+                        {project.category}
+                      </span>
+                      
+                      <h3 className="text-[20px] sm:text-[30px] font-bold tracking-tight text-white font-heading mb-2 sm:mb-3 translate-y-0 lg:translate-y-2 lg:group-hover:translate-y-0 transition-transform duration-500 ease-out translate-z-30 drop-shadow-md">
+                        {project.title}
+                      </h3>
+                      
+                      {/* Hidden Meta Information revealed on Hover (Visible by default on mobile) */}
+                      <div className="h-auto opacity-95 mt-2 lg:mt-0 lg:h-0 lg:opacity-0 lg:group-hover:h-auto lg:group-hover:opacity-95 overflow-hidden transition-all duration-500 ease-out flex items-center justify-between translate-z-20">
+                        <span className="text-sm font-medium tracking-wide text-bg-luxury">
+                          {project.location}
+                        </span>
+                        
+                        <span className="text-[11px] font-bold tracking-[0.15em] text-white uppercase flex items-center gap-2">
+                          Explore
+                          <svg
+                            className="w-3.5 h-3.5 stroke-white"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="1.8"
+                              d="M14 5l7 7m0 0l-7 7m7-7H3"
+                            />
+                          </svg>
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Accent Highlight lines */}
+                    <div className="absolute inset-0 border border-white/10 pointer-events-none rounded-[20px] transition-all duration-500 group-hover:border-accent/40 translate-z-10" />
+                  </div>
+                </Link>
+              </TiltCard3D>
             </motion.div>
           ))}
         </div>

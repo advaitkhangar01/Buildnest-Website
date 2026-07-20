@@ -2,6 +2,7 @@
 
 import { useState, useRef } from "react";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
+import TiltCard3D from "@/components/TiltCard3D";
 
 const testimonials = [
   {
@@ -51,7 +52,7 @@ export default function Testimonials() {
     <section
       id="testimonials"
       ref={sectionRef}
-      className="relative py-16 sm:py-20 lg:py-24 bg-bg-luxury border-b border-border-luxury/50 overflow-hidden"
+      className="relative py-20 sm:py-24 lg:py-28 bg-bg-luxury border-b border-border-luxury/50 overflow-hidden"
     >
       {/* Background Graphics & Depth Lights */}
       <div className="absolute inset-0 pointer-events-none select-none overflow-hidden">
@@ -117,37 +118,41 @@ export default function Testimonials() {
             </div>
           </div>
 
-          {/* Right Column: Sliding Testimonial Quote */}
-          <div className="lg:col-span-8 relative min-h-[300px] flex items-center">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeIndex}
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                className="flex flex-col gap-5 text-left"
-              >
-                {/* Large double quotes indicator */}
-                <span className="text-[96px] leading-[0.1] text-accent/10 font-serif h-4 block select-none">
-                  “
-                </span>
-                
-                <blockquote className="text-text-luxury text-[20px] sm:text-[24px] font-light leading-[1.7] max-w-[60ch]">
-                  {testimonials[activeIndex].quote}
-                </blockquote>
+          {/* Right Column: Sliding Testimonial Quote with 3D Tilt */}
+          <div className="lg:col-span-8 relative min-h-[300px]">
+            <TiltCard3D maxTilt={6} className="w-full">
+              <div className="p-8 sm:p-12 bg-white rounded-[28px] border border-border-luxury shadow-3d-lg specular-border relative preserve-3d">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={activeIndex}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -20 }}
+                    transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                    className="flex flex-col gap-5 text-left preserve-3d"
+                  >
+                    {/* Large double quotes indicator */}
+                    <span className="text-[96px] leading-[0.1] text-accent/15 font-serif h-4 block select-none translate-z-10">
+                      “
+                    </span>
+                    
+                    <blockquote className="text-text-luxury text-[20px] sm:text-[24px] font-light leading-[1.7] max-w-[60ch] translate-z-30">
+                      {testimonials[activeIndex].quote}
+                    </blockquote>
 
-                {/* Author Info */}
-                <div className="flex flex-col gap-1 mt-4">
-                  <cite className="not-italic text-[16px] font-bold text-text-luxury font-heading">
-                    {testimonials[activeIndex].author}
-                  </cite>
-                  <span className="text-[12px] font-medium tracking-wide text-muted-luxury">
-                    {testimonials[activeIndex].role} — <span className="text-accent">{testimonials[activeIndex].project}</span>
-                  </span>
-                </div>
-              </motion.div>
-            </AnimatePresence>
+                    {/* Author Info */}
+                    <div className="flex flex-col gap-1 mt-4 translate-z-20">
+                      <cite className="not-italic text-[16px] font-bold text-text-luxury font-heading">
+                        {testimonials[activeIndex].author}
+                      </cite>
+                      <span className="text-[12px] font-medium tracking-wide text-muted-luxury">
+                        {testimonials[activeIndex].role} — <span className="text-accent">{testimonials[activeIndex].project}</span>
+                      </span>
+                    </div>
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+            </TiltCard3D>
           </div>
 
         </div>

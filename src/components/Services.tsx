@@ -3,6 +3,7 @@
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { useRef, useState } from "react";
 import Image from "next/image";
+import TiltCard3D from "@/components/TiltCard3D";
 
 const services = [
   {
@@ -11,7 +12,7 @@ const services = [
     tagline: "Spatial choreography & modern forms.",
     description:
       "Bespoke spatial design combining structural expression, contextual response, and timeless modernist forms.",
-    image: "/images/services/architecture.png",
+    image: "/images/services/architecture.webp",
     highlights: [
       "Contextual & bioclimatic site analysis",
       "High-fidelity 3D modeling & cinematic VR",
@@ -34,7 +35,7 @@ const services = [
     tagline: "Precision civil engineering & load dynamics.",
     description:
       "Precision civil engineering utilizing high-grade materials, structural safety audits, and flawless masonry.",
-    image: "/images/services/construction.png",
+    image: "/images/services/construction.webp",
     highlights: [
       "High-strength reinforced concrete core",
       "Micro-precision masonry alignment checks",
@@ -56,7 +57,7 @@ const services = [
     tagline: "Curated material palettes & bespoke millwork.",
     description:
       "Curated material palettes, custom millwork, ambient lighting design, and ergonomic luxury space planning.",
-    image: "/images/services/interior.png",
+    image: "/images/services/interior.webp",
     highlights: [
       "Ergonomic high-end space planning",
       "Bespoke veneer, marble, & brass millwork",
@@ -78,7 +79,7 @@ const services = [
     tagline: "End-to-end single point accountability.",
     description:
       "End-to-end design-and-build responsibility, absolute budget guarantee, and fully integrated management.",
-    image: "/images/services/turnkey.png",
+    image: "/images/services/turnkey.webp",
     highlights: [
       "Absolute lock-in cost guarantee",
       "Zero vendor conflict project management",
@@ -98,29 +99,28 @@ const services = [
     title: "Liaisoning",
     tagline: "Navigating complex municipal regulations.",
     description:
-      "Navigating NIT, NMC, and corporate building regulations, local municipal approvals, and legal clearances.",
-    image: "/images/services/liaisoning.png",
+      "Securing municipal sanctions, structural permits, environmental NOCs, and legal clearances.",
+    image: "/images/services/liaisoning.webp",
     highlights: [
-      "NIT & NMC building permit approvals",
-      "Structural safety certificates processing",
-      "Legal clearance & zone verification checks",
-      "Occupancy certificate & utility connections"
+      "NIT & NMC sanction drawing approvals",
+      "Environmental & fire safety clearances",
+      "Structural stability certificates",
+      "Occupancy & completion certificates"
     ],
-    technicalSpecs: { label: "Permit Clearance", value: "100% Compliant" },
+    technicalSpecs: { label: "Compliance Rate", value: "100% Guaranteed" },
     icon: (
       <svg className="w-6 h-6 stroke-accent" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 12h6M9 16h6M9 8h2" />
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" />
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
       </svg>
     ),
   },
   {
     index: "06",
     title: "Project Management",
-    tagline: "Strict schedule tracking & quality audits.",
+    tagline: "Rigorous milestone audits & cost controls.",
     description:
-      "Strict schedule tracking, quality control inspections, material testing protocols, and cost optimization.",
-    image: "/images/services/project_management.png",
+      "Independent engineering oversight, material testing audits, contractor management, and BOQ cost tracking.",
+    image: "/images/services/project_management.webp",
     highlights: [
       "Real-time Gantt schedule tracking",
       "Multi-stage concrete & masonry testing",
@@ -154,15 +154,15 @@ export default function Services() {
     <section
       id="services"
       ref={sectionRef}
-      className="relative py-16 sm:py-20 lg:py-24 bg-white border-b border-border-luxury/50 overflow-hidden"
+      className="relative py-20 sm:py-24 lg:py-32 bg-white border-b border-border-luxury/50 overflow-hidden"
     >
       {/* Invisible grid pattern element in background */}
       <div className="absolute inset-0 blueprint-grid opacity-[0.2]" />
 
       {/* Background Graphics & Depth Lights */}
       <div className="absolute inset-0 pointer-events-none select-none overflow-hidden">
-        {/* Soft Radial Ambient Glow */}
-        <div className="absolute top-[20%] left-[-10%] w-[550px] h-[550px] rounded-full bg-accent/4 blur-[130px] pointer-events-none" />
+        {/* Subtle radial depth spotlight */}
+        <div className="absolute top-1/2 left-[-10%] w-[500px] h-[500px] rounded-full bg-accent/3 blur-3xl [transform:translateZ(0)] pointer-events-none" />
         <div className="absolute bottom-[10%] right-[-10%] w-[450px] h-[450px] rounded-full bg-primary/3 blur-[110px] pointer-events-none" />
 
         {/* CAD Grid Coordinates */}
@@ -189,7 +189,7 @@ export default function Services() {
 
       <div className="relative z-10 mx-auto max-w-[1440px] px-5 sm:px-10 lg:px-16">
         {/* Header */}
-        <div className="flex flex-col gap-6 mb-10 lg:mb-16 max-w-[700px]">
+        <div className="flex flex-col gap-6 mb-6 lg:mb-8 max-w-[700px]">
           <span className="text-[11px] font-bold tracking-[0.16em] text-accent uppercase flex items-center gap-3">
             <span className="w-6 h-[1px] bg-accent inline-block" />
             02 / Core Offerings
@@ -202,70 +202,72 @@ export default function Services() {
         {/* Interactive Split Layout */}
         <div className="lg:grid lg:grid-cols-12 lg:gap-16 items-start">
           
-          {/* Left Column - Sticky Visual Showcase */}
+          {/* Left Column - Sticky Visual Showcase with 3D Depth */}
           <div className="hidden lg:block lg:col-span-5 lg:sticky lg:top-28 h-fit">
-            <div className="relative w-full aspect-[4/5] rounded-[24px] border border-border-luxury bg-bg-luxury p-4 flex flex-col justify-between overflow-hidden shadow-[0_30px_70px_rgba(15,92,105,0.04)]">
-              {/* Corner brackets for engineering drawing feel */}
-              <div className="absolute top-4 left-4 w-4 h-4 border-t border-l border-accent/40" />
-              <div className="absolute top-4 right-4 w-4 h-4 border-t border-r border-accent/40" />
-              <div className="absolute bottom-4 left-4 w-4 h-4 border-b border-l border-accent/40" />
-              <div className="absolute bottom-4 right-4 w-4 h-4 border-b border-r border-accent/40" />
+            <TiltCard3D maxTilt={6} className="w-full">
+              <div className="relative w-full aspect-[4/5] rounded-[24px] border border-border-luxury bg-bg-luxury p-4 flex flex-col justify-between overflow-hidden shadow-3d-lg specular-border preserve-3d">
+                {/* Corner brackets for engineering drawing feel */}
+                <div className="absolute top-4 left-4 w-4 h-4 border-t border-l border-accent/40 translate-z-20" />
+                <div className="absolute top-4 right-4 w-4 h-4 border-t border-r border-accent/40 translate-z-20" />
+                <div className="absolute bottom-4 left-4 w-4 h-4 border-b border-l border-accent/40 translate-z-20" />
+                <div className="absolute bottom-4 right-4 w-4 h-4 border-b border-r border-accent/40 translate-z-20" />
 
-              {/* Blueprint coordinates and labels */}
-              <div className="absolute top-6 left-6 text-[9px] font-mono tracking-wider text-muted-luxury/50 uppercase">
-                LAT_LON: 21.14° N, 79.08° E
-              </div>
-              <div className="absolute top-6 right-6 text-[9px] font-mono tracking-wider text-muted-luxury/50 uppercase">
-                SCALE: 1:50
-              </div>
+                {/* Blueprint coordinates and labels */}
+                <div className="absolute top-6 left-6 text-[9px] font-mono tracking-wider text-muted-luxury/50 uppercase translate-z-10">
+                  LAT_LON: 21.14° N, 79.08° E
+                </div>
+                <div className="absolute top-6 right-6 text-[9px] font-mono tracking-wider text-muted-luxury/50 uppercase translate-z-10">
+                  SCALE: 1:50
+                </div>
 
-              {/* Image Frame */}
-              <div className="w-full h-[82%] relative rounded-xl overflow-hidden mt-6 border border-border-luxury/50 bg-white">
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={activeIdx}
-                    initial={{ opacity: 0, scale: 1.05 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.98 }}
-                    transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                    className="absolute inset-0 w-full h-full"
-                  >
-                    <Image
-                      src={services[activeIdx].image}
-                      alt={services[activeIdx].title}
-                      fill
-                      priority
-                      className="object-cover transition-transform duration-75"
-                      sizes="(max-width: 1024px) 100vw, 40vw"
-                    />
-                    {/* Visual filter grid overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-primary/10 via-transparent to-transparent pointer-events-none mix-blend-multiply" />
-                  </motion.div>
-                </AnimatePresence>
+                {/* Image Frame */}
+                <div className="w-full h-[82%] relative rounded-xl overflow-hidden mt-6 border border-border-luxury/50 bg-white translate-z-20 shadow-md">
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={activeIdx}
+                      initial={{ opacity: 0, scale: 1.05 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.98 }}
+                      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                      className="absolute inset-0 w-full h-full"
+                    >
+                      <Image
+                        src={services[activeIdx].image}
+                        alt={services[activeIdx].title}
+                        fill
+                        priority
+                        className="object-cover transition-transform duration-75"
+                        sizes="(max-width: 1024px) 100vw, 40vw"
+                      />
+                      {/* Visual filter grid overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-primary/10 via-transparent to-transparent pointer-events-none mix-blend-multiply" />
+                    </motion.div>
+                  </AnimatePresence>
 
-                {/* Thin overlay crosshairs */}
-                <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
-                  <div className="w-[30px] h-[0.5px] bg-white/30" />
-                  <div className="h-[30px] w-[0.5px] bg-white/30 absolute" />
+                  {/* Thin overlay crosshairs */}
+                  <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
+                    <div className="w-[30px] h-[0.5px] bg-white/30" />
+                    <div className="h-[30px] w-[0.5px] bg-white/30 absolute" />
+                  </div>
+                </div>
+
+                {/* Bottom Labels */}
+                <div className="flex justify-between items-end mt-2 z-10 translate-z-30">
+                  <div className="flex flex-col gap-0.5">
+                    <span className="text-[10px] font-mono text-muted-luxury/40 uppercase">System block ID</span>
+                    <span className="text-[12px] font-mono font-medium text-text-luxury">
+                      SYS_ID: BN_CORE_0{activeIdx + 1}
+                    </span>
+                  </div>
+                  <div className="flex flex-col items-end gap-0.5">
+                    <span className="text-[10px] font-mono text-muted-luxury/40 uppercase">Engineering spec</span>
+                    <span className="text-[12px] font-mono font-medium text-accent">
+                      {services[activeIdx].technicalSpecs.label}: {services[activeIdx].technicalSpecs.value}
+                    </span>
+                  </div>
                 </div>
               </div>
-
-              {/* Bottom Labels */}
-              <div className="flex justify-between items-end mt-2 z-10">
-                <div className="flex flex-col gap-0.5">
-                  <span className="text-[10px] font-mono text-muted-luxury/40 uppercase">System block ID</span>
-                  <span className="text-[12px] font-mono font-medium text-text-luxury">
-                    SYS_ID: BN_CORE_0{activeIdx + 1}
-                  </span>
-                </div>
-                <div className="flex flex-col items-end gap-0.5">
-                  <span className="text-[10px] font-mono text-muted-luxury/40 uppercase">Engineering spec</span>
-                  <span className="text-[12px] font-mono font-medium text-accent">
-                    {services[activeIdx].technicalSpecs.label}: {services[activeIdx].technicalSpecs.value}
-                  </span>
-                </div>
-              </div>
-            </div>
+            </TiltCard3D>
           </div>
 
           {/* Right Column - Interactive Accordion List */}
@@ -296,22 +298,22 @@ export default function Services() {
                         setActiveIdx(idx);
                       }
                     }}
-                    className="w-full flex items-center justify-between py-6 text-left cursor-pointer focus:outline-none focus-visible:bg-bg-luxury/40 px-2"
+                    className="w-full flex items-center justify-between py-5 sm:py-6 text-left cursor-pointer focus:outline-none focus-visible:bg-bg-luxury/40 px-2 gap-3"
                   >
-                    <div className="flex items-center gap-6 sm:gap-8">
+                    <div className="flex items-center gap-3 sm:gap-8 min-w-0 flex-1">
                       {/* Monospace Index */}
-                      <span className="text-[12px] font-mono text-accent font-bold tracking-wider">
+                      <span className="text-[11px] sm:text-[12px] font-mono text-accent font-bold tracking-wider shrink-0">
                         {service.index} /
                       </span>
 
                       {/* Icon */}
-                      <div className="p-2.5 bg-bg-luxury rounded-lg border border-border-luxury group-hover:border-accent/30 transition-colors duration-300">
+                      <div className="p-2 sm:p-2.5 bg-bg-luxury rounded-lg border border-border-luxury group-hover:border-accent/30 transition-colors duration-300 shrink-0">
                         {service.icon}
                       </div>
 
                       {/* Title & Tagline */}
-                      <div className="flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-4">
-                        <h3 className="text-[20px] sm:text-[22px] font-bold tracking-tight text-text-luxury font-heading group-hover:text-primary transition-colors duration-300">
+                      <div className="flex flex-col sm:flex-row sm:items-baseline gap-0.5 sm:gap-4 min-w-0 flex-1">
+                        <h3 className="text-[17px] sm:text-[22px] font-bold tracking-tight text-text-luxury font-heading group-hover:text-primary transition-colors duration-300 truncate">
                           {service.title}
                         </h3>
                         <span className="text-[12px] text-muted-luxury/60 font-light hidden md:inline-block">
@@ -324,7 +326,7 @@ export default function Services() {
                     <motion.div
                       animate={{ rotate: isExpanded ? 45 : 0 }}
                       transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                      className={`w-10 h-10 rounded-full border flex items-center justify-center transition-colors duration-300 ${
+                      className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full border flex items-center justify-center transition-colors duration-300 shrink-0 ${
                         isExpanded
                           ? "bg-accent border-accent text-white"
                           : "border-border-luxury group-hover:border-accent text-muted-luxury group-hover:text-accent"
@@ -356,9 +358,9 @@ export default function Services() {
                         transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                         className="overflow-hidden"
                       >
-                        <div className="pb-8 pl-12 sm:pl-28 pr-4 flex flex-col gap-6">
+                        <div className="pb-8 pl-2 sm:pl-28 pr-2 flex flex-col gap-6">
                           {/* Tagline for Mobile */}
-                          <span className="text-[13px] text-accent/80 font-medium md:hidden uppercase tracking-wider font-mono">
+                          <span className="text-[12px] text-accent font-semibold md:hidden uppercase tracking-wider font-mono">
                             {service.tagline}
                           </span>
 

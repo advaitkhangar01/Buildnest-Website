@@ -2,6 +2,7 @@
 
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
+import TiltCard3D from "@/components/TiltCard3D";
 
 const parameters = [
   {
@@ -33,7 +34,7 @@ export default function WhyBuildnest() {
     <section
       id="why-us"
       ref={sectionRef}
-      className="relative py-16 sm:py-20 lg:py-24 bg-bg-luxury border-b border-border-luxury/50 overflow-hidden"
+      className="relative py-20 sm:py-24 lg:py-28 bg-bg-luxury border-b border-border-luxury/50 overflow-hidden"
     >
       {/* Background Graphics & Depth Lights */}
       <div className="absolute inset-0 pointer-events-none select-none overflow-hidden">
@@ -87,15 +88,19 @@ export default function WhyBuildnest() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
                 transition={{ duration: 1, delay: idx * 0.15, ease: [0.16, 1, 0.3, 1] }}
-                className="flex flex-col gap-4 text-left border-l-2 border-border-luxury pl-6 sm:pl-8 py-2 hover:border-accent transition-colors duration-500"
+                className="h-full"
               >
-                <span className="text-[10px] font-mono tracking-wider text-accent/60">0{idx + 1} {"//"} VAL</span>
-                <h3 className="text-[20px] font-bold text-text-luxury font-heading tracking-tight">
-                  {param.title}
-                </h3>
-                <p className="text-muted-luxury text-[14px] leading-[1.75] font-light">
-                  {param.desc}
-                </p>
+                <TiltCard3D maxTilt={8} className="h-full">
+                  <div className="p-6 bg-white rounded-2xl border border-border-luxury shadow-3d-sm specular-border flex flex-col gap-4 text-left h-full preserve-3d">
+                    <span className="text-[10px] font-mono tracking-wider text-accent font-bold uppercase translate-z-10">0{idx + 1} {"//"} VAL</span>
+                    <h3 className="text-[20px] font-bold text-text-luxury font-heading tracking-tight translate-z-20">
+                      {param.title}
+                    </h3>
+                    <p className="text-muted-luxury text-[14px] leading-[1.75] font-light translate-z-10">
+                      {param.desc}
+                    </p>
+                  </div>
+                </TiltCard3D>
               </motion.div>
             ))}
           </div>

@@ -61,26 +61,58 @@ interface LinkItem {
 }
 
 const SOCIAL_LINKS = [
-  { name: "Instagram", icon: InstagramIcon, href: "https://instagram.com" },
-  { name: "Facebook", icon: FacebookIcon, href: "https://facebook.com" },
-  { name: "LinkedIn", icon: LinkedinIcon, href: "https://linkedin.com" },
-  { name: "WhatsApp", icon: WhatsappIcon, href: "https://whatsapp.com" },
-  { name: "YouTube", icon: YoutubeIcon, href: "https://youtube.com" },
-  { name: "Google Business", icon: GoogleBusinessIcon, href: "https://google.com" },
+  { 
+    name: "Instagram", 
+    icon: InstagramIcon, 
+    href: "https://www.instagram.com/buildnest_nagpur/",
+    hoverBg: "hover:bg-gradient-to-tr hover:from-[#f9ce34] hover:via-[#ee2a7b] hover:to-[#6228d7] hover:text-white hover:border-transparent hover:shadow-[0_0_15px_rgba(238,42,123,0.3)]",
+    color: "text-[#e1306c]"
+  },
+  { 
+    name: "Facebook", 
+    icon: FacebookIcon, 
+    href: "https://www.facebook.com/profile.php?id=61591824793874",
+    hoverBg: "hover:bg-[#1877F2] hover:text-white hover:border-transparent hover:shadow-[0_0_15px_rgba(24,119,242,0.3)]",
+    color: "text-[#1877F2]"
+  },
+  { 
+    name: "LinkedIn", 
+    icon: LinkedinIcon, 
+    href: "https://www.linkedin.com/in/rohan-shahoo-880068423/",
+    hoverBg: "hover:bg-[#0A66C2] hover:text-white hover:border-transparent hover:shadow-[0_0_15px_rgba(10,102,194,0.3)]",
+    color: "text-[#0A66C2]"
+  },
+  { 
+    name: "WhatsApp", 
+    icon: WhatsappIcon, 
+    href: "https://wa.me/919823000000?text=Hello%20Buildnest%20Team,%20I%20would%20like%20to%20inquire%20about%20a%20new%20project.",
+    hoverBg: "hover:bg-[#25D366] hover:text-white hover:border-transparent hover:shadow-[0_0_15px_rgba(37,211,102,0.3)]",
+    color: "text-[#25D366]"
+  },
+  { 
+    name: "YouTube", 
+    icon: YoutubeIcon, 
+    href: "https://youtube.com",
+    hoverBg: "hover:bg-[#FF0000] hover:text-white hover:border-transparent hover:shadow-[0_0_15px_rgba(255,0,0,0.3)]",
+    color: "text-[#FF0000]"
+  },
+  { 
+    name: "Google Business", 
+    icon: GoogleBusinessIcon, 
+    href: "https://google.com",
+    hoverBg: "hover:bg-[#4285F4] hover:text-white hover:border-transparent hover:shadow-[0_0_15px_rgba(66,133,244,0.3)]",
+    color: "text-[#4285F4]"
+  },
 ];
 
 const QUICK_LINKS: LinkItem[] = [
-  { name: "Home", href: "#home" },
-  { name: "About", href: "#about" },
-  { name: "Services", href: "#services" },
-  { name: "Projects", href: "#projects" },
-  { name: "Gallery", href: "#projects" },
-  { name: "Testimonials", href: "#testimonials" },
-  { name: "Contact", href: "#contact" },
-  { name: "Blogs", href: "#" },
-  { name: "Careers", href: "#" },
-  { name: "Privacy Policy", href: "#privacy" },
-  { name: "Terms & Conditions", href: "#terms" },
+  { name: "Home", href: "/" },
+  { name: "About", href: "/about" },
+  { name: "Services", href: "/services" },
+  { name: "Projects", href: "/projects" },
+  { name: "Blog", href: "/blog" },
+  { name: "Contact", href: "/contact" },
+  { name: "Testimonials", href: "/#testimonials" },
 ];
 
 const SERVICE_GROUPS = [
@@ -238,12 +270,21 @@ const UnderlineLink = ({ href, children }: { href: string; children: React.React
 };
 
 const FooterColumn = ({ title, links }: { title: string; links: LinkItem[] }) => {
+  const [isOpen, setIsOpen] = React.useState(false);
+
   return (
-    <div className="flex flex-col gap-4 text-left">
-      <h4 className="text-[11px] font-semibold tracking-[0.2em] text-text-luxury uppercase">
-        {title}
-      </h4>
-      <ul className="flex flex-col gap-2.5">
+    <div className="flex flex-col text-left border-b sm:border-b-0 border-border-luxury/40 pb-4 sm:pb-0">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full flex items-center justify-between py-2 sm:py-0 text-left sm:cursor-default cursor-pointer focus:outline-none"
+      >
+        <h4 className="text-[11px] font-semibold tracking-[0.2em] text-text-luxury uppercase">
+          {title}
+        </h4>
+        <span className="text-sm font-mono text-accent sm:hidden">{isOpen ? "−" : "+"}</span>
+      </button>
+      
+      <ul className={`flex-col gap-2.5 mt-3 sm:mt-4 ${isOpen ? "flex" : "hidden sm:flex"}`}>
         {links.map((link) => (
           <li key={link.name} className="leading-none">
             <UnderlineLink href={link.href}>{link.name}</UnderlineLink>
@@ -255,12 +296,21 @@ const FooterColumn = ({ title, links }: { title: string; links: LinkItem[] }) =>
 };
 
 const LocationLinkSection = ({ title, links }: { title: string; links: LinkItem[] }) => {
+  const [isOpen, setIsOpen] = React.useState(false);
+
   return (
-    <div className="flex flex-col gap-4 text-left">
-      <h4 className="text-[11px] font-semibold tracking-[0.2em] text-text-luxury uppercase border-b border-border-luxury/60 pb-2">
-        {title}
-      </h4>
-      <ul className="flex flex-col gap-2.5">
+    <div className="flex flex-col text-left border-b sm:border-b-0 border-border-luxury/40 pb-4 sm:pb-0">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full flex items-center justify-between border-b border-border-luxury/60 pb-2 text-left sm:cursor-default cursor-pointer focus:outline-none"
+      >
+        <h4 className="text-[11px] font-semibold tracking-[0.2em] text-text-luxury uppercase">
+          {title}
+        </h4>
+        <span className="text-sm font-mono text-accent sm:hidden">{isOpen ? "−" : "+"}</span>
+      </button>
+      
+      <ul className={`flex-col gap-2.5 mt-3 ${isOpen ? "flex" : "hidden sm:flex"}`}>
         {links.map((link) => (
           <li key={link.name} className="leading-none">
             <UnderlineLink href={link.href}>{link.name}</UnderlineLink>
@@ -272,12 +322,21 @@ const LocationLinkSection = ({ title, links }: { title: string; links: LinkItem[
 };
 
 const InlineLinkList = ({ title, links }: { title: string; links: LinkItem[] }) => {
+  const [isOpen, setIsOpen] = React.useState(false);
+
   return (
-    <div className="flex flex-col gap-4 text-left">
-      <h4 className="text-[11px] font-semibold tracking-[0.2em] text-text-luxury uppercase border-b border-border-luxury/60 pb-2">
-        {title}
-      </h4>
-      <div className="flex flex-wrap gap-x-3 gap-y-2 text-[12.5px] text-muted-luxury/80 font-light leading-relaxed">
+    <div className="flex flex-col text-left border-b sm:border-b-0 border-border-luxury/40 pb-4 sm:pb-0">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full flex items-center justify-between border-b border-border-luxury/60 pb-2 text-left sm:cursor-default cursor-pointer focus:outline-none"
+      >
+        <h4 className="text-[11px] font-semibold tracking-[0.2em] text-text-luxury uppercase">
+          {title}
+        </h4>
+        <span className="text-sm font-mono text-accent sm:hidden">{isOpen ? "−" : "+"}</span>
+      </button>
+
+      <div className={`flex-wrap gap-x-3 gap-y-2 mt-3 text-[12.5px] text-muted-luxury/80 font-light leading-relaxed ${isOpen ? "flex" : "hidden sm:flex"}`}>
         {links.map((link, idx) => (
           <React.Fragment key={link.name}>
             <Link
@@ -324,7 +383,7 @@ export default function Footer() {
   };
 
   return (
-    <footer className="relative bg-white text-text-luxury border-t border-border-luxury/60 overflow-hidden z-10">
+    <footer className="relative bg-white text-text-luxury border-t border-border-luxury/80 shadow-3d-lg specular-border overflow-hidden z-10">
       {/* Blueprint Grid Lines (Luxury branding element) */}
       <div className="absolute inset-0 blueprint-grid opacity-[0.012] pointer-events-none" />
 
@@ -337,7 +396,7 @@ export default function Footer() {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-100px" }}
-        className="mx-auto max-w-[1600px] px-5 sm:px-8 lg:px-12 py-12 sm:py-16 lg:py-20 flex flex-col gap-16 relative z-10"
+        className="mx-auto max-w-[1600px] px-5 sm:px-8 lg:px-12 py-16 sm:py-20 lg:py-24 flex flex-col gap-16 relative z-10"
       >
         {/* ==========================================
             ROW 1: COMPANY CARD + MAIN COLUMNS
@@ -348,7 +407,7 @@ export default function Footer() {
           <div className="md:col-span-4 flex flex-col gap-6 text-left">
             <Link href="#home" className="flex items-center gap-3 group/logo w-fit">
               <Image
-                src="/images/logo.png"
+                src="/images/logo.webp"
                 alt="Buildnest Logo"
                 width={120}
                 height={32}
@@ -397,7 +456,7 @@ export default function Footer() {
                     href={social.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-9 h-9 rounded-full border border-border-luxury/60 flex items-center justify-center text-muted-luxury/80 hover:text-accent hover:border-accent hover:bg-bg-luxury transition-all duration-250 ease-out"
+                    className={`w-9 h-9 rounded-full border border-border-luxury/40 flex items-center justify-center transition-all duration-300 ease-out bg-transparent ${social.color} ${social.hoverBg}`}
                     aria-label={social.name}
                   >
                     <Icon className="w-[15px] h-[15px]" />

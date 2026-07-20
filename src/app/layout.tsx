@@ -6,32 +6,33 @@ import LenisProvider from "@/components/LenisProvider";
 const avenir = localFont({
   src: [
     {
-      path: "../../public/fonts/avenir/Avenir-Light.ttf",
+      path: "../../public/fonts/avenir/Avenir-Light.woff2",
       weight: "300",
       style: "normal",
     },
     {
-      path: "../../public/fonts/avenir/Avenir-Book.ttf",
+      path: "../../public/fonts/avenir/Avenir-Book.woff2",
       weight: "400",
       style: "normal",
     },
     {
-      path: "../../public/fonts/avenir/Avenir-Medium.ttf",
+      path: "../../public/fonts/avenir/Avenir-Medium.woff2",
       weight: "500",
       style: "normal",
     },
     {
-      path: "../../public/fonts/avenir/Avenir-Heavy.ttf",
+      path: "../../public/fonts/avenir/Avenir-Heavy.woff2",
       weight: "600",
       style: "normal",
     },
     {
-      path: "../../public/fonts/avenir/Avenir-Black.ttf",
+      path: "../../public/fonts/avenir/Avenir-Black.woff2",
       weight: "800",
       style: "normal",
     },
   ],
   variable: "--font-avenir",
+  display: "swap",
 });
 
 import { Montserrat, Oswald } from "next/font/google";
@@ -40,12 +41,14 @@ const montserrat = Montserrat({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700", "900"],
   variable: "--font-proxima-nova",
+  display: "swap",
 });
 
 const oswald = Oswald({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   variable: "--font-proxima-nova-excn",
+  display: "swap",
 });
 
 export const viewport: Viewport = {
@@ -78,6 +81,8 @@ export const metadata: Metadata = {
   },
 };
 
+import MobileQuickBar from "@/components/MobileQuickBar";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -86,11 +91,12 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${avenir.variable} ${montserrat.variable} ${oswald.variable} h-full antialiased`}
+      className={`${avenir.variable} ${montserrat.variable} ${oswald.variable} antialiased`}
     >
-      <body className="min-h-full flex flex-col noise-overlay blueprint-grid">
+      <body className="min-h-full flex flex-col blueprint-grid">
         <LenisProvider>
           {children}
+          <MobileQuickBar />
         </LenisProvider>
       </body>
     </html>

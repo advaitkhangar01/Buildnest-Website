@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { motion } from "framer-motion";
+import TiltCard3D from "@/components/TiltCard3D";
 
 const steps = [
   {
@@ -99,16 +100,14 @@ export default function Process() {
   const pinSectionRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
 
-  const [mounted, setMounted] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
     const handleResize = () => {
       setIsDesktop(window.innerWidth >= 1024);
     };
     handleResize();
-    window.addEventListener("resize", handleResize);
+    window.addEventListener("resize", handleResize, { passive: true });
     return () => {
       window.removeEventListener("resize", handleResize);
     };
@@ -289,15 +288,15 @@ export default function Process() {
       <div className="absolute inset-0 blueprint-grid opacity-[0.1]" />
 
       {/* Static background glow */}
-      <div className="absolute top-[40%] left-[30%] -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-primary/[0.03] blur-[140px] pointer-events-none select-none z-0" />
-      <div className="absolute bottom-[10%] right-[10%] w-[400px] h-[400px] rounded-full bg-accent/[0.03] blur-[100px] pointer-events-none select-none z-0" />
+      <div className="absolute top-[40%] left-[30%] -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-primary/[0.03] blur-3xl [transform:translateZ(0)] pointer-events-none select-none z-0" />
+      <div className="absolute bottom-[10%] right-[10%] w-[350px] h-[350px] rounded-full bg-accent/[0.03] blur-3xl [transform:translateZ(0)] pointer-events-none select-none z-0" />
 
       {/* Editorial Header Section */}
-      <div className="relative lg:absolute lg:top-0 lg:left-0 lg:w-full lg:h-full flex flex-col justify-between py-0 lg:py-16 px-5 sm:px-10 lg:px-16 pointer-events-none mb-16 lg:mb-0 z-10">
+      <div className="relative lg:absolute lg:top-0 lg:left-0 lg:w-full lg:h-full flex flex-col justify-between py-0 lg:py-12 px-5 sm:px-10 lg:px-16 pointer-events-none mb-8 lg:mb-0 z-10">
         
         {/* Title */}
         <div className="max-w-[640px] pointer-events-auto">
-          <span className="text-[11px] font-bold tracking-[0.16em] text-accent uppercase flex items-center gap-3 mb-4">
+          <span className="text-xs font-bold tracking-[0.16em] text-accent uppercase flex items-center gap-3 mb-3">
             <span className="w-6 h-[1px] bg-accent inline-block" />
             04 / Workflow
           </span>
@@ -307,7 +306,7 @@ export default function Process() {
         </div>
 
         {/* Scroll helper (desktop only) */}
-        <div className="hidden lg:flex items-center gap-4 text-muted-luxury/40 text-[10px] font-bold tracking-[0.2em] uppercase">
+        <div className="hidden lg:flex items-center gap-4 text-text-luxury text-xs font-bold tracking-[0.2em] uppercase">
           <span>Scroll Down to Progress</span>
           <div className="w-16 h-[1px] bg-border-luxury relative overflow-hidden">
             <div className="absolute left-0 top-0 h-full w-8 bg-accent animate-pulse-slow" />
@@ -318,103 +317,95 @@ export default function Process() {
       {/* Timeline Track - Scrolls Horizontally on Desktop, Vertically on Mobile */}
       <div
         ref={trackRef}
-        className="lg:h-full flex flex-col lg:flex-row lg:items-stretch gap-16 lg:gap-32 px-5 sm:px-10 lg:px-[15vw] max-w-2xl lg:max-w-none mx-auto lg:mx-0 relative"
-        style={{ willChange: "transform" }}
+        className="relative z-10 flex flex-col lg:flex-row items-center gap-10 lg:gap-32 w-full px-5 sm:px-10 lg:px-0 lg:w-max"
+        style={isDesktop ? { paddingLeft: "30vw", paddingRight: "30vw" } : {}}
       >
-        {/* Scrolling watermark text for parallax depth (desktop only) */}
-        <div className="hidden lg:block absolute left-[-20vw] top-[15%] w-0 h-0 whitespace-nowrap pointer-events-none z-0 select-none">
-          <span className="text-[clamp(120px,22vw,300px)] font-bold text-text-luxury/[0.015] tracking-[0.08em] uppercase leading-none">
-            EXECUTION_STAGE_SYSTEM
-          </span>
-        </div>
+        {/* Continuous baseline connecting steps */}
+        <div 
+          className="hidden lg:block absolute left-0 right-0 h-[2px] bg-border-luxury/70 z-0 pointer-events-none" 
+          style={{ top: "calc(35vh + 24px)" }}
+        />
 
-
-
-
-        {/* Vertical line behind nodes (mobile only) */}
-        <div className="absolute left-[32px] sm:left-[36px] lg:hidden top-4 bottom-4 w-[1.5px] bg-border-luxury/60 z-0" />
-
-        {/* Stages */}
         {steps.map((step, idx) => (
-          <motion.div
+          <div
             key={step.num}
-            initial={mounted && !isDesktop ? { opacity: 0, y: 40 } : { opacity: 1, y: 0 }}
-            whileInView={mounted && !isDesktop ? { opacity: 1, y: 0 } : { opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.8, delay: idx * 0.05 }}
-            className="w-full lg:w-[420px] lg:h-full lg:flex-shrink-0 relative z-20 pl-20 lg:pl-0"
+            className="step-group flex flex-col items-center lg:items-start relative flex-shrink-0 w-full lg:w-[420px]"
           >
-            {/* Timeline Circle Node */}
+            {/* Step Node */}
             <div
-              className="timeline-node w-12 h-12 sm:w-14 sm:h-14 rounded-full border border-border-luxury bg-bg-luxury/80 flex items-center justify-center absolute left-2 lg:left-0 top-4 lg:top-[35%] transition-all duration-500 shadow-sm"
-              style={isDesktop ? { transform: "translateY(-50%)", top: "35vh" } : {}}
+              className="timeline-node w-12 h-12 rounded-full border-2 border-border-luxury bg-bg-luxury/80 flex items-center justify-center relative z-10 transition-all duration-300 pointer-events-none mb-6 lg:mb-0"
+              style={isDesktop ? { top: "35vh", position: "absolute" } : {}}
             >
-              <div className="timeline-node-inner w-8 h-8 sm:w-10 sm:h-10 rounded-full border border-border-luxury/60 bg-bg-luxury flex items-center justify-center transition-all duration-500">
-                <span className="timeline-num text-[11px] font-bold text-muted-luxury tracking-tight font-body">
+              <div className="timeline-node-inner w-7 h-7 rounded-full border border-border-luxury/60 bg-bg-luxury flex items-center justify-center transition-all duration-300">
+                <span className="timeline-num text-[11px] font-mono font-bold text-text-luxury">
                   {step.num}
                 </span>
               </div>
             </div>
 
-            {/* The Glassmorphism Card */}
+            {/* Step Card with 3D Tilt */}
             <div 
-              className="timeline-card p-6 sm:p-10 pt-6 sm:pt-8 rounded-[28px] border border-border-luxury/60 bg-bg-luxury/40 backdrop-blur-md flex flex-col gap-6 text-left transition-all duration-500 shadow-[0_10px_30px_rgba(15,92,105,0.01)] relative overflow-hidden group"
+              className="w-full"
               style={isDesktop ? { marginTop: "calc(35vh + 56px)" } : {}}
             >
-              {/* Large watermark number */}
-              <span className="absolute right-6 top-4 text-[70px] sm:text-[100px] font-black text-text-luxury/[0.03] select-none pointer-events-none leading-none font-heading">
-                {step.num}
-              </span>
+              <TiltCard3D maxTilt={6} className="w-full">
+                <div className="timeline-card p-6 sm:p-10 pt-6 sm:pt-8 rounded-[28px] border border-border-luxury bg-white flex flex-col gap-6 text-left transition-all duration-500 shadow-3d-md specular-border relative overflow-hidden group preserve-3d">
+                  {/* Large watermark number */}
+                  <span className="absolute right-6 top-4 text-[70px] sm:text-[100px] font-black text-text-luxury/[0.05] select-none pointer-events-none leading-none font-heading translate-z-10">
+                    {step.num}
+                  </span>
 
-              {/* Icon & Phase tag */}
-              <div className="flex items-center justify-between">
-                <div className="timeline-icon text-muted-luxury/40 w-10 h-10 flex items-center justify-center transition-all duration-500">
-                  {step.icon}
+                  {/* Icon & Phase tag */}
+                  <div className="flex items-center justify-between translate-z-20">
+                    <div className="timeline-icon text-accent w-10 h-10 flex items-center justify-center transition-all duration-500">
+                      {step.icon}
+                    </div>
+                    <span className="text-xs font-bold tracking-[0.18em] text-accent uppercase">
+                      {step.phase}
+                    </span>
+                  </div>
+
+                  {/* Text Area */}
+                  <div className="flex flex-col gap-2 relative z-10 translate-z-30">
+                    <h3 className="text-[20px] sm:text-[24px] font-bold tracking-tight text-text-luxury font-heading leading-tight">
+                      {step.title.includes("&") ? (
+                        <>
+                          {step.title.split("&")[0]}
+                          <span className="font-body font-light">&amp;</span>
+                          {step.title.split("&")[1]}
+                        </>
+                      ) : (
+                        step.title
+                      )}
+                    </h3>
+                    <p className="text-text-luxury text-sm sm:text-base leading-[1.6] font-medium">
+                      {step.desc}
+                    </p>
+                  </div>
+
+                  {/* Deliverables checklist */}
+                  <div className="h-[1px] bg-border-luxury my-1 relative z-10 translate-z-10" />
+                  <div className="flex flex-col gap-2.5 relative z-10 translate-z-20">
+                    <span className="text-xs font-bold tracking-[0.15em] text-accent uppercase">
+                      Key Deliverables
+                    </span>
+                    <ul className="flex flex-col gap-2">
+                      {step.deliverables.map((item) => (
+                        <li
+                          key={item}
+                          className="deliverable-item flex items-center gap-3 text-sm text-text-luxury font-semibold transition-all duration-300"
+                          style={{ transform: isDesktop ? "translateX(-4px)" : "none" }}
+                        >
+                          <span className="w-2 h-2 rounded-full bg-accent flex-shrink-0" />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
-                <span className="text-[10px] font-bold tracking-[0.18em] text-accent uppercase">
-                  {step.phase}
-                </span>
-              </div>
-
-              {/* Text Area */}
-              <div className="flex flex-col gap-2 relative z-10">
-                <h3 className="text-[19px] sm:text-[23px] font-bold tracking-tight text-text-luxury font-heading leading-tight">
-                  {step.title.includes("&") ? (
-                    <>
-                      {step.title.split("&")[0]}
-                      <span className="font-body font-light">&amp;</span>
-                      {step.title.split("&")[1]}
-                    </>
-                  ) : (
-                    step.title
-                  )}
-                </h3>
-                <p className="text-muted-luxury text-[13px] sm:text-[13.5px] leading-[1.65] font-light">
-                  {step.desc}
-                </p>
-              </div>
-
-              {/* Deliverables checklist */}
-              <div className="h-[1px] bg-border-luxury/40 my-1 relative z-10" />
-              <div className="flex flex-col gap-2.5 relative z-10">
-                <span className="text-[9px] font-bold tracking-[0.15em] text-text-luxury/40 uppercase">
-                  Key Deliverables
-                </span>
-                <ul className="flex flex-col gap-2">
-                  {step.deliverables.map((item) => (
-                    <li
-                      key={item}
-                      className="deliverable-item flex items-center gap-3 text-[12.5px] text-muted-luxury font-light lg:opacity-50 transition-all duration-300"
-                      style={{ transform: isDesktop ? "translateX(-4px)" : "none" }}
-                    >
-                      <span className="w-1.5 h-1.5 rounded-full bg-accent/60 flex-shrink-0" />
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              </TiltCard3D>
             </div>
-          </motion.div>
+          </div>
         ))}
       </div>
     </section>
