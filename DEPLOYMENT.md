@@ -1,6 +1,6 @@
-# Safe Deployment Guide: Next.js Website on Shared Ubuntu VPS
+# Safe Deployment Guide: Next.js Website on Shared Ubuntu VPS (Port 3012)
 
-This guide provides step-by-step instructions to host and deploy the **Buildnest Website** on a shared Ubuntu VPS under the domain **buildnest-website.advait.website** without impacting any existing websites or web applications.
+This guide provides step-by-step instructions to host and deploy the **Buildnest Website** on a shared Ubuntu VPS under the domain **buildnest-website.advait.website** without impacting any existing websites (`advait.website`, `aquasaver`, or `w4y`).
 
 ---
 
@@ -11,35 +11,25 @@ Before configuring the server, point your domain to your VPS:
 2. Add an **A Record** pointing to your VPS IP:
    - **Type:** `A`
    - **Name:** `buildnest-website` (which results in `buildnest-website.advait.website`)
-   - **Value:** `YOUR_VPS_PUBLIC_IP_ADDRESS`
+   - **Value:** `168.231.102.17`
    - **TTL:** Auto or 3600
 
 ---
 
-## 2. Server Installation & Configuration (If not already installed)
+## 2. Server Installation & Pre-Checks
 
 SSH into your Ubuntu VPS:
 ```bash
-ssh ubuntu@YOUR_VPS_PUBLIC_IP_ADDRESS
+ssh advait@168.231.102.17
 ```
 
-### Check Port 3001 Availability
-Since port 3000 is already in use by another web application on your VPS, this project is configured to run on **Port 3001**.
-Verify that Port 3001 is currently free:
+### Check Port 3012 Availability
+This project is configured to run on **Port 3012** to prevent conflicts with `aquasaver` (port 3000) and `w4y` (port 3001).
+Verify that Port 3012 is free:
 ```bash
-sudo ss -tulpn | grep :3001
+sudo ss -tulpn | grep :3012
 ```
-*If this command returns no output, Port 3001 is free and safe to use.*
-
-### Install PM2 (Process Manager) Globally
-Check if PM2 is already installed:
-```bash
-pm2 -v
-```
-*If it is not installed, install it globally:*
-```bash
-sudo npm install -g pm2
-```
+*If this command returns no output, Port 3012 is free and safe to use.*
 
 ---
 
@@ -47,22 +37,20 @@ sudo npm install -g pm2
 
 Create a directory for the website and clone the code:
 ```bash
-# Create directory and set ownership to current user
-sudo mkdir -p /var/www/buildnest-website
-sudo chown -R $USER:$USER /var/www/buildnest-website
+# Navigate to /var/www
+cd /var/www
 
-# Clone repository
-git clone https://github.com/advaitkhangar01/Buildnest-Website.git /var/www/buildnest-website
+# Clone repository into 'buildnest-website'
+git clone https://github.com/advaitkhangar01/Buildnest-Website.git buildnest-website
 
 # Navigate to the directory
-cd /var/www/buildnest-website
+cd buildnest-website
 ```
 
 ---
 
-## 4. Install Dependencies & Perform Initial Build
+## 4. Install Dependencies & Build
 
-Next.js requires development dependencies to build.
 ```bash
 # Install dependencies
 npm install
@@ -73,9 +61,9 @@ npm run build
 
 ---
 
-## 5. Configure Nginx Reverse Proxy (HTTP-Only First)
+## 5. Configure Nginx Reverse Proxy (IPv4 Only)
 
-Nginx acts as a reverse proxy, routing traffic to port 3001. We use a safe HTTP-only (Port 80) configuration first. Certbot will then read this configuration and automatically add the SSL directives to match your system-wide SSL setup.
+Nginx acts as a reverse proxy, routing traffic to port 3012.
 
 1. Copy the template Nginx configuration:
    ```bash
@@ -87,15 +75,13 @@ Nginx acts as a reverse proxy, routing traffic to port 3001. We use a safe HTTP-
    sudo ln -s /etc/nginx/sites-available/buildnest-website /etc/nginx/sites-enabled/
    ```
 
-3. **DO NOT** delete any other configuration files in `/etc/nginx/sites-enabled/`!
-
-4. Verify the Nginx syntax is correct:
+3. Verify the Nginx syntax is correct:
    ```bash
    sudo nginx -t
    ```
-   *This command should say "syntax is ok" and "test is successful".*
+   *Should report "syntax is ok" and "test is successful".*
 
-5. Reload Nginx (safe reload, does not drop active connections to your other websites):
+4. Reload Nginx (safe reload, does not drop active connections to your other websites):
    ```bash
    sudo systemctl reload nginx
    ```
@@ -104,51 +90,40 @@ Nginx acts as a reverse proxy, routing traffic to port 3001. We use a safe HTTP-
 
 ## 6. Secure the Site with SSL (Let's Encrypt)
 
-Certbot will automatically verify ownership of the domain, request a free SSL certificate from Let's Encrypt, and automatically configure Nginx to use SSL using the exact same cipher and protocol configurations as your other websites.
+Certbot will automatically verify domain ownership and configure SSL.
 
 Run the following command:
 ```bash
 sudo certbot --nginx -d buildnest-website.advait.website
 ```
 
-- Enter your email address and accept terms if prompted.
-- Choose whether to redirect HTTP traffic to HTTPS (recommended).
-- Certbot will automatically inject the SSL certificates into `/etc/nginx/sites-available/buildnest-website`.
+- If prompted to reinstall or renew existing certificate, choose **1** (Reinstall).
+- Certbot will inject the SSL certificate into `/etc/nginx/sites-available/buildnest-website` without affecting other sites.
 
 ---
 
 ## 7. Run Application with PM2
 
-Start the Next.js production server in the background.
+Start the Next.js production server on Port 3012 in the background.
 
-1. Start the server using the PM2 ecosystem configuration:
+1. Start the server using PM2:
    ```bash
    pm2 start ecosystem.config.js
    ```
 
-2. Save the current process list so it persists after reboots:
+2. Save the PM2 process list:
    ```bash
    pm2 save
    ```
-   *(Note: You only need to run `pm2 startup` if PM2 has never been configured on this VPS before. Since you already have live apps running, PM2 startup is already active!)*
 
 ---
 
 ## 8. Automating Future Deployments
 
-For subsequent updates, a `deploy.sh` script is provided to automate pulling changes, building the website, and restarting PM2 with zero downtime.
-
-1. Ensure the deployment script has executable permissions:
-   ```bash
-   chmod +x deploy.sh
-   ```
-
-2. To deploy new updates, simply run:
-   ```bash
-   ./deploy.sh
-   ```
-
-This will run git pull, install new dependencies, run `npm run build`, and reload PM2 automatically. Logs for the deployment will be stored in `deployment.log`.
+For subsequent updates, run:
+```bash
+chmod +x deploy.sh && ./deploy.sh
+```
 
 ---
 
