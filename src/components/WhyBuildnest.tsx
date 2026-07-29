@@ -1,8 +1,10 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { motion } from "framer-motion";
+import { useRef, useEffect } from "react";
 import TiltCard3D from "@/components/TiltCard3D";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 const parameters = [
   {
@@ -21,14 +23,47 @@ const parameters = [
 
 export default function WhyBuildnest() {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const shape1Ref = useRef<HTMLDivElement>(null);
+  const shape2Ref = useRef<HTMLDivElement>(null);
 
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  });
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
 
-  const yParallax = useTransform(scrollYProgress, [0, 1], [-60, 60]);
-  const yParallaxFast = useTransform(scrollYProgress, [0, 1], [-110, 110]);
+    let ctx = gsap.context(() => {
+      if (shape1Ref.current) {
+        gsap.fromTo(shape1Ref.current,
+          { y: -110 },
+          {
+            y: 110,
+            ease: "none",
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: true,
+            }
+          }
+        );
+      }
+      if (shape2Ref.current) {
+        gsap.fromTo(shape2Ref.current,
+          { y: -60 },
+          {
+            y: 60,
+            ease: "none",
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: true,
+            }
+          }
+        );
+      }
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
 
   return (
     <section
@@ -38,9 +73,15 @@ export default function WhyBuildnest() {
     >
       {/* Background Graphics & Depth Lights */}
       <div className="absolute inset-0 pointer-events-none select-none overflow-hidden">
-        {/* Soft Radial Ambient Lights */}
-        <div className="absolute top-[10%] right-[-10%] w-[500px] h-[500px] rounded-full bg-primary/4 blur-[130px] pointer-events-none" />
-        <div className="absolute bottom-[-10%] left-[-5%] w-[450px] h-[450px] rounded-full bg-accent/3 blur-[110px] pointer-events-none" />
+        {/* Soft Radial Ambient Lights - optimized to radial gradients (no blur filter rasterization) */}
+        <div 
+          style={{ background: "radial-gradient(circle at center, rgba(15, 92, 105, 0.05) 0%, transparent 70%)" }}
+          className="absolute top-[10%] right-[-10%] w-[500px] h-[500px] rounded-full pointer-events-none" 
+        />
+        <div 
+          style={{ background: "radial-gradient(circle at center, rgba(166, 107, 61, 0.05) 0%, transparent 70%)" }}
+          className="absolute bottom-[-10%] left-[-5%] w-[450px] h-[450px] rounded-full pointer-events-none" 
+        />
         
         {/* CAD Grid Coordinates */}
         <div className="absolute top-[12%] right-[8%] text-text-luxury/10 text-[9px] font-mono tracking-[0.2em] uppercase">
@@ -48,17 +89,17 @@ export default function WhyBuildnest() {
         </div>
 
         {/* Floating Overlapping Isometric Rectangles */}
-        <motion.div
-          style={{ y: yParallaxFast }}
-          className="absolute left-[8%] top-[12%] w-[250px] h-[250px] border border-primary/5 rounded-[40px] rotate-[15deg] opacity-70 flex items-center justify-center"
+        <div
+          ref={shape1Ref}
+          className="absolute left-[8%] top-[12%] w-[250px] h-[250px] border border-primary/5 rounded-[40px] rotate-[15deg] opacity-70 flex items-center justify-center pointer-events-none [will-change:transform]"
         >
           <div className="w-[180px] h-[180px] border border-primary/5 rounded-[30px] rotate-[15deg]" />
-        </motion.div>
+        </div>
 
         {/* Secondary floating vector */}
-        <motion.div
-          style={{ y: yParallax }}
-          className="absolute right-[12%] bottom-[12%] w-[280px] h-[280px] rounded-full border border-dashed border-accent/10 opacity-60"
+        <div
+          ref={shape2Ref}
+          className="absolute right-[12%] bottom-[12%] w-[280px] h-[280px] rounded-full border border-dashed border-accent/10 opacity-60 pointer-events-none [will-change:transform]"
         />
       </div>
 

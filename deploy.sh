@@ -43,6 +43,18 @@ fi
 echo "Saving PM2 process list..."
 pm2 save
 
+# 6. Check and Reload Nginx configuration if updated
+echo "Checking Nginx configuration..."
+if command -v nginx > /dev/null 2>&1; then
+    if sudo nginx -t > /dev/null 2>&1; then
+        echo "Nginx syntax is valid. Reloading Nginx..."
+        sudo systemctl reload nginx || true
+    else
+        echo "Warning: Nginx test failed or sudo password required. Please run 'sudo nginx -t && sudo systemctl reload nginx' manually if Nginx config was modified."
+    fi
+fi
+
 echo "=========================================="
 echo "Deployment completed successfully at: $(date)"
 echo "=========================================="
+

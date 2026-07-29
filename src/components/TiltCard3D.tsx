@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef, useState } from "react";
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { motion, useMotionValue, useSpring, useTransform, useMotionTemplate } from "framer-motion";
 
 interface TiltCard3DProps {
   children: React.ReactNode;
@@ -21,6 +21,7 @@ export default function TiltCard3D({
   depthShadow = true,
 }: TiltCard3DProps) {
   const cardRef = useRef<HTMLDivElement>(null);
+  const rectRef = useRef<DOMRect | null>(null);
   const [isHovered, setIsHovered] = useState(false);
 
   // Mouse relative coordinates from -0.5 to 0.5
@@ -40,9 +41,12 @@ export default function TiltCard3D({
   const shadowX = useSpring(useTransform(mouseX, [-0.5, 0.5], [10, -10]), springConfig);
   const shadowY = useSpring(useTransform(mouseY, [-0.5, 0.5], [15, 5]), springConfig);
 
+  // Dynamic template for CSS glare gradient
+  const glareBackground = useMotionTemplate`radial-gradient(circle at ${glareX}% ${glareY}%, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0) 65%)`;
+
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!cardRef.current) return;
-    const rect = cardRef.current.getBoundingClientRect();
+    const rect = rectRef.current;
+    if (!rect) return;
     const width = rect.width;
     const height = rect.height;
     
@@ -55,11 +59,19 @@ export default function TiltCard3D({
   };
 
   const handleMouseEnter = () => {
+    // Only enable 3D tilt on devices with fine cursor pointer (hover supported)
+    if (typeof window !== "undefined" && !window.matchMedia("(hover: hover)").matches) {
+      return;
+    }
     setIsHovered(true);
+    if (cardRef.current) {
+      rectRef.current = cardRef.current.getBoundingClientRect();
+    }
   };
 
   const handleMouseLeave = () => {
     setIsHovered(false);
+    rectRef.current = null;
     mouseX.set(0);
     mouseY.set(0);
   };
@@ -88,7 +100,7 @@ export default function TiltCard3D({
         {glare && isHovered && (
           <motion.div
             style={{
-              background: `radial-gradient(circle at ${glareX.get()}% ${glareY.get()}%, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0) 65%)`,
+              background: glareBackground,
             }}
             className="absolute inset-0 pointer-events-none rounded-[inherit] z-30 transition-opacity duration-300 opacity-100"
           />

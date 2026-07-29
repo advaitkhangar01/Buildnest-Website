@@ -1,10 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 import { MoveHorizontal, Ruler, Compass, CheckCircle2 } from "lucide-react";
 import TiltCard3D from "@/components/TiltCard3D";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 const hotspots = [
   {
@@ -39,6 +41,9 @@ const hotspots = [
 export default function BrandIntro() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const containerRectRef = useRef<DOMRect | null>(null);
+  const shape1Ref = useRef<HTMLDivElement>(null);
+  const shape2Ref = useRef<HTMLDivElement>(null);
 
   const [sliderPos, setSliderPos] = useState(50); // percentage (0 - 100)
   const [isDragging, setIsDragging] = useState(false);
@@ -56,19 +61,51 @@ export default function BrandIntro() {
     }
   }, [activeHotspot]);
 
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  });
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
 
-  const yParallax = useTransform(scrollYProgress, [0, 1], [-40, 40]);
-  const yParallaxFast = useTransform(scrollYProgress, [0, 1], [-80, 80]);
+    let ctx = gsap.context(() => {
+      if (shape1Ref.current) {
+        gsap.fromTo(shape1Ref.current,
+          { y: -80 },
+          {
+            y: 80,
+            ease: "none",
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: true,
+            }
+          }
+        );
+      }
+      if (shape2Ref.current) {
+        gsap.fromTo(shape2Ref.current,
+          { y: -40 },
+          {
+            y: 40,
+            ease: "none",
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: true,
+            }
+          }
+        );
+      }
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
 
   // Pointer event handlers for dragging slider
   const handlePointerDown = (e: React.PointerEvent) => {
     setIsDragging(true);
     if (!containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
+    containerRectRef.current = rect;
     const x = e.clientX - rect.left;
     const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100));
     setSliderPos(percentage);
@@ -76,9 +113,9 @@ export default function BrandIntro() {
   };
 
   const handlePointerMove = (e: React.PointerEvent) => {
-    if (!containerRef.current) return;
     if (!isDragging && e.buttons !== 1) return;
-    const rect = containerRef.current.getBoundingClientRect();
+    const rect = containerRectRef.current;
+    if (!rect) return;
     const x = e.clientX - rect.left;
     const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100));
     setSliderPos(percentage);
@@ -86,6 +123,7 @@ export default function BrandIntro() {
 
   const handlePointerUp = (e: React.PointerEvent) => {
     setIsDragging(false);
+    containerRectRef.current = null;
     if (containerRef.current) {
       try {
         e.currentTarget.releasePointerCapture(e.pointerId);
@@ -127,8 +165,14 @@ export default function BrandIntro() {
       {/* Background Graphics & Depth Lights */}
       <div className="absolute inset-0 pointer-events-none select-none overflow-hidden">
         {/* Soft Radial Ambient Lights */}
-        <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] rounded-full bg-primary/3 blur-3xl [transform:translateZ(0)]" />
-        <div className="absolute bottom-[-10%] left-[-10%] w-[400px] h-[400px] rounded-full bg-accent/3 blur-3xl [transform:translateZ(0)]" />
+        <div 
+          style={{ background: "radial-gradient(circle at center, rgba(15, 92, 105, 0.05) 0%, transparent 70%)" }}
+          className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] rounded-full [transform:translateZ(0)]" 
+        />
+        <div 
+          style={{ background: "radial-gradient(circle at center, rgba(166, 107, 61, 0.05) 0%, transparent 70%)" }}
+          className="absolute bottom-[-10%] left-[-10%] w-[400px] h-[400px] rounded-full [transform:translateZ(0)]" 
+        />
         
         {/* CAD Grid Coordinates */}
         <div className="absolute top-[8%] right-[5%] text-text-luxury/10 text-[9px] font-mono tracking-[0.2em] uppercase">
@@ -159,17 +203,17 @@ export default function BrandIntro() {
         </div>
 
         {/* Geometric Outline Arc (Parallax) */}
-        <motion.div
-          style={{ y: yParallaxFast }}
-          className="absolute -left-[15%] top-[5%] w-[700px] h-[700px] rounded-full border border-accent/5 flex items-center justify-center opacity-60"
+        <div
+          ref={shape1Ref}
+          className="absolute -left-[15%] top-[5%] w-[700px] h-[700px] rounded-full border border-accent/5 flex items-center justify-center opacity-60 pointer-events-none [will-change:transform]"
         >
           <div className="w-[500px] h-[500px] rounded-full border border-dashed border-accent/5 flex items-center justify-center" />
-        </motion.div>
+        </div>
         
         {/* Thin vector wireframe rectangle */}
-        <motion.div
-          style={{ y: yParallax }}
-          className="absolute right-[8%] bottom-[10%] w-[220px] h-[320px] border border-primary/5 rounded-[40px] opacity-70"
+        <div
+          ref={shape2Ref}
+          className="absolute right-[8%] bottom-[10%] w-[220px] h-[320px] border border-primary/5 rounded-[40px] opacity-70 pointer-events-none [will-change:transform]"
         />
       </div>
 

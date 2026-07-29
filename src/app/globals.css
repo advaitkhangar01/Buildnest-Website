@@ -103,12 +103,32 @@ html.lenis body {
   display: none;
 }
 
-/* 3. Frosted Glass (GPU Accelerated) */
+/* 3. Frosted Glass (GPU Accelerated with Fallbacks) */
 .frosted-glass {
-  background-color: rgba(252, 251, 249, 0.92);
+  background-color: rgba(252, 251, 249, 0.95);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid rgba(232, 230, 227, 0.6);
+}
+
+@supports not (backdrop-filter: blur(1px)) {
+  .frosted-glass {
+    background-color: #FCFBF9;
+  }
+}
+
+/* Reduced Motion & Battery Saver Safeguards */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .animate-orb-float,
+  .animate-pulse-slow {
+    animation: none !important;
+  }
 }
 
 /* 4. Scrollbar styling */
@@ -129,6 +149,7 @@ html.lenis body {
 /* 5. Custom cursor styling or magnetic indicators */
 .magnetic-button {
   transition: transform 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+  will-change: transform;
 }
 
 /* 6. Typography Helpers */
@@ -212,8 +233,10 @@ html.lenis body {
 .card-3d-lift {
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   transform-style: preserve-3d;
+  will-change: transform, box-shadow;
 }
 .card-3d-lift:hover {
   transform: translateY(-8px) translateZ(15px);
 }
+
 

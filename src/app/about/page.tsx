@@ -65,16 +65,18 @@ export default function AboutPage() {
           <div className="absolute inset-0 pointer-events-none select-none overflow-hidden">
             <div className="absolute inset-0 blueprint-grid opacity-[0.08] animate-pulse-slow" />
             
-            {/* Soft Warm Depth Spotlights */}
+            {/* Soft Warm Depth Spotlights - optimized to radial gradients (no blur filter rasterization) */}
             <motion.div
               animate={{ scale: [1, 1.15, 1], opacity: [0.2, 0.35, 0.2] }}
               transition={{ duration: 11, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute -top-20 left-10 w-[500px] h-[500px] bg-primary/30 rounded-full blur-3xl [transform:translateZ(0)]"
+              style={{ background: "radial-gradient(circle, rgba(15, 92, 105, 0.22) 0%, transparent 70%)" }}
+              className="absolute -top-20 left-10 w-[500px] h-[500px] rounded-full [transform:translateZ(0)]"
             />
             <motion.div
               animate={{ scale: [1.1, 1, 1.1], opacity: [0.25, 0.4, 0.25] }}
               transition={{ duration: 13, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-              className="absolute -bottom-20 right-10 w-[450px] h-[450px] bg-accent/30 rounded-full blur-3xl [transform:translateZ(0)]"
+              style={{ background: "radial-gradient(circle, rgba(166, 107, 61, 0.22) 0%, transparent 70%)" }}
+              className="absolute -bottom-20 right-10 w-[450px] h-[450px] rounded-full [transform:translateZ(0)]"
             />
 
             {/* Horizontal Light Scan */}

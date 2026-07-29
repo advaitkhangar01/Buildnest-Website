@@ -1,10 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { motion, useScroll, useSpring, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 const navItems = [
   { name: "Home", href: "/", code: "01" },
@@ -18,20 +20,13 @@ const navItems = [
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const { scrollYProgress } = useScroll();
   const pathname = usePathname();
+  const progressRef = useRef<HTMLDivElement>(null);
 
   const isHomePage = pathname === "/";
   // Light text (white) is ONLY used when on the homepage at the top of the page when closed.
   // On all subpages or when scrolled/open, dark luxury text is used over frosted glass.
   const isLightText = isHomePage && !isScrolled && !isOpen;
-  
-  // Smooth scroll progress line
-  const scaleX = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
-    restDelta: 0.001,
-  });
 
   useEffect(() => {
     const handleScroll = () => {
@@ -42,6 +37,29 @@ export default function Navbar() {
     handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+
+    const tween = gsap.fromTo(progressRef.current,
+      { scaleX: 0 },
+      {
+        scaleX: 1,
+        ease: "none",
+        scrollTrigger: {
+          trigger: "body",
+          start: "top top",
+          end: "bottom bottom",
+          scrub: true,
+        }
+      }
+    );
+
+    return () => {
+      tween.scrollTrigger?.kill();
+      tween.kill();
+    };
   }, []);
 
   useEffect(() => {
@@ -66,39 +84,39 @@ export default function Navbar() {
       <header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-in-out ${
           isOpen
-            ? "h-[80px] bg-[#0E1013] border-b border-white/10"
+            ? "h-[96px] sm:h-[108px] bg-[#0E1013] border-b border-white/10"
             : !isLightText
-            ? "h-[80px] sm:h-[88px] frosted-glass shadow-3d-md specular-border"
-            : "h-[80px] sm:h-[88px] bg-transparent border-b border-white/10"
+            ? "h-[96px] sm:h-[108px] frosted-glass shadow-3d-md specular-border"
+            : "h-[96px] sm:h-[108px] bg-transparent border-b border-white/10"
         }`}
       >
         {/* Scroll Progress Line (Bronze) */}
-        <motion.div
-          className="absolute top-0 left-0 right-0 h-[2px] bg-accent origin-left z-50"
-          style={{ scaleX }}
+        <div
+          ref={progressRef}
+          className="absolute top-0 left-0 right-0 h-[3px] bg-accent origin-left z-50 scale-x-0 [will-change:transform]"
         />
 
         <div className="mx-auto h-full max-w-[1440px] px-4 sm:px-10 lg:px-16 flex items-center justify-between">
           {/* Logo */}
           <Link
             href="/"
-            className="relative z-50 flex items-center gap-2.5 sm:gap-4 group/logo"
+            className="relative z-50 flex items-center gap-3.5 sm:gap-5 group/logo"
             onClick={() => setIsOpen(false)}
           >
             <div className="relative flex items-center shrink-0">
               <Image
-                src="/images/logo.webp"
+                src="/images/logo.png"
                 alt="Buildnest Logo"
-                width={105}
-                height={28}
-                className="object-contain sm:w-[120px] transition-transform duration-500 ease-out group-hover/logo:scale-105"
+                width={160}
+                height={145}
+                className="h-15 sm:h-18 md:h-22 w-auto object-contain transition-transform duration-500 ease-out group-hover/logo:scale-105 filter drop-shadow-md"
                 priority
               />
             </div>
 
             {/* Vertical line separator */}
             <span
-              className={`h-5 sm:h-6 w-[1px] origin-center transition-all duration-500 ease-out group-hover/logo:scale-y-110 ${
+              className={`h-9 sm:h-11 w-[2.5px] origin-center transition-all duration-500 ease-out group-hover/logo:scale-y-110 ${
                 isOpen || !isLightText
                   ? "bg-border-luxury/80 group-hover/logo:bg-accent/60"
                   : "bg-white/30 group-hover/logo:bg-accent"
@@ -107,7 +125,7 @@ export default function Navbar() {
 
             {/* Creative Typography */}
             <div
-              className={`flex items-center font-heading-excn text-[15px] sm:text-[19px] font-medium tracking-[0.2em] sm:tracking-[0.24em] select-none overflow-hidden h-6 transition-all duration-500 ${
+              className={`flex items-center font-heading-excn text-[24px] sm:text-[30px] md:text-[34px] font-black tracking-[0.2em] sm:tracking-[0.24em] select-none overflow-hidden h-10 sm:h-12 transition-all duration-500 ${
                 isOpen || !isLightText ? "text-text-luxury" : "text-white"
               }`}
               style={
@@ -116,23 +134,23 @@ export default function Navbar() {
                   : {}
               }
             >
-              <div className="flex items-center h-6">
+              <div className="flex items-center h-10 sm:h-12">
                 {/* BUILD */}
-                <span className="relative flex flex-col overflow-hidden h-6">
-                  <span className={`font-extrabold leading-6 transition-transform duration-500 ease-out group-hover/logo:-translate-y-full ${isOpen ? "text-white" : ""}`}>
+                <span className="relative flex flex-col overflow-hidden h-10 sm:h-12">
+                  <span className={`font-black leading-10 sm:leading-12 transition-transform duration-500 ease-out group-hover/logo:-translate-y-full ${isOpen ? "text-white" : ""}`}>
                     BUILD
                   </span>
-                  <span className="absolute left-0 top-0 font-extrabold leading-6 text-accent transition-transform duration-500 ease-out translate-y-full group-hover/logo:translate-y-0">
+                  <span className="absolute left-0 top-0 font-black leading-10 sm:leading-12 text-accent transition-transform duration-500 ease-out translate-y-full group-hover/logo:translate-y-0">
                     BUILD
                   </span>
                 </span>
 
                 {/* NEST */}
-                <span className="relative flex flex-col overflow-hidden h-6 ml-[3px] sm:ml-[4px] pr-[4px]">
-                  <span className="font-light leading-6 text-accent transition-transform duration-500 ease-out delay-75 group-hover/logo:-translate-y-full">
+                <span className="relative flex flex-col overflow-hidden h-10 sm:h-12 ml-[4px] sm:ml-[6px] pr-[4px]">
+                  <span className="font-light leading-10 sm:leading-12 text-accent transition-transform duration-500 ease-out delay-75 group-hover/logo:-translate-y-full">
                     NEST<span className={isOpen ? "text-white" : !isLightText ? "text-text-luxury" : "text-white"}>.</span>
                   </span>
-                  <span className="absolute left-0 top-0 font-light leading-6 transition-transform duration-500 ease-out delay-75 translate-y-full group-hover/logo:translate-y-0">
+                  <span className="absolute left-0 top-0 font-light leading-10 sm:leading-12 transition-transform duration-500 ease-out delay-75 translate-y-full group-hover/logo:translate-y-0">
                     <span className={isOpen ? "text-white" : !isLightText ? "text-text-luxury" : "text-white"}>NEST</span>
                     <span className="text-accent">.</span>
                   </span>

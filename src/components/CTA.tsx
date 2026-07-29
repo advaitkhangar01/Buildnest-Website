@@ -1,9 +1,11 @@
 "use client";
 
-import React, { useState, useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import React, { useState, useRef, useEffect } from "react";
+import { motion } from "framer-motion";
 import TiltCard3D from "@/components/TiltCard3D";
 import dynamic from "next/dynamic";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 const MapBox = dynamic(() => import("@/components/MapBox"), {
   ssr: false,
@@ -21,14 +23,47 @@ export default function CTA() {
   });
   const [submitted, setSubmitted] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
+  const shape1Ref = useRef<HTMLDivElement>(null);
+  const shape2Ref = useRef<HTMLDivElement>(null);
 
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  });
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
 
-  const yParallax = useTransform(scrollYProgress, [0, 1], [-80, 80]);
-  const yParallaxFast = useTransform(scrollYProgress, [0, 1], [-130, 130]);
+    let ctx = gsap.context(() => {
+      if (shape1Ref.current) {
+        gsap.fromTo(shape1Ref.current,
+          { y: -80 },
+          {
+            y: 80,
+            ease: "none",
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: true,
+            }
+          }
+        );
+      }
+      if (shape2Ref.current) {
+        gsap.fromTo(shape2Ref.current,
+          { y: -130 },
+          {
+            y: 130,
+            ease: "none",
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: true,
+            }
+          }
+        );
+      }
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -42,9 +77,15 @@ export default function CTA() {
       ref={sectionRef}
       className="relative py-20 sm:py-24 lg:py-32 bg-text-luxury text-bg-luxury border-b border-border-luxury/10 overflow-hidden"
     >
-      {/* Background radial lighting glow in top-right */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-accent/5 rounded-full blur-[80px] pointer-events-none" />
+      {/* Background radial lighting glow in top-right - optimized to radial gradients (no blur filter rasterization) */}
+      <div 
+        style={{ background: "radial-gradient(circle at center, rgba(15, 92, 105, 0.15) 0%, transparent 70%)" }}
+        className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full pointer-events-none" 
+      />
+      <div 
+        style={{ background: "radial-gradient(circle at center, rgba(166, 107, 61, 0.08) 0%, transparent 70%)" }}
+        className="absolute bottom-0 left-0 w-[300px] h-[300px] rounded-full pointer-events-none" 
+      />
       
       {/* Background Graphics & Depth Lights */}
       <div className="absolute inset-0 pointer-events-none select-none overflow-hidden z-0 opacity-40">
@@ -54,18 +95,18 @@ export default function CTA() {
         </div>
 
         {/* Diagonal wireframe line cutting across (Strong high contrast element) */}
-        <motion.div
-          style={{ y: yParallax }}
-          className="absolute left-[-10%] top-[40%] w-[120%] h-[1px] bg-gradient-to-r from-transparent via-white/15 to-transparent rotate-[-15deg]"
+        <div
+          ref={shape1Ref}
+          className="absolute left-[-10%] top-[40%] w-[120%] h-[1px] bg-gradient-to-r from-transparent via-white/15 to-transparent rotate-[-15deg] pointer-events-none [will-change:transform]"
         />
 
         {/* Floating concentric outline circle */}
-        <motion.div
-          style={{ y: yParallaxFast }}
-          className="absolute left-[5%] bottom-[10%] w-[400px] h-[400px] rounded-full border border-dashed border-white/10 flex items-center justify-center"
+        <div
+          ref={shape2Ref}
+          className="absolute left-[5%] bottom-[10%] w-[400px] h-[400px] rounded-full border border-dashed border-white/10 flex items-center justify-center pointer-events-none [will-change:transform]"
         >
           <div className="w-[260px] h-[260px] rounded-full border border-white/5" />
-        </motion.div>
+        </div>
       </div>
 
       <div className="relative z-10 mx-auto max-w-[1440px] px-5 sm:px-10 lg:px-16">

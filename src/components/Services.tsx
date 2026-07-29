@@ -1,9 +1,11 @@
 "use client";
 
-import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
-import { useRef, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import TiltCard3D from "@/components/TiltCard3D";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 const services = [
   {
@@ -139,16 +141,49 @@ const services = [
 
 export default function Services() {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const shape1Ref = useRef<HTMLDivElement>(null);
+  const shape2Ref = useRef<HTMLDivElement>(null);
   const [activeIdx, setActiveIdx] = useState(0);
   const [expandedIdx, setExpandedIdx] = useState<number | null>(0);
 
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  });
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
 
-  const yParallax = useTransform(scrollYProgress, [0, 1], [-80, 80]);
-  const yParallaxFast = useTransform(scrollYProgress, [0, 1], [-140, 140]);
+    let ctx = gsap.context(() => {
+      if (shape1Ref.current) {
+        gsap.fromTo(shape1Ref.current,
+          { y: -140 },
+          {
+            y: 140,
+            ease: "none",
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: true,
+            }
+          }
+        );
+      }
+      if (shape2Ref.current) {
+        gsap.fromTo(shape2Ref.current,
+          { y: -80 },
+          {
+            y: 80,
+            ease: "none",
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: true,
+            }
+          }
+        );
+      }
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
 
   return (
     <section
@@ -161,9 +196,15 @@ export default function Services() {
 
       {/* Background Graphics & Depth Lights */}
       <div className="absolute inset-0 pointer-events-none select-none overflow-hidden">
-        {/* Subtle radial depth spotlight */}
-        <div className="absolute top-1/2 left-[-10%] w-[500px] h-[500px] rounded-full bg-accent/3 blur-3xl [transform:translateZ(0)] pointer-events-none" />
-        <div className="absolute bottom-[10%] right-[-10%] w-[450px] h-[450px] rounded-full bg-primary/3 blur-[110px] pointer-events-none" />
+        {/* Subtle radial depth spotlight - optimized to radial gradients (no blur filter rasterization) */}
+        <div 
+          style={{ background: "radial-gradient(circle at center, rgba(166, 107, 61, 0.05) 0%, transparent 70%)" }}
+          className="absolute top-1/2 left-[-10%] w-[500px] h-[500px] rounded-full [transform:translateZ(0)] pointer-events-none" 
+        />
+        <div 
+          style={{ background: "radial-gradient(circle at center, rgba(15, 92, 105, 0.05) 0%, transparent 70%)" }}
+          className="absolute bottom-[10%] right-[-10%] w-[450px] h-[450px] rounded-full pointer-events-none" 
+        />
 
         {/* CAD Grid Coordinates */}
         <div className="absolute top-[8%] left-[5%] text-text-luxury/10 text-[9px] font-mono tracking-[0.2em] uppercase">
@@ -171,19 +212,19 @@ export default function Services() {
         </div>
 
         {/* Geometric Outline Circle representing compass drawings */}
-        <motion.div
-          style={{ y: yParallaxFast }}
-          className="absolute right-[-15%] top-[15%] w-[700px] h-[700px] rounded-full border border-primary/5 flex items-center justify-center opacity-60"
+        <div
+          ref={shape1Ref}
+          className="absolute right-[-15%] top-[15%] w-[700px] h-[700px] rounded-full border border-primary/5 flex items-center justify-center opacity-60 pointer-events-none [will-change:transform]"
         >
           <div className="w-[500px] h-[500px] rounded-full border border-dashed border-primary/5 flex items-center justify-center">
             <div className="w-[300px] h-[300px] rounded-full border border-primary/5" />
           </div>
-        </motion.div>
+        </div>
 
         {/* Thin vector wireframe layout box */}
-        <motion.div
-          style={{ y: yParallax }}
-          className="absolute left-[8%] bottom-[8%] w-[220px] h-[220px] border border-accent/10 rounded-[50px] opacity-70"
+        <div
+          ref={shape2Ref}
+          className="absolute left-[8%] bottom-[8%] w-[220px] h-[220px] border border-accent/10 rounded-[50px] opacity-70 pointer-events-none [will-change:transform]"
         />
       </div>
 

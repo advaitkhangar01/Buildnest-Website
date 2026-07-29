@@ -56,6 +56,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://buildnestnagpur.com"),
   title: "Buildnest | Premium Architecture, Interior & Construction Solutions",
   description: "Buildnest offers bespoke turnkey architecture, construction, and interior design solutions in Nagpur. Crafting timeless spaces with engineering precision.",
   keywords: ["Architecture", "Interior Design", "Construction", "Nagpur", "Premium", "Turnkey Projects", "Buildnest"],
@@ -76,12 +77,21 @@ export const metadata: Metadata = {
     description: "Bespoke turnkey architecture, construction, and interior design in Nagpur. Crafting timeless spaces with engineering precision.",
     url: "https://buildnestnagpur.com",
     siteName: "Buildnest",
+    images: [
+      {
+        url: "/images/logo.png",
+        width: 786,
+        height: 714,
+        alt: "Buildnest Logo",
+      },
+    ],
     locale: "en_US",
     type: "website",
   },
 };
 
 import MobileQuickBar from "@/components/MobileQuickBar";
+import Preloader from "@/components/Preloader";
 
 export default function RootLayout({
   children,
@@ -94,6 +104,7 @@ export default function RootLayout({
       className={`${avenir.variable} ${montserrat.variable} ${oswald.variable} antialiased`}
     >
       <body className="min-h-full flex flex-col blueprint-grid">
+        <Preloader />
         <LenisProvider>
           {children}
           <MobileQuickBar />

@@ -1,8 +1,10 @@
 "use client";
 
-import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
-import { useRef, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useRef, useState, useEffect } from "react";
 import TiltCard3D from "@/components/TiltCard3D";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 const promises = [
   {
@@ -42,15 +44,48 @@ const promises = [
 
 export default function QualityPromise() {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const shape1Ref = useRef<HTMLDivElement>(null);
+  const shape2Ref = useRef<HTMLDivElement>(null);
   const [expandedCard, setExpandedCard] = useState<number | null>(null);
 
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  });
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
 
-  const yParallax = useTransform(scrollYProgress, [0, 1], [-50, 50]);
-  const yParallaxFast = useTransform(scrollYProgress, [0, 1], [-100, 100]);
+    let ctx = gsap.context(() => {
+      if (shape1Ref.current) {
+        gsap.fromTo(shape1Ref.current,
+          { y: -50 },
+          {
+            y: 50,
+            ease: "none",
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: true,
+            }
+          }
+        );
+      }
+      if (shape2Ref.current) {
+        gsap.fromTo(shape2Ref.current,
+          { y: -100 },
+          {
+            y: 100,
+            ease: "none",
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: true,
+            }
+          }
+        );
+      }
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
 
   return (
     <section
@@ -62,9 +97,15 @@ export default function QualityPromise() {
 
       {/* Background Graphics & Depth Lights */}
       <div className="absolute inset-0 pointer-events-none select-none overflow-hidden">
-        {/* Soft Radial Ambient Lights */}
-        <div className="absolute top-[20%] left-[-10%] w-[500px] h-[500px] rounded-full bg-accent/3 blur-[120px] pointer-events-none" />
-        <div className="absolute bottom-[20%] right-[-10%] w-[450px] h-[450px] rounded-full bg-primary/4 blur-[110px] pointer-events-none" />
+        {/* Soft Radial Ambient Lights - optimized to radial gradients (no blur filter rasterization) */}
+        <div 
+          style={{ background: "radial-gradient(circle at center, rgba(166, 107, 61, 0.05) 0%, transparent 70%)" }}
+          className="absolute top-[20%] left-[-10%] w-[500px] h-[500px] rounded-full pointer-events-none" 
+        />
+        <div 
+          style={{ background: "radial-gradient(circle at center, rgba(15, 92, 105, 0.06) 0%, transparent 70%)" }}
+          className="absolute bottom-[20%] right-[-10%] w-[450px] h-[450px] rounded-full pointer-events-none" 
+        />
         
         {/* CAD Grid Coordinates */}
         <div className="absolute top-[8%] left-[5%] text-text-luxury/10 text-[9px] font-mono tracking-[0.2em] uppercase">
@@ -72,9 +113,9 @@ export default function QualityPromise() {
         </div>
 
         {/* Crisp CAD Dimension Line Graphic */}
-        <motion.div
-          style={{ y: yParallax }}
-          className="absolute right-[5%] top-[25%] w-[350px] flex flex-col gap-2 items-center opacity-60"
+        <div
+          ref={shape1Ref}
+          className="absolute right-[5%] top-[25%] w-[350px] flex flex-col gap-2 items-center opacity-60 pointer-events-none [will-change:transform]"
         >
           <div className="w-full flex items-center justify-between text-text-luxury/20 text-[9px] font-mono tracking-[0.15em] uppercase">
             <span>START_STAND</span>
@@ -85,15 +126,15 @@ export default function QualityPromise() {
             <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-accent" />
             <div className="absolute right-0 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-accent" />
           </div>
-        </motion.div>
+        </div>
 
         {/* Floating concentric outline circles */}
-        <motion.div
-          style={{ y: yParallaxFast }}
-          className="absolute left-[3%] bottom-[12%] w-[240px] h-[240px] rounded-full border border-primary/5 flex items-center justify-center opacity-70"
+        <div
+          ref={shape2Ref}
+          className="absolute left-[3%] bottom-[12%] w-[240px] h-[240px] rounded-full border border-primary/5 flex items-center justify-center opacity-70 pointer-events-none [will-change:transform]"
         >
           <div className="w-[140px] h-[140px] rounded-full border border-dashed border-primary/5" />
-        </motion.div>
+        </div>
       </div>
 
       <div className="relative z-10 mx-auto max-w-[1440px] px-5 sm:px-10 lg:px-16">

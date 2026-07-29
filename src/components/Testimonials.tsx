@@ -1,8 +1,10 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
-import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import TiltCard3D from "@/components/TiltCard3D";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 interface Testimonial {
   id: string;
@@ -81,15 +83,48 @@ export default function Testimonials() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isAutoplay, setIsAutoplay] = useState(true);
   const sectionRef = useRef<HTMLDivElement>(null);
+  const shape1Ref = useRef<HTMLDivElement>(null);
+  const shape2Ref = useRef<HTMLDivElement>(null);
   const autoplayTimerRef = useRef<NodeJS.Timeout | null>(null);
 
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  });
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
 
-  const yParallax = useTransform(scrollYProgress, [0, 1], [-60, 60]);
-  const yParallaxFast = useTransform(scrollYProgress, [0, 1], [-110, 110]);
+    let ctx = gsap.context(() => {
+      if (shape1Ref.current) {
+        gsap.fromTo(shape1Ref.current,
+          { y: -110 },
+          {
+            y: 110,
+            ease: "none",
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: true,
+            }
+          }
+        );
+      }
+      if (shape2Ref.current) {
+        gsap.fromTo(shape2Ref.current,
+          { y: -60 },
+          {
+            y: 60,
+            ease: "none",
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: true,
+            }
+          }
+        );
+      }
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
 
   const nextTestimonial = useCallback(() => {
     setActiveIndex((prev) => (prev + 1) % testimonials.length);
@@ -124,9 +159,15 @@ export default function Testimonials() {
     >
       {/* Background Graphics & Ambient Atmospheric Lighting */}
       <div className="absolute inset-0 pointer-events-none select-none overflow-hidden">
-        {/* Soft Radial Glows */}
-        <div className="absolute top-[15%] right-[-8%] w-[600px] h-[600px] rounded-full bg-primary/4 blur-[140px] pointer-events-none" />
-        <div className="absolute bottom-[10%] left-[-10%] w-[500px] h-[500px] rounded-full bg-accent/5 blur-[120px] pointer-events-none" />
+        {/* Soft Radial Glows - optimized to radial gradients (no blur filter rasterization) */}
+        <div 
+          style={{ background: "radial-gradient(circle at center, rgba(15, 92, 105, 0.06) 0%, transparent 70%)" }}
+          className="absolute top-[15%] right-[-8%] w-[600px] h-[600px] rounded-full pointer-events-none" 
+        />
+        <div 
+          style={{ background: "radial-gradient(circle at center, rgba(166, 107, 61, 0.07) 0%, transparent 70%)" }}
+          className="absolute bottom-[10%] left-[-10%] w-[500px] h-[500px] rounded-full pointer-events-none" 
+        />
 
         {/* CAD Grid Metadata Tag */}
         <div className="absolute top-[8%] left-[6%] text-text-luxury/15 text-[10px] font-mono tracking-[0.25em] uppercase hidden sm:block">
@@ -134,19 +175,19 @@ export default function Testimonials() {
         </div>
 
         {/* Concentric Architectural Compass Rings */}
-        <motion.div
-          style={{ y: yParallaxFast }}
-          className="absolute right-[5%] top-[5%] w-[550px] h-[550px] rounded-full border border-primary/5 flex items-center justify-center opacity-70"
+        <div
+          ref={shape1Ref}
+          className="absolute right-[5%] top-[5%] w-[550px] h-[550px] rounded-full border border-primary/5 flex items-center justify-center opacity-70 pointer-events-none [will-change:transform]"
         >
           <div className="w-[380px] h-[380px] rounded-full border border-dashed border-primary/5 flex items-center justify-center">
             <div className="w-[200px] h-[200px] rounded-full border border-primary/5" />
           </div>
-        </motion.div>
+        </div>
 
         {/* Architectural drafting line */}
-        <motion.div
-          style={{ y: yParallax }}
-          className="absolute left-[12%] bottom-[12%] w-[350px] h-[1px] bg-gradient-to-r from-transparent via-accent/15 to-transparent rotate-[25deg]"
+        <div
+          ref={shape2Ref}
+          className="absolute left-[12%] bottom-[12%] w-[350px] h-[1px] bg-gradient-to-r from-transparent via-accent/15 to-transparent rotate-[25deg] pointer-events-none [will-change:transform]"
         />
       </div>
 

@@ -2,9 +2,11 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { motion } from "framer-motion";
+import { useRef, useEffect } from "react";
 import TiltCard3D from "@/components/TiltCard3D";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 const projects = [
   {
@@ -43,14 +45,47 @@ const projects = [
 
 export default function Projects() {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const shape1Ref = useRef<HTMLDivElement>(null);
+  const shape2Ref = useRef<HTMLDivElement>(null);
 
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  });
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
 
-  const yParallax = useTransform(scrollYProgress, [0, 1], [-70, 70]);
-  const yParallaxFast = useTransform(scrollYProgress, [0, 1], [-120, 120]);
+    let ctx = gsap.context(() => {
+      if (shape1Ref.current) {
+        gsap.fromTo(shape1Ref.current,
+          { y: -70 },
+          {
+            y: 70,
+            ease: "none",
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: true,
+            }
+          }
+        );
+      }
+      if (shape2Ref.current) {
+        gsap.fromTo(shape2Ref.current,
+          { y: -120 },
+          {
+            y: 120,
+            ease: "none",
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: true,
+            }
+          }
+        );
+      }
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
 
   return (
     <section
@@ -60,14 +95,20 @@ export default function Projects() {
     >
       {/* Background Graphics & Depth Lights */}
       <div className="absolute inset-0 pointer-events-none select-none overflow-hidden">
-        {/* Soft Radial Ambient Lights */}
-        <div className="absolute top-[-10%] left-[20%] w-[500px] h-[500px] rounded-full bg-primary/3 blur-3xl [transform:translateZ(0)] pointer-events-none" />
-        <div className="absolute bottom-[-10%] right-[10%] w-[400px] h-[400px] rounded-full bg-accent/3 blur-3xl [transform:translateZ(0)] pointer-events-none" />
+        {/* Soft Radial Ambient Lights - optimized to radial gradients (no blur filter rasterization) */}
+        <div 
+          style={{ background: "radial-gradient(circle at center, rgba(15, 92, 105, 0.05) 0%, transparent 70%)" }}
+          className="absolute top-[-10%] left-[20%] w-[500px] h-[500px] rounded-full [transform:translateZ(0)] pointer-events-none" 
+        />
+        <div 
+          style={{ background: "radial-gradient(circle at center, rgba(166, 107, 61, 0.05) 0%, transparent 70%)" }}
+          className="absolute bottom-[-10%] right-[10%] w-[400px] h-[400px] rounded-full [transform:translateZ(0)] pointer-events-none" 
+        />
         
         {/* Horizontal structural axis line */}
-        <motion.div
-          style={{ y: yParallax }}
-          className="absolute top-[45%] left-0 w-full h-[0.5px] bg-gradient-to-r from-transparent via-text-luxury/5 to-transparent"
+        <div
+          ref={shape1Ref}
+          className="absolute top-[45%] left-0 w-full h-[0.5px] bg-gradient-to-r from-transparent via-text-luxury/5 to-transparent pointer-events-none [will-change:transform]"
         />
 
         {/* CAD Layout Marks */}
@@ -78,12 +119,12 @@ export default function Projects() {
         </div>
 
         {/* Floating geometric wireframes (CAD elevation blocks) */}
-        <motion.div
-          style={{ y: yParallaxFast }}
-          className="absolute right-[5%] top-[10%] w-[320px] h-[320px] rounded-[50px] border border-dashed border-accent/10 flex items-center justify-center opacity-60"
+        <div
+          ref={shape2Ref}
+          className="absolute right-[5%] top-[10%] w-[320px] h-[320px] rounded-[50px] border border-dashed border-accent/10 flex items-center justify-center opacity-60 pointer-events-none [will-change:transform]"
         >
           <div className="w-[180px] h-[180px] rounded-[30px] border border-accent/5" />
-        </motion.div>
+        </div>
       </div>
 
       <div className="mx-auto max-w-[1440px] px-5 sm:px-10 lg:px-16">

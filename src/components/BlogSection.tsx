@@ -18,8 +18,14 @@ export default function BlogSection() {
       {/* Ambient Depth Elements */}
       <div className="absolute inset-0 pointer-events-none select-none overflow-hidden">
         <div className="absolute inset-0 blueprint-grid opacity-[0.02]" />
-        <div className="absolute top-0 right-[15%] w-[450px] h-[450px] bg-accent/5 rounded-full blur-[140px]" />
-        <div className="absolute bottom-0 left-[10%] w-[400px] h-[400px] bg-primary/5 rounded-full blur-[120px]" />
+        <div 
+          style={{ background: "radial-gradient(circle at center, rgba(166, 107, 61, 0.06) 0%, transparent 70%)" }}
+          className="absolute top-0 right-[15%] w-[450px] h-[450px] rounded-full" 
+        />
+        <div 
+          style={{ background: "radial-gradient(circle at center, rgba(15, 92, 105, 0.06) 0%, transparent 70%)" }}
+          className="absolute bottom-0 left-[10%] w-[400px] h-[400px] rounded-full" 
+        />
         
         {/* Decorative CAD Code */}
         <div className="absolute top-[10%] left-[6%] text-text-luxury/10 text-[9px] font-mono tracking-[0.2em] uppercase hidden md:block">

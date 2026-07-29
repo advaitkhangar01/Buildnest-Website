@@ -2,8 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
+import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import TiltCard3D from "@/components/TiltCard3D";
@@ -11,34 +11,44 @@ import TiltCard3D from "@/components/TiltCard3D";
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
   const bgRef = useRef<HTMLDivElement>(null);
-
-  const { scrollY } = useScroll();
-  const yParallax = useTransform(scrollY, [0, 800], [0, 140]);
-  const opacityParallax = useTransform(scrollY, [0, 500], [1, 0.4]);
+  const cadLinesRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
 
-    let tween: gsap.core.Tween | null = null;
-    if (bgRef.current && containerRef.current) {
-      tween = gsap.to(bgRef.current, {
-        yPercent: 18,
-        ease: "none",
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: "top top",
-          end: "bottom top",
-          scrub: true,
-        },
-      });
-    }
-
-    return () => {
-      if (tween) {
-        tween.scrollTrigger?.kill();
-        tween.kill();
+    let ctx = gsap.context(() => {
+      if (bgRef.current && containerRef.current) {
+        gsap.to(bgRef.current, {
+          yPercent: 18,
+          ease: "none",
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: "top top",
+            end: "bottom top",
+            scrub: true,
+          },
+        });
       }
-    };
+
+      if (cadLinesRef.current && containerRef.current) {
+        gsap.fromTo(cadLinesRef.current,
+          { y: 0, opacity: 0.3 },
+          {
+            y: 140,
+            opacity: 0.12,
+            ease: "none",
+            scrollTrigger: {
+              trigger: containerRef.current,
+              start: "top top",
+              end: "bottom top",
+              scrub: true,
+            }
+          }
+        );
+      }
+    }, containerRef);
+
+    return () => ctx.revert();
   }, []);
 
   // Text lines for reveal animation
@@ -74,20 +84,25 @@ export default function Hero() {
         <div className="absolute inset-0 bg-radial-gradient(circle at 70% 30%, transparent 20%, rgba(0,0,0,0.85) 90%)" />
       </motion.div>
 
-      {/* Volumetric Ambient Lighting Orbs */}
+      {/* Volumetric Ambient Lighting Orbs - optimized to radial gradients (no blur filter rasterization) */}
       <div className="absolute inset-0 pointer-events-none select-none overflow-hidden z-2">
         <div
-          className="absolute -top-32 right-10 w-[650px] h-[650px] rounded-full bg-accent/20 blur-[150px] animate-orb-float [transform:translateZ(0)]"
+          style={{ background: "radial-gradient(circle at center, rgba(166, 107, 61, 0.18) 0%, rgba(166, 107, 61, 0) 70%)" }}
+          className="absolute -top-32 right-10 w-[650px] h-[650px] rounded-full animate-orb-float [transform:translateZ(0)]"
         />
         <div
-          style={{ animationDelay: "2s", animationDuration: "12s" }}
-          className="absolute -bottom-32 left-10 w-[650px] h-[650px] rounded-full bg-primary/30 blur-[150px] animate-orb-float [transform:translateZ(0)]"
+          style={{
+            animationDelay: "2s",
+            animationDuration: "12s",
+            background: "radial-gradient(circle at center, rgba(15, 92, 105, 0.22) 0%, rgba(15, 92, 105, 0) 70%)"
+          }}
+          className="absolute -bottom-32 left-10 w-[650px] h-[650px] rounded-full animate-orb-float [transform:translateZ(0)]"
         />
       </div>
 
       {/* Background CAD Lines */}
-      <motion.div
-        style={{ y: yParallax, opacity: opacityParallax }}
+      <div
+        ref={cadLinesRef}
         className="absolute inset-0 z-5 pointer-events-none select-none opacity-30 preserve-3d [will-change:transform]"
       >
         {/* Architectural Vector Grid overlay lines */}
@@ -100,7 +115,7 @@ export default function Hero() {
           <div className="w-[280px] h-[280px] rounded-full border border-white/10" />
           <div className="w-[140px] h-[140px] rounded-full border border-accent/30" />
         </div>
-      </motion.div>
+      </div>
 
       {/* Main Hero Container */}
       <div className="relative z-10 mx-auto w-full max-w-[1440px] px-5 sm:px-10 lg:px-16 my-auto preserve-3d">

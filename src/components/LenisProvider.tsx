@@ -14,23 +14,33 @@ export default function LenisProvider({ children }: { children: React.ReactNode 
     // Register GSAP ScrollTrigger plugin
     gsap.registerPlugin(ScrollTrigger);
 
-    // Turn off GSAP lag smoothing to maintain continuous frame sync with Lenis
-    gsap.ticker.lagSmoothing(0);
+    // Check user preference for reduced motion
+    const prefersReducedMotion =
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    // Enable GSAP lag smoothing to prevent stuttering under CPU spikes
+    gsap.ticker.lagSmoothing(500, 33);
 
     // Detect touch / mobile device
     const isTouchDevice =
       typeof window !== "undefined" &&
       ("ontouchstart" in window || navigator.maxTouchPoints > 0 || window.innerWidth < 768);
 
+    if (prefersReducedMotion) {
+      ScrollTrigger.refresh();
+      return;
+    }
+
     // Initialize Lenis scroller with autoRaf false so GSAP ticker exclusively drives the frame loop
     const lenis = new Lenis({
-      duration: isTouchDevice ? 0.8 : 1.0,
+      duration: isTouchDevice ? 0.7 : 0.9,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: "vertical",
       gestureOrientation: "vertical",
       smoothWheel: true,
       wheelMultiplier: 1.0,
-      touchMultiplier: isTouchDevice ? 1.0 : 1.5,
+      touchMultiplier: 1.0,
       autoRaf: false,
     });
 
@@ -78,7 +88,6 @@ export default function LenisProvider({ children }: { children: React.ReactNode 
       lenis.off("scroll", handleScroll);
       lenis.destroy();
       lenisRef.current = null;
-      gsap.ticker.lagSmoothing(500, 33);
       delete (window as unknown as { lenis?: Lenis }).lenis;
     };
   }, []);

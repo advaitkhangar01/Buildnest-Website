@@ -405,16 +405,16 @@ export default function Footer() {
           
           {/* Section 1: Company Profile (Cols 1-4) */}
           <div className="md:col-span-4 flex flex-col gap-6 text-left">
-            <Link href="#home" className="flex items-center gap-3 group/logo w-fit">
+            <Link href="#home" className="flex items-center gap-4 sm:gap-5 group/logo w-fit">
               <Image
-                src="/images/logo.webp"
+                src="/images/logo.png"
                 alt="Buildnest Logo"
-                width={120}
-                height={32}
-                className="object-contain"
+                width={160}
+                height={145}
+                className="h-16 sm:h-22 md:h-24 w-auto object-contain transition-transform duration-500 group-hover/logo:scale-105 filter drop-shadow-md"
               />
-              <span className="h-5 w-[1px] bg-border-luxury" />
-              <span className="font-heading-excn text-[18px] font-medium tracking-[0.2em] text-text-luxury">
+              <span className="h-10 sm:h-12 w-[2.5px] bg-border-luxury" />
+              <span className="font-heading-excn text-[26px] sm:text-[32px] font-black tracking-[0.22em] text-text-luxury">
                 BUILD<span className="font-light text-accent">NEST</span>.
               </span>
             </Link>
