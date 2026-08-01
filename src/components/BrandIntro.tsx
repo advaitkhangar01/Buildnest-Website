@@ -2,41 +2,11 @@
 
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useMemo, useCallback } from "react";
 import { MoveHorizontal, Ruler, Compass, CheckCircle2 } from "lucide-react";
 import TiltCard3D from "@/components/TiltCard3D";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-const hotspots = [
-  {
-    id: "ceiling",
-    x: 65, // %
-    y: 20, // %
-    title: "Integrated Shadowline Ceilings",
-    spec: "SPEC: SHADOWLINE // REF: DET-09",
-    desc: "A 12mm plasterboard recess replaces traditional cornices, creating an architectural shadow gap that makes the ceiling appear to float.",
-    align: "bottom-left",
-  },
-  {
-    id: "column",
-    x: 80, // %
-    y: 50, // %
-    title: "Fluted Travertine Column",
-    spec: "MAT: TRAVERTINE // HONE: MATTE",
-    desc: "Solid Turkish Travertine fluted cladding, precision-machined with a CNC router and hand-honed to a zero-tolerance seamless finish.",
-    align: "left",
-  },
-  {
-    id: "baseboard",
-    x: 45, // %
-    y: 85, // %
-    title: "Flush-Mount Baseboards",
-    spec: "SPEC: FLUSH-BASE // TOL: +/-0.2MM",
-    desc: "Anodized aluminum channels set flush with the drywall, avoiding dust-catching protrusions and maintaining the pure plane of the wall.",
-    align: "top-right",
-  },
-];
+import { useParallax } from "@/lib/animations/useParallax";
+import { HOTSPOTS_DATA, BRAND_INTRO_COPY, Hotspot } from "@/data/brandIntroData";
 
 export default function BrandIntro() {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -45,63 +15,24 @@ export default function BrandIntro() {
   const shape1Ref = useRef<HTMLDivElement>(null);
   const shape2Ref = useRef<HTMLDivElement>(null);
 
-  const [sliderPos, setSliderPos] = useState(50); // percentage (0 - 100)
+  const [sliderPos, setSliderPos] = useState(50);
   const [isDragging, setIsDragging] = useState(false);
   const [activeHotspot, setActiveHotspot] = useState<string | null>(null);
 
-  const activeHotspotData = hotspots.find((h) => h.id === activeHotspot);
+  useParallax({ triggerRef: sectionRef, targetRef: shape1Ref, yFrom: -80, yTo: 80 });
+  useParallax({ triggerRef: sectionRef, targetRef: shape2Ref, yFrom: -40, yTo: 40 });
 
-  useEffect(() => {
-    // On mobile, auto-select the first hotspot on mount so the info block is populated
-    if (typeof window !== "undefined" && window.innerWidth < 640 && !activeHotspot) {
-      const timer = setTimeout(() => {
-        setActiveHotspot(hotspots[0].id);
-      }, 0);
-      return () => clearTimeout(timer);
-    }
+  const activeHotspotData = useMemo(() => {
+    return HOTSPOTS_DATA.find((h) => h.id === activeHotspot);
   }, [activeHotspot]);
 
   useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
+    if (typeof window !== "undefined" && window.innerWidth < 640 && !activeHotspot) {
+      setActiveHotspot(HOTSPOTS_DATA[0].id);
+    }
+  }, [activeHotspot]);
 
-    let ctx = gsap.context(() => {
-      if (shape1Ref.current) {
-        gsap.fromTo(shape1Ref.current,
-          { y: -80 },
-          {
-            y: 80,
-            ease: "none",
-            scrollTrigger: {
-              trigger: sectionRef.current,
-              start: "top bottom",
-              end: "bottom top",
-              scrub: true,
-            }
-          }
-        );
-      }
-      if (shape2Ref.current) {
-        gsap.fromTo(shape2Ref.current,
-          { y: -40 },
-          {
-            y: 40,
-            ease: "none",
-            scrollTrigger: {
-              trigger: sectionRef.current,
-              start: "top bottom",
-              end: "bottom top",
-              scrub: true,
-            }
-          }
-        );
-      }
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
-
-  // Pointer event handlers for dragging slider
-  const handlePointerDown = (e: React.PointerEvent) => {
+  const handlePointerDown = useCallback((e: React.PointerEvent) => {
     setIsDragging(true);
     if (!containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
@@ -109,31 +40,33 @@ export default function BrandIntro() {
     const x = e.clientX - rect.left;
     const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100));
     setSliderPos(percentage);
-    e.currentTarget.setPointerCapture(e.pointerId);
-  };
+    if (e.currentTarget.hasPointerCapture && !e.currentTarget.hasPointerCapture(e.pointerId)) {
+      e.currentTarget.setPointerCapture(e.pointerId);
+    }
+  }, []);
 
-  const handlePointerMove = (e: React.PointerEvent) => {
+  const handlePointerMove = useCallback((e: React.PointerEvent) => {
     if (!isDragging && e.buttons !== 1) return;
     const rect = containerRectRef.current;
     if (!rect) return;
     const x = e.clientX - rect.left;
     const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100));
     setSliderPos(percentage);
-  };
+  }, [isDragging]);
 
-  const handlePointerUp = (e: React.PointerEvent) => {
+  const handlePointerUp = useCallback((e: React.PointerEvent) => {
     setIsDragging(false);
     containerRectRef.current = null;
-    if (containerRef.current) {
+    if (containerRef.current && e.currentTarget.hasPointerCapture && e.currentTarget.hasPointerCapture(e.pointerId)) {
       try {
         e.currentTarget.releasePointerCapture(e.pointerId);
       } catch {
-        // Ignore capture release errors
+        // Safe capture release
       }
     }
-  };
+  }, []);
 
-  const getTooltipClass = (align: string) => {
+  const getTooltipClass = useCallback((align: string) => {
     switch (align) {
       case "bottom-left":
         return "absolute top-8 right-2 w-[240px] sm:w-[280px] bg-bg-luxury/95 backdrop-blur-md border border-accent/25 rounded-xl p-4 shadow-xl z-30 text-left md:right-0";
@@ -144,17 +77,9 @@ export default function BrandIntro() {
       default:
         return "absolute top-8 left-1/2 -translate-x-1/2 w-[240px] sm:w-[280px] bg-bg-luxury/95 backdrop-blur-md border border-accent/25 rounded-xl p-4 shadow-xl z-30 text-left";
     }
-  };
+  }, []);
 
-  // Splitting text for staggered animations
-  const headingText = "Crafting The Future of Living.";
-  const headingWords = headingText.split(" ");
-
-  const paragraph1 = "Buildnest is Nagpur’s premier architecture, interior, and turnkey construction house. Founded on the principles of permanence, precision, and craftsmanship, we design spaces that stand as architectural statements.";
-  const p1Words = paragraph1.split(" ");
-
-  const paragraph2 = "Every detail we draw is an exercise in restraint and luxury. We align construction engineering and interior artistry into one seamless turnkey workflow, managing projects from initial CAD specifications to the final key handover.";
-  const p2Words = paragraph2.split(" ");
+  const headingWords = useMemo(() => BRAND_INTRO_COPY.headingText.split(" "), []);
 
   return (
     <section
@@ -162,9 +87,7 @@ export default function BrandIntro() {
       ref={sectionRef}
       className="relative py-20 sm:py-24 lg:py-32 bg-bg-luxury border-b border-border-luxury/50 overflow-hidden"
     >
-      {/* Background Graphics & Depth Lights */}
       <div className="absolute inset-0 pointer-events-none select-none overflow-hidden">
-        {/* Soft Radial Ambient Lights */}
         <div 
           style={{ background: "radial-gradient(circle at center, rgba(15, 92, 105, 0.05) 0%, transparent 70%)" }}
           className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] rounded-full [transform:translateZ(0)]" 
@@ -174,35 +97,17 @@ export default function BrandIntro() {
           className="absolute bottom-[-10%] left-[-10%] w-[400px] h-[400px] rounded-full [transform:translateZ(0)]" 
         />
         
-        {/* CAD Grid Coordinates */}
         <div className="absolute top-[8%] right-[5%] text-text-luxury/10 text-[9px] font-mono tracking-[0.2em] uppercase">
           SEC: 01_INTRO // NAGPUR_CIVIL // 21.1458° N, 79.0882° E
         </div>
         
-        {/* Editorial CAD grid line overlays */}
         <div className="hidden lg:block absolute left-[33.33%] top-0 bottom-0 w-[1px] bg-border-luxury/60 pointer-events-none">
-          {/* Millimeter ticks along the grid lines */}
           <div className="absolute top-[10%] left-[-3px] w-1.5 h-[1px] bg-accent/40" />
-          <div className="absolute top-[20%] left-[-3px] w-1.5 h-[1px] bg-accent/40" />
-          <div className="absolute top-[30%] left-[-3px] w-1.5 h-[1px] bg-accent/40" />
-          <div className="absolute top-[40%] left-[-3px] w-1.5 h-[1px] bg-accent/40" />
           <div className="absolute top-[50%] left-[-3px] w-1.5 h-[1px] bg-accent/40" />
-          <div className="absolute top-[60%] left-[-3px] w-1.5 h-[1px] bg-accent/40" />
-          <div className="absolute top-[70%] left-[-3px] w-1.5 h-[1px] bg-accent/40" />
-          <div className="absolute top-[80%] left-[-3px] w-1.5 h-[1px] bg-accent/40" />
           <div className="absolute top-[90%] left-[-3px] w-1.5 h-[1px] bg-accent/40" />
-          
           <span className="absolute top-[15%] left-3 text-[8px] font-mono text-accent/50 tracking-wider">H-GRID: 01A</span>
-          <span className="absolute top-[85%] left-3 text-[8px] font-mono text-accent/50 tracking-wider">H-GRID: 01B</span>
         </div>
 
-        <div className="hidden lg:block absolute left-0 right-0 top-[200px] h-[1px] bg-border-luxury/45 pointer-events-none">
-          <div className="absolute left-[10%] top-[-3px] w-[1px] h-1.5 bg-accent/40" />
-          <div className="absolute left-[50%] top-[-3px] w-[1px] h-1.5 bg-accent/40" />
-          <div className="absolute left-[80%] top-[-3px] w-[1px] h-1.5 bg-accent/40" />
-        </div>
-
-        {/* Geometric Outline Arc (Parallax) */}
         <div
           ref={shape1Ref}
           className="absolute -left-[15%] top-[5%] w-[700px] h-[700px] rounded-full border border-accent/5 flex items-center justify-center opacity-60 pointer-events-none [will-change:transform]"
@@ -210,7 +115,6 @@ export default function BrandIntro() {
           <div className="w-[500px] h-[500px] rounded-full border border-dashed border-accent/5 flex items-center justify-center" />
         </div>
         
-        {/* Thin vector wireframe rectangle */}
         <div
           ref={shape2Ref}
           className="absolute right-[8%] bottom-[10%] w-[220px] h-[320px] border border-primary/5 rounded-[40px] opacity-70 pointer-events-none [will-change:transform]"
@@ -220,7 +124,6 @@ export default function BrandIntro() {
       <div className="mx-auto max-w-[1440px] px-5 sm:px-10 lg:px-16 relative">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-start">
           
-          {/* Left Column: Index and Section Meta */}
           <div className="lg:col-span-4 flex flex-col gap-5 sm:gap-6">
             <span className="text-xs font-bold tracking-[0.2em] text-accent uppercase flex items-center gap-3">
               <span className="w-8 h-[1px] bg-accent inline-block" />
@@ -254,10 +157,8 @@ export default function BrandIntro() {
             </div>
           </div>
 
-          {/* Right Column: Narrative Block */}
           <div className="lg:col-span-8 flex flex-col gap-6 sm:gap-10">
             <div className="flex flex-col gap-4 sm:gap-5">
-              {/* Animated Paragraph 1 */}
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -265,10 +166,9 @@ export default function BrandIntro() {
                 transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                 className="text-text-luxury text-[17px] sm:text-[24px] font-medium leading-[1.6] max-w-[65ch]"
               >
-                {paragraph1}
+                {BRAND_INTRO_COPY.paragraph1}
               </motion.p>
 
-              {/* Animated Paragraph 2 */}
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -276,14 +176,12 @@ export default function BrandIntro() {
                 transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
                 className="text-muted-luxury text-[15px] sm:text-[18px] leading-[1.7] font-normal max-w-[65ch]"
               >
-                {paragraph2}
+                {BRAND_INTRO_COPY.paragraph2}
               </motion.p>
             </div>
 
-            {/* Immersive Architectural Photo & CAD Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-12 gap-8 lg:gap-10 items-stretch">
               
-              {/* CAD-to-Handover Interactive Comparison Slider Container */}
               <div className="sm:col-span-8 flex flex-col gap-2">
                 <div 
                   ref={containerRef}
@@ -293,7 +191,6 @@ export default function BrandIntro() {
                   onPointerLeave={handlePointerUp}
                   className="relative aspect-[16/10] overflow-hidden rounded-[24px] bg-border-luxury border border-border-luxury select-none touch-none shadow-lg cursor-ew-resize group"
                 >
-                  {/* Bottom Layer: The Reality Photo */}
                   <div className="absolute inset-0 z-0">
                     <Image
                       src="/images/about_detail.webp"
@@ -305,8 +202,7 @@ export default function BrandIntro() {
                     />
                   </div>
 
-                  {/* Hotspots Overlay (Visible on the photo side, automatically clipped by the CAD layer z-index) */}
-                  {hotspots.map((spot) => {
+                  {HOTSPOTS_DATA.map((spot) => {
                     const isVisible = (spot.x > sliderPos);
                     
                     return (
@@ -322,6 +218,7 @@ export default function BrandIntro() {
                           onMouseLeave={() => setActiveHotspot(null)}
                           onClick={() => setActiveHotspot(activeHotspot === spot.id ? null : spot.id)}
                           className="relative flex h-6 w-6 items-center justify-center cursor-pointer group focus:outline-none"
+                          aria-label={`Inspect hotspot ${spot.title}`}
                         >
                           <span className="absolute inline-flex h-6 w-6 rounded-full bg-accent/40 animate-pulse-slow opacity-80" />
                           <span className="absolute inline-flex h-4 w-4 rounded-full bg-accent/20 group-hover:scale-125 transition-transform duration-300" />
@@ -330,7 +227,6 @@ export default function BrandIntro() {
                           </span>
                         </button>
 
-                        {/* Tooltip Content */}
                         <AnimatePresence>
                           {activeHotspot === spot.id && (
                             <motion.div
@@ -358,12 +254,10 @@ export default function BrandIntro() {
                     );
                   })}
 
-                  {/* Top Layer: CAD Blueprint (Clipped from the right based on sliderPos) */}
                   <div 
                     style={{ clipPath: `inset(0 ${100 - sliderPos}% 0 0)` }}
                     className="absolute inset-0 bg-[#F4F1EB] z-10 pointer-events-none"
                   >
-                    {/* SVG CAD Drafting Wireframe */}
                     <svg
                       viewBox="0 0 800 500"
                       className="w-full h-full object-cover opacity-85 select-none"
@@ -372,104 +266,44 @@ export default function BrandIntro() {
                       preserveAspectRatio="xMidYMid slice"
                     >
                       <defs>
-                        {/* CAD Grid Lines */}
                         <pattern id="cadGrid" width="40" height="40" patternUnits="userSpaceOnUse">
                           <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#0F5C69" strokeWidth="0.5" strokeOpacity="0.08"/>
                         </pattern>
-                        {/* CAD Hatch Pattern for walls */}
                         <pattern id="hatch" width="8" height="8" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse">
                           <line x1="0" y1="0" x2="0" y2="8" stroke="#A66B3D" strokeWidth="1" strokeOpacity="0.2" />
                         </pattern>
                       </defs>
                       
-                      {/* Grid Background */}
                       <rect width="100%" height="100%" fill="url(#cadGrid)" />
-
-                      {/* Technical CAD Border */}
                       <rect x="15" y="15" width="770" height="470" stroke="#0F5C69" strokeWidth="0.75" strokeOpacity="0.3" />
-                      
-                      {/* Grid Line Coordinates & Crosshairs */}
-                      <line x1="100" y1="15" x2="100" y2="485" stroke="#0F5C69" strokeWidth="0.5" strokeDasharray="3 6" strokeOpacity="0.15" />
-                      <line x1="300" y1="15" x2="300" y2="485" stroke="#0F5C69" strokeWidth="0.5" strokeDasharray="3 6" strokeOpacity="0.15" />
-                      <line x1="500" y1="15" x2="500" y2="485" stroke="#0F5C69" strokeWidth="0.5" strokeDasharray="3 6" strokeOpacity="0.15" />
-                      <line x1="700" y1="15" x2="700" y2="485" stroke="#0F5C69" strokeWidth="0.5" strokeDasharray="3 6" strokeOpacity="0.15" />
 
-                      <line x1="15" y1="100" x2="785" y2="100" stroke="#0F5C69" strokeWidth="0.5" strokeDasharray="3 6" strokeOpacity="0.15" />
-                      <line x1="15" y1="250" x2="785" y2="250" stroke="#0F5C69" strokeWidth="0.5" strokeDasharray="3 6" strokeOpacity="0.15" />
-                      <line x1="15" y1="400" x2="785" y2="400" stroke="#0F5C69" strokeWidth="0.5" strokeDasharray="3 6" strokeOpacity="0.15" />
-
-                      {/* Ceiling Shadowline Detail (matching hotspot 1 at left:65%, top:20% -> x:520, y:100) */}
                       <path d="M 450 100 L 514 100 M 526 100 L 590 100" stroke="#0F5C69" strokeWidth="1.5" strokeOpacity="0.6" />
                       <path d="M 450 90 L 514 90 L 514 110 L 526 110 L 526 90 L 590 90" stroke="#A66B3D" strokeWidth="1.25" strokeOpacity="0.7" fill="url(#hatch)" />
                       <circle cx="520" cy="100" r="1.5" fill="#A66B3D" />
                       <text x="520" y="80" fontFamily="monospace" fontSize="7" fill="#0F5C69" fillOpacity="0.6" textAnchor="middle" letterSpacing="0.5">SHADOWLINE DET_09</text>
 
-                      {/* Fluted Travertine Column (matching hotspot 2 at left:80%, top:50% -> x:640, y:250) */}
                       <circle cx="640" cy="250" r="28" stroke="#A66B3D" strokeWidth="1.25" strokeOpacity="0.7" />
                       <circle cx="640" cy="250" r="24" stroke="#0F5C69" strokeWidth="0.75" strokeDasharray="2 2" strokeOpacity="0.5" />
-                      {/* Radial fluting cuts */}
-                      {[0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330].map((deg) => {
-                        const rad = (deg * Math.PI) / 180;
-                        const x1 = 640 + Math.cos(rad) * 24;
-                        const y1 = 250 + Math.sin(rad) * 24;
-                        const x2 = 640 + Math.cos(rad) * 28;
-                        const y2 = 250 + Math.sin(rad) * 28;
-                        return (
-                          <line key={deg} x1={x1} y1={y1} x2={x2} y2={y2} stroke="#A66B3D" strokeWidth="0.75" strokeOpacity="0.6" />
-                        );
-                      })}
-                      {/* Center Crosshairs */}
-                      <line x1="600" y1="250" x2="680" y2="250" stroke="#0F5C69" strokeWidth="0.5" strokeDasharray="4 4" strokeOpacity="0.3" />
-                      <line x1="640" y1="210" x2="640" y2="290" stroke="#0F5C69" strokeWidth="0.5" strokeDasharray="4 4" strokeOpacity="0.3" />
                       <circle cx="640" cy="250" r="1.5" fill="#0F5C69" fillOpacity="0.6" />
                       <text x="640" y="295" fontFamily="monospace" fontSize="7" fill="#A66B3D" fillOpacity="0.8" textAnchor="middle" letterSpacing="0.5">COL_DET // TRAVERTINE</text>
 
-                      {/* Flush Baseboard Detail (matching hotspot 3 at left:45%, top:85% -> x:360, y:425) */}
                       <line x1="280" y1="425" x2="440" y2="425" stroke="#0F5C69" strokeWidth="1.25" strokeOpacity="0.6" />
                       <path d="M 330 425 L 354 425 L 354 415 L 366 415 L 366 425 L 390 425" stroke="#A66B3D" strokeWidth="1.25" strokeOpacity="0.7" fill="url(#hatch)" />
                       <circle cx="360" cy="425" r="1.5" fill="#A66B3D" />
                       <text x="360" y="442" fontFamily="monospace" fontSize="7" fill="#0F5C69" fillOpacity="0.6" textAnchor="middle" letterSpacing="0.5">FLUSH-BASE DET // TOL: +/-0.2MM</text>
-
-                      {/* Dimension Strings */}
-                      {/* Horizontal dimension from Baseboard (360) to Column (640) */}
-                      <line x1="360" y1="350" x2="640" y2="350" stroke="#A66B3D" strokeWidth="0.75" strokeOpacity="0.7" />
-                      <line x1="360" y1="345" x2="360" y2="355" stroke="#A66B3D" strokeWidth="0.75" strokeOpacity="0.7" />
-                      <line x1="640" y1="345" x2="640" y2="355" stroke="#A66B3D" strokeWidth="0.75" strokeOpacity="0.7" />
-                      {/* Slanted ticks at endpoints */}
-                      <line x1="357" y1="353" x2="363" y2="347" stroke="#A66B3D" strokeWidth="1.25" strokeOpacity="0.8" />
-                      <line x1="637" y1="353" x2="643" y2="347" stroke="#A66B3D" strokeWidth="1.25" strokeOpacity="0.8" />
-                      <text x="500" y="342" fontFamily="monospace" fontSize="8" fill="#A66B3D" fillOpacity="0.9" textAnchor="middle" fontWeight="bold">2800 mm</text>
-
-                      {/* Technical Info Blocks / Legend */}
-                      <text x="30" y="45" fontFamily="monospace" fontSize="8" fill="#0F5C69" fillOpacity="0.5" fontWeight="bold">DWG NO: BN-01-INTRO</text>
-                      <text x="30" y="60" fontFamily="monospace" fontSize="7" fill="#0F5C69" fillOpacity="0.4">SHEET: 01 OF 08</text>
-                      <text x="30" y="75" fontFamily="monospace" fontSize="7" fill="#0F5C69" fillOpacity="0.4">SYSTEM: STRUCTURAL_DETAIL</text>
-
-                      {/* CAD Stamp / Title Block */}
-                      <g transform="translate(30, 200)">
-                        <rect x="0" y="0" width="120" height="65" fill="#FCFBF9" stroke="#0F5C69" strokeWidth="0.75" strokeOpacity="0.3" />
-                        <line x1="0" y1="20" x2="120" y2="20" stroke="#0F5C69" strokeWidth="0.5" strokeOpacity="0.3" />
-                        <text x="6" y="13" fontFamily="monospace" fontSize="7" fill="#0F5C69" fillOpacity="0.8" fontWeight="bold">BUILDNEST ARCHITECTS</text>
-                        <text x="6" y="32" fontFamily="monospace" fontSize="6" fill="#0F5C69" fillOpacity="0.6">PROJECT: VILLA_NAGPUR</text>
-                        <text x="6" y="44" fontFamily="monospace" fontSize="6" fill="#0F5C69" fillOpacity="0.6">DRAWN: R. SHAHOO</text>
-                        <text x="6" y="56" fontFamily="monospace" fontSize="6" fill="#0F5C69" fillOpacity="0.6">SCALE: 1:50  UNIT: mm</text>
-                      </g>
                     </svg>
                   </div>
 
-                  {/* Vertical Comparison Divider Line and Drag Handle */}
                   <div 
                     style={{ left: `${sliderPos}%` }}
                     className="absolute top-0 bottom-0 w-[1.5px] bg-accent/80 z-20 pointer-events-none -translate-x-[0.75px] shadow-[0_0_8px_rgba(166,107,61,0.5)]"
                   >
-                    {/* Floating Center Drag Thumb */}
                     <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-9 h-9 rounded-full bg-accent border-2 border-white shadow-xl flex items-center justify-center pointer-events-auto cursor-ew-resize hover:scale-110 active:scale-95 transition-transform duration-200">
                       <MoveHorizontal className="w-4 h-4 text-white animate-pulse" />
                     </div>
                   </div>
                 </div>
 
-                {/* Sub-slider CAD metadata labels */}
                 <div className="flex justify-between items-center px-2 text-[9px] font-mono text-muted-luxury uppercase tracking-wider">
                   <span className="flex items-center gap-1.5">
                     <span className="w-2 h-2 rounded-full bg-accent/40" />
@@ -478,12 +312,9 @@ export default function BrandIntro() {
                   <span className="text-[8px] font-semibold text-accent/80 bg-accent/5 px-2 py-0.5 rounded-full">
                     Drag Slider to Reveal Reality
                   </span>
-                  <span>
-                    Key Handover (Reality)
-                  </span>
+                  <span>Key Handover (Reality)</span>
                 </div>
 
-                {/* Active Hotspot Info Card on Mobile */}
                 <div className="sm:hidden mt-4">
                   <AnimatePresence mode="wait">
                     {activeHotspotData ? (
@@ -522,7 +353,6 @@ export default function BrandIntro() {
                 </div>
               </div>
 
-              {/* Stats Card wrapped in 3D Tilt */}
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -532,12 +362,6 @@ export default function BrandIntro() {
               >
                 <TiltCard3D maxTilt={7} className="h-full">
                   <div className="border border-border-luxury rounded-[24px] p-6 flex flex-col justify-between bg-white/80 backdrop-blur-md relative overflow-hidden shadow-3d-md preserve-3d h-full specular-border">
-                    {/* CAD style corner brackets */}
-                    <div className="absolute top-0 left-0 w-3.5 h-3.5 border-t border-l border-accent/25" />
-                    <div className="absolute top-0 right-0 w-3.5 h-3.5 border-t border-r border-accent/25" />
-                    <div className="absolute bottom-0 left-0 w-3.5 h-3.5 border-b border-l border-accent/25" />
-                    <div className="absolute bottom-0 right-0 w-3.5 h-3.5 border-b border-r border-accent/25" />
-
                     <div className="flex flex-col gap-4 preserve-3d">
                       <div className="flex items-center justify-between border-b border-border-luxury/50 pb-2 translate-z-10">
                         <span className="text-[10px] font-mono tracking-[0.15em] text-accent uppercase font-bold">

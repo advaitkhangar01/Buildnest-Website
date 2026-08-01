@@ -1,14 +1,24 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { Phone, Mail, MapPin, Clock } from "lucide-react";
+import {
+  SOCIAL_LINKS,
+  QUICK_LINKS,
+  SERVICE_GROUPS,
+  ARCHITECTS_NEAR_YOU,
+  CONSTRUCTION_SERVICES,
+  INTERIOR_SERVICES,
+  POPULAR_AREAS,
+  POPULAR_SEARCHES,
+  LinkItem,
+  SocialLink,
+} from "@/data/footerData";
 
-// ==========================================
-// SVGS FOR SOCIALS (Clean Stroke Width 1.5)
-// ==========================================
+// Social SVG Icons
 const InstagramIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
     <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
@@ -51,232 +61,37 @@ const GoogleBusinessIcon = (props: React.SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
-// ==========================================
-// CONSTANTS DATABASE (SEO & NAVIGATION)
-// ==========================================
-
-interface LinkItem {
-  name: string;
-  href: string;
+function getSocialIcon(type: SocialLink["iconType"]) {
+  switch (type) {
+    case "instagram": return InstagramIcon;
+    case "facebook": return FacebookIcon;
+    case "linkedin": return LinkedinIcon;
+    case "whatsapp": return WhatsappIcon;
+    case "youtube": return YoutubeIcon;
+    case "google": return GoogleBusinessIcon;
+  }
 }
 
-const SOCIAL_LINKS = [
-  { 
-    name: "Instagram", 
-    icon: InstagramIcon, 
-    href: "https://www.instagram.com/buildnest_nagpur/",
-    hoverBg: "hover:bg-gradient-to-tr hover:from-[#f9ce34] hover:via-[#ee2a7b] hover:to-[#6228d7] hover:text-white hover:border-transparent hover:shadow-[0_0_15px_rgba(238,42,123,0.3)]",
-    color: "text-[#e1306c]"
-  },
-  { 
-    name: "Facebook", 
-    icon: FacebookIcon, 
-    href: "https://www.facebook.com/profile.php?id=61591824793874",
-    hoverBg: "hover:bg-[#1877F2] hover:text-white hover:border-transparent hover:shadow-[0_0_15px_rgba(24,119,242,0.3)]",
-    color: "text-[#1877F2]"
-  },
-  { 
-    name: "LinkedIn", 
-    icon: LinkedinIcon, 
-    href: "https://www.linkedin.com/in/rohan-shahoo-880068423/",
-    hoverBg: "hover:bg-[#0A66C2] hover:text-white hover:border-transparent hover:shadow-[0_0_15px_rgba(10,102,194,0.3)]",
-    color: "text-[#0A66C2]"
-  },
-  { 
-    name: "WhatsApp", 
-    icon: WhatsappIcon, 
-    href: "https://wa.me/919823000000?text=Hello%20Buildnest%20Team,%20I%20would%20like%20to%20inquire%20about%20a%20new%20project.",
-    hoverBg: "hover:bg-[#25D366] hover:text-white hover:border-transparent hover:shadow-[0_0_15px_rgba(37,211,102,0.3)]",
-    color: "text-[#25D366]"
-  },
-  { 
-    name: "YouTube", 
-    icon: YoutubeIcon, 
-    href: "https://youtube.com",
-    hoverBg: "hover:bg-[#FF0000] hover:text-white hover:border-transparent hover:shadow-[0_0_15px_rgba(255,0,0,0.3)]",
-    color: "text-[#FF0000]"
-  },
-  { 
-    name: "Google Business", 
-    icon: GoogleBusinessIcon, 
-    href: "https://google.com",
-    hoverBg: "hover:bg-[#4285F4] hover:text-white hover:border-transparent hover:shadow-[0_0_15px_rgba(66,133,244,0.3)]",
-    color: "text-[#4285F4]"
-  },
-];
+const UnderlineLink = React.memo(({ href, children }: { href: string; children: React.ReactNode }) => (
+  <Link
+    href={href}
+    className="group relative inline-block text-[13px] font-light text-muted-luxury hover:text-text-luxury transition-colors duration-250 ease-out py-0.5"
+  >
+    {children}
+    <span className="absolute bottom-0 left-0 w-full h-[1px] bg-accent scale-x-0 group-hover:scale-x-100 transition-transform duration-250 origin-left ease-out" />
+  </Link>
+));
+UnderlineLink.displayName = "UnderlineLink";
 
-const QUICK_LINKS: LinkItem[] = [
-  { name: "Home", href: "/" },
-  { name: "About", href: "/about" },
-  { name: "Services", href: "/services" },
-  { name: "Projects", href: "/projects" },
-  { name: "Blog", href: "/blog" },
-  { name: "Contact", href: "/contact" },
-  { name: "Testimonials", href: "/#testimonials" },
-];
-
-const SERVICE_GROUPS = [
-  {
-    title: "Design & Consultancy",
-    items: [
-      { name: "Architectural Design", href: "#services" },
-      { name: "Interior Design", href: "#services" },
-      { name: "Structural Design", href: "#services" },
-      { name: "3D Elevation", href: "#services" },
-      { name: "Landscape Design", href: "#services" },
-      { name: "Vaastu Shastra Consultation", href: "#services" },
-      { name: "Green Building & LEED Design", href: "#services" },
-      { name: "Structural Stability Certification", href: "#services" },
-      { name: "Custom Villa Layouts", href: "#services" },
-    ],
-  },
-  {
-    title: "Construction & PMC",
-    items: [
-      { name: "Residential Construction", href: "#services" },
-      { name: "Commercial Construction", href: "#services" },
-      { name: "Turnkey Construction", href: "#services" },
-      { name: "Renovation", href: "#services" },
-      { name: "PMC", href: "#services" },
-      { name: "Project Consultation", href: "#services" },
-      { name: "Site Supervision", href: "#services" },
-      { name: "Warehouse & Industrial Construction", href: "#services" },
-      { name: "Duplex Development", href: "#services" },
-      { name: "Joint Ventures", href: "#services" },
-    ],
-  },
-];
-
-const ARCHITECTS_NEAR_YOU: LinkItem[] = [
-  { name: "Architect in Nagpur", href: "#" },
-  { name: "Architect in Wardha", href: "#" },
-  { name: "Architect in Chandrapur", href: "#" },
-  { name: "Architect in Bhandara", href: "#" },
-  { name: "Architect in Gondia", href: "#" },
-  { name: "Architect in Amravati", href: "#" },
-  { name: "Architect in Yavatmal", href: "#" },
-  { name: "Architect in Akola", href: "#" },
-  { name: "Architect in Chhindwara", href: "#" },
-  { name: "Architect in Betul", href: "#" },
-];
-
-const CONSTRUCTION_SERVICES: LinkItem[] = [
-  { name: "House Construction in Nagpur", href: "#" },
-  { name: "Villa Construction in Nagpur", href: "#" },
-  { name: "Commercial Construction in Nagpur", href: "#" },
-  { name: "Luxury Home Construction", href: "#" },
-  { name: "Turnkey Construction", href: "#" },
-  { name: "Construction Company in Nagpur", href: "#" },
-  { name: "Civil Contractor in Nagpur", href: "#" },
-  { name: "Building Contractor", href: "#" },
-  { name: "Industrial Construction", href: "#" },
-  { name: "Apartment Construction", href: "#" },
-];
-
-const INTERIOR_SERVICES: LinkItem[] = [
-  { name: "Interior Designer in Nagpur", href: "#" },
-  { name: "Luxury Interior Designer", href: "#" },
-  { name: "Office Interior", href: "#" },
-  { name: "Restaurant Interior", href: "#" },
-  { name: "Hotel Interior", href: "#" },
-  { name: "Clinic Interior", href: "#" },
-  { name: "Hospital Interior", href: "#" },
-  { name: "Modular Kitchen", href: "#" },
-  { name: "Wardrobe Design", href: "#" },
-  { name: "False Ceiling", href: "#" },
-  { name: "Furniture Design", href: "#" },
-  { name: "Retail Showroom Fit-Outs", href: "#" },
-  { name: "Smart Home Integration", href: "#" },
-  { name: "Luxury Bedroom Suites", href: "#" },
-];
-
-const POPULAR_AREAS: LinkItem[] = [
-  { name: "Architect in Dharampeth", href: "#" },
-  { name: "Architect in Civil Lines", href: "#" },
-  { name: "Architect in Pratap Nagar", href: "#" },
-  { name: "Architect in Manish Nagar", href: "#" },
-  { name: "Architect in Besa", href: "#" },
-  { name: "Architect in Wardha Road", href: "#" },
-  { name: "Architect in Narendra Nagar", href: "#" },
-  { name: "Architect in Sadar", href: "#" },
-  { name: "Architect in Hingna", href: "#" },
-  { name: "Architect in Mihan", href: "#" },
-  { name: "Architect in Trimurti Nagar", href: "#" },
-  { name: "Architect in Ramdaspeth", href: "#" },
-  { name: "Architect in Shankar Nagar", href: "#" },
-  { name: "Architect in Jaripatka", href: "#" },
-  { name: "Architect in Kamptee Road", href: "#" },
-  { name: "Architect in Seminary Hills", href: "#" },
-  { name: "Architect in Bajaj Nagar", href: "#" },
-  { name: "Architect in Wadi", href: "#" },
-  { name: "Architect in Koradi", href: "#" },
-  { name: "Architect in Beltarodi", href: "#" },
-  { name: "Architect in Hudkeshwar", href: "#" },
-  { name: "Architect in Nandanvan", href: "#" },
-  { name: "Architect in Medical Square", href: "#" },
-  { name: "Architect in Sitabuldi", href: "#" },
-  { name: "Architect in Lakadganj", href: "#" },
-  { name: "Architect in Mahal", href: "#" },
-  { name: "Architect in Reshimbagh", href: "#" },
-  { name: "Architect in Khamla", href: "#" },
-  { name: "Architect in Pipla", href: "#" },
-  { name: "Architect in Omkar Nagar", href: "#" },
-  { name: "Architect in Wardhaman Nagar", href: "#" },
-  { name: "Architect in Gandhibagh", href: "#" },
-  { name: "Architect in Ganeshpeth", href: "#" },
-  { name: "Architect in Telephone Exchange Square", href: "#" },
-  { name: "Architect in Somalwada", href: "#" },
-  { name: "Architect in Sonegaon", href: "#" },
-  { name: "Architect in Jaitala", href: "#" },
-  { name: "Architect in Chinchbhuvan", href: "#" },
-  { name: "Architect in Manewada", href: "#" },
-  { name: "Architect in Wanadongri", href: "#" },
-  { name: "Architect in Gittikhadan", href: "#" },
-  { name: "Architect in Friends Colony", href: "#" },
-  { name: "Architect in Ravi Nagar", href: "#" },
-  { name: "Architect in Gokulpeth", href: "#" },
-  { name: "Architect in Wathoda", href: "#" },
-  { name: "Architect in Dighori", href: "#" },
-];
-
-const POPULAR_SEARCHES: LinkItem[] = [
-  { name: "Construction Company Near Me", href: "#" },
-  { name: "Best Architect Near Me", href: "#" },
-  { name: "Interior Designer Near Me", href: "#" },
-  { name: "Luxury Architects", href: "#" },
-  { name: "Modern Home Designers", href: "#" },
-  { name: "Bungalow Architects", href: "#" },
-  { name: "Villa Designers", href: "#" },
-  { name: "Commercial Architects", href: "#" },
-  { name: "Office Interior Designers", href: "#" },
-  { name: "Turnkey Interior Company", href: "#" },
-  { name: "Premium Construction Company", href: "#" },
-];
-
-// ==========================================
-// MODULAR REUSABLE COMPONENTS
-// ==========================================
-
-const UnderlineLink = ({ href, children }: { href: string; children: React.ReactNode }) => {
-  return (
-    <Link
-      href={href}
-      className="group relative inline-block text-[13px] font-light text-muted-luxury hover:text-text-luxury transition-colors duration-250 ease-out py-0.5"
-    >
-      {children}
-      <span className="absolute bottom-0 left-0 w-full h-[1px] bg-accent scale-x-0 group-hover:scale-x-100 transition-transform duration-250 origin-left ease-out" />
-    </Link>
-  );
-};
-
-const FooterColumn = ({ title, links }: { title: string; links: LinkItem[] }) => {
-  const [isOpen, setIsOpen] = React.useState(false);
+const FooterColumn = React.memo(({ title, links }: { title: string; links: LinkItem[] }) => {
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <div className="flex flex-col text-left border-b sm:border-b-0 border-border-luxury/40 pb-4 sm:pb-0">
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="w-full flex items-center justify-between py-2 sm:py-0 text-left sm:cursor-default cursor-pointer focus:outline-none"
+        aria-expanded={isOpen}
       >
         <h4 className="text-[11px] font-semibold tracking-[0.2em] text-text-luxury uppercase">
           {title}
@@ -293,42 +108,18 @@ const FooterColumn = ({ title, links }: { title: string; links: LinkItem[] }) =>
       </ul>
     </div>
   );
-};
+});
+FooterColumn.displayName = "FooterColumn";
 
-const LocationLinkSection = ({ title, links }: { title: string; links: LinkItem[] }) => {
-  const [isOpen, setIsOpen] = React.useState(false);
-
-  return (
-    <div className="flex flex-col text-left border-b sm:border-b-0 border-border-luxury/40 pb-4 sm:pb-0">
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between border-b border-border-luxury/60 pb-2 text-left sm:cursor-default cursor-pointer focus:outline-none"
-      >
-        <h4 className="text-[11px] font-semibold tracking-[0.2em] text-text-luxury uppercase">
-          {title}
-        </h4>
-        <span className="text-sm font-mono text-accent sm:hidden">{isOpen ? "−" : "+"}</span>
-      </button>
-      
-      <ul className={`flex-col gap-2.5 mt-3 ${isOpen ? "flex" : "hidden sm:flex"}`}>
-        {links.map((link) => (
-          <li key={link.name} className="leading-none">
-            <UnderlineLink href={link.href}>{link.name}</UnderlineLink>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-};
-
-const InlineLinkList = ({ title, links }: { title: string; links: LinkItem[] }) => {
-  const [isOpen, setIsOpen] = React.useState(false);
+const InlineLinkList = React.memo(({ title, links }: { title: string; links: LinkItem[] }) => {
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <div className="flex flex-col text-left border-b sm:border-b-0 border-border-luxury/40 pb-4 sm:pb-0">
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="w-full flex items-center justify-between border-b border-border-luxury/60 pb-2 text-left sm:cursor-default cursor-pointer focus:outline-none"
+        aria-expanded={isOpen}
       >
         <h4 className="text-[11px] font-semibold tracking-[0.2em] text-text-luxury uppercase">
           {title}
@@ -351,59 +142,27 @@ const InlineLinkList = ({ title, links }: { title: string; links: LinkItem[] }) 
       </div>
     </div>
   );
-};
-
-// ==========================================
-// MAIN COMPONENT
-// ==========================================
+});
+InlineLinkList.displayName = "InlineLinkList";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
-  const containerVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.8,
-        ease: [0.16, 1, 0.3, 1] as const,
-        staggerChildren: 0.08,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 15 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] as const },
-    },
-  };
-
   return (
     <footer className="relative bg-white text-text-luxury border-t border-border-luxury/80 shadow-3d-lg specular-border overflow-hidden z-10">
-      {/* Blueprint Grid Lines (Luxury branding element) */}
       <div className="absolute inset-0 blueprint-grid opacity-[0.012] pointer-events-none" />
-
-      {/* Subtle Background Radial Light Glow */}
       <div className="absolute bottom-0 right-[5%] w-[500px] h-[500px] bg-primary/5 rounded-full blur-[140px] pointer-events-none" />
       <div className="absolute top-0 left-[5%] w-[400px] h-[400px] bg-accent/5 rounded-full blur-[120px] pointer-events-none" />
 
       <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        whileInView="visible"
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         className="mx-auto max-w-[1600px] px-5 sm:px-8 lg:px-12 py-16 sm:py-20 lg:py-24 flex flex-col gap-16 relative z-10"
       >
-        {/* ==========================================
-            ROW 1: COMPANY CARD + MAIN COLUMNS
-            ========================================== */}
-        <motion.div variants={itemVariants} className="grid grid-cols-1 md:grid-cols-12 gap-12 lg:gap-16 items-start">
-          
-          {/* Section 1: Company Profile (Cols 1-4) */}
+        {/* ROW 1: COMPANY CARD + MAIN COLUMNS */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 lg:gap-16 items-start">
           <div className="md:col-span-4 flex flex-col gap-6 text-left">
             <Link href="#home" className="flex items-center gap-4 sm:gap-5 group/logo w-fit">
               <Image
@@ -422,7 +181,6 @@ export default function Footer() {
               Premium Architect, Interior &amp; Construction Solutions. Designing structures for longevity, built with engineering precision and luxury finish.
             </p>
 
-            {/* Contacts & Metadata */}
             <div className="flex flex-col gap-3.5 text-[13.5px] font-light text-muted-luxury mt-2">
               <a href="tel:+919876543210" className="flex items-center gap-2.5 hover:text-accent transition-colors duration-250 ease-out w-fit">
                 <Phone className="w-4 h-4 text-accent shrink-0" />
@@ -434,11 +192,7 @@ export default function Footer() {
               </a>
               <div className="flex items-start gap-2.5 leading-relaxed">
                 <MapPin className="w-4 h-4 text-accent shrink-0 mt-0.5" />
-                <span>
-                  12, Architectural Row,<br />
-                  Civil Lines, Nagpur,<br />
-                  MH, India - 440001
-                </span>
+                <span>12, Architectural Row, Civil Lines, Nagpur, MH, India - 440001</span>
               </div>
               <div className="flex items-start gap-2.5">
                 <Clock className="w-4 h-4 text-accent shrink-0 mt-0.5" />
@@ -446,10 +200,9 @@ export default function Footer() {
               </div>
             </div>
 
-            {/* Social Icons */}
             <div className="flex gap-2.5 mt-2">
               {SOCIAL_LINKS.map((social) => {
-                const Icon = social.icon;
+                const Icon = getSocialIcon(social.iconType);
                 return (
                   <a
                     key={social.name}
@@ -466,79 +219,46 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Section 2: Quick Links (Cols 5-7) */}
           <div className="md:col-span-3 lg:col-span-3">
             <FooterColumn title="Quick Links" links={QUICK_LINKS} />
           </div>
 
-          {/* Section 3: Our Services (Cols 8-12) */}
           <div className="md:col-span-5 lg:col-span-5 grid grid-cols-1 sm:grid-cols-2 gap-10">
             {SERVICE_GROUPS.map((group) => (
               <FooterColumn key={group.title} title={group.title} links={group.items} />
             ))}
           </div>
+        </div>
 
-        </motion.div>
+        {/* ROW 2: REGIONAL DIRECTORY SEO COLUMNS */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 sm:gap-12 pt-12 border-t border-border-luxury/40">
+          <FooterColumn title="Architects Near You" links={ARCHITECTS_NEAR_YOU} />
+          <FooterColumn title="Construction Services" links={CONSTRUCTION_SERVICES} />
+          <FooterColumn title="Interior Services" links={INTERIOR_SERVICES} />
+        </div>
 
-        {/* ==========================================
-            ROW 2: REGIONAL DIRECTORY SEO COLUMNS
-            ========================================== */}
-        <motion.div variants={itemVariants} className="grid grid-cols-1 md:grid-cols-3 gap-10 sm:gap-12 pt-12 border-t border-border-luxury/40">
-          
-          {/* Section 4: Architects Near You */}
-          <LocationLinkSection title="Architects Near You" links={ARCHITECTS_NEAR_YOU} />
-
-          {/* Section 5: Construction Services */}
-          <LocationLinkSection title="Construction Services" links={CONSTRUCTION_SERVICES} />
-
-          {/* Section 6: Interior Services */}
-          <LocationLinkSection title="Interior Services" links={INTERIOR_SERVICES} />
-
-        </motion.div>
-
-        {/* ==========================================
-            ROW 3: POPULAR AREAS & POPULAR SEARCHES
-            ========================================== */}
-        <motion.div variants={itemVariants} className="flex flex-col gap-12 pt-12 border-t border-border-luxury/40">
-          
-          {/* Section 7: Popular Areas */}
+        {/* ROW 3: POPULAR AREAS & POPULAR SEARCHES */}
+        <div className="flex flex-col gap-12 pt-12 border-t border-border-luxury/40">
           <InlineLinkList title="Popular Areas" links={POPULAR_AREAS} />
-
-          {/* Section 8: Popular Searches */}
           <InlineLinkList title="Popular Searches" links={POPULAR_SEARCHES} />
+        </div>
 
-        </motion.div>
-
-        {/* ==========================================
-            ROW 4: BOTTOM BAR (COPYRIGHT & LEGALS)
-            ========================================== */}
-        <motion.div
-          variants={itemVariants}
-          className="pt-8 border-t border-border-luxury/60 flex flex-col sm:flex-row items-center justify-between gap-6 text-[11.5px] text-muted-luxury/60 font-light"
-        >
+        {/* ROW 4: BOTTOM BAR */}
+        <div className="pt-8 border-t border-border-luxury/60 flex flex-col sm:flex-row items-center justify-between gap-6 text-[11.5px] text-muted-luxury/60 font-light">
           <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-6 text-center sm:text-left">
-            <span>
-              &copy; {currentYear} Buildnest. All Rights Reserved.
-            </span>
+            <span>&copy; {currentYear} Buildnest. All Rights Reserved.</span>
             <span className="hidden sm:inline text-muted-luxury/20">|</span>
             <span>Made with precision in India.</span>
           </div>
 
           <div className="flex gap-6 items-center">
-            <Link href="#privacy" className="hover:text-accent transition-colors duration-250 ease-out">
-              Privacy Policy
-            </Link>
+            <Link href="#privacy" className="hover:text-accent transition-colors duration-250 ease-out">Privacy Policy</Link>
             <span className="text-muted-luxury/20">|</span>
-            <Link href="#terms" className="hover:text-accent transition-colors duration-250 ease-out">
-              Terms &amp; Conditions
-            </Link>
+            <Link href="#terms" className="hover:text-accent transition-colors duration-250 ease-out">Terms &amp; Conditions</Link>
             <span className="text-muted-luxury/20">|</span>
-            <Link href="#" className="hover:text-accent transition-colors duration-250 ease-out">
-              Sitemap
-            </Link>
+            <Link href="#" className="hover:text-accent transition-colors duration-250 ease-out">Sitemap</Link>
           </div>
-        </motion.div>
-
+        </div>
       </motion.div>
     </footer>
   );

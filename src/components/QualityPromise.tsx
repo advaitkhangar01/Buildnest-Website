@@ -1,46 +1,10 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useCallback } from "react";
 import TiltCard3D from "@/components/TiltCard3D";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-const promises = [
-  {
-    title: "120+ Quality checkpoints",
-    description: "From concrete slump tests to structural alignment audits, we execute a rigorous, multi-stage inspection plan overseen by certified structural consultants.",
-    details: [
-      { label: "Concrete Slump & Cube Tests", desc: "Compression testing at 7, 14, and 28 days." },
-      { label: "Structural Alignment", desc: "Laser-guided vertical column and slab levelling audits." },
-      { label: "Cover Block Verification", desc: "Ensures exact rebar positioning prior to concrete pours." },
-      { label: "48-Hour Waterproofing Test", desc: "Flood testing of bathrooms, balconies, and slabs." },
-      { label: "Wall Plumb & Squareness", desc: "Digital spirit level verification of all masonry walls." }
-    ]
-  },
-  {
-    title: "Absolute Supply Transparency",
-    description: "Every metric ton of steel and bag of cement is tracked. Clients receive material test certificates and have full access to live site CCTV feeds.",
-    details: [
-      { label: "BuildTrack CRM Portal", desc: "24/7 client dashboard tracking material dispatches and inventory." },
-      { label: "Live CCTV Streams", desc: "High-definition camera feeds overlooking concrete and steel storage zones." },
-      { label: "Mill Test Certificates", desc: "Certified manufacturer strength/metallurgy reports uploaded per batch." },
-      { label: "Digital Weighbridge Receipts", desc: "Exact tonnage validation logs shared instantly." },
-      { label: "Blockchain Ledger", desc: "Immutable supply-chain stamps tracking cement and reinforcement steel." }
-    ]
-  },
-  {
-    title: "Certified A-Grade Materials Only",
-    description: "We use only FE-550 grade reinforcement bars, OPC 53 concrete blends, premium lead-free plumbing systems, and kiln-dried seasoned hardwoods.",
-    details: [
-      { label: "Structural Steel (Fe-550 SD)", desc: "Tata Tiscon SD, JSW Neosteel" },
-      { label: "Cement (OPC 53)", desc: "UltraTech, Ambuja, ACC Gold" },
-      { label: "Plumbing & Pipes", desc: "Astral, Ashirvad (Lead-free CPVC/UPVC)" },
-      { label: "Electrical Wiring", desc: "Finolex, Polycab, Havells" },
-      { label: "Hardwoods & Timber", desc: "Premium Kiln-dried Teak & Seasoned Sal wood" }
-    ]
-  },
-];
+import { useParallax } from "@/lib/animations/useParallax";
+import { QUALITY_PROMISES_DATA } from "@/data/qualityPromiseData";
 
 export default function QualityPromise() {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -48,43 +12,11 @@ export default function QualityPromise() {
   const shape2Ref = useRef<HTMLDivElement>(null);
   const [expandedCard, setExpandedCard] = useState<number | null>(null);
 
-  useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
+  useParallax({ triggerRef: sectionRef, targetRef: shape1Ref, yFrom: -50, yTo: 50 });
+  useParallax({ triggerRef: sectionRef, targetRef: shape2Ref, yFrom: -100, yTo: 100 });
 
-    let ctx = gsap.context(() => {
-      if (shape1Ref.current) {
-        gsap.fromTo(shape1Ref.current,
-          { y: -50 },
-          {
-            y: 50,
-            ease: "none",
-            scrollTrigger: {
-              trigger: sectionRef.current,
-              start: "top bottom",
-              end: "bottom top",
-              scrub: true,
-            }
-          }
-        );
-      }
-      if (shape2Ref.current) {
-        gsap.fromTo(shape2Ref.current,
-          { y: -100 },
-          {
-            y: 100,
-            ease: "none",
-            scrollTrigger: {
-              trigger: sectionRef.current,
-              start: "top bottom",
-              end: "bottom top",
-              scrub: true,
-            }
-          }
-        );
-      }
-    }, sectionRef);
-
-    return () => ctx.revert();
+  const toggleExpandedCard = useCallback((idx: number) => {
+    setExpandedCard((prev) => (prev === idx ? null : idx));
   }, []);
 
   return (
@@ -95,9 +27,7 @@ export default function QualityPromise() {
     >
       <div className="absolute inset-0 blueprint-grid opacity-[0.2]" />
 
-      {/* Background Graphics & Depth Lights */}
       <div className="absolute inset-0 pointer-events-none select-none overflow-hidden">
-        {/* Soft Radial Ambient Lights - optimized to radial gradients (no blur filter rasterization) */}
         <div 
           style={{ background: "radial-gradient(circle at center, rgba(166, 107, 61, 0.05) 0%, transparent 70%)" }}
           className="absolute top-[20%] left-[-10%] w-[500px] h-[500px] rounded-full pointer-events-none" 
@@ -107,12 +37,10 @@ export default function QualityPromise() {
           className="absolute bottom-[20%] right-[-10%] w-[450px] h-[450px] rounded-full pointer-events-none" 
         />
         
-        {/* CAD Grid Coordinates */}
         <div className="absolute top-[8%] left-[5%] text-text-luxury/10 text-[9px] font-mono tracking-[0.2em] uppercase">
           SYS_SPEC: 06_STANDARDS // TRUST_WARRANTY
         </div>
 
-        {/* Crisp CAD Dimension Line Graphic */}
         <div
           ref={shape1Ref}
           className="absolute right-[5%] top-[25%] w-[350px] flex flex-col gap-2 items-center opacity-60 pointer-events-none [will-change:transform]"
@@ -128,7 +56,6 @@ export default function QualityPromise() {
           </div>
         </div>
 
-        {/* Floating concentric outline circles */}
         <div
           ref={shape2Ref}
           className="absolute left-[3%] bottom-[12%] w-[240px] h-[240px] rounded-full border border-primary/5 flex items-center justify-center opacity-70 pointer-events-none [will-change:transform]"
@@ -138,8 +65,6 @@ export default function QualityPromise() {
       </div>
 
       <div className="relative z-10 mx-auto max-w-[1440px] px-5 sm:px-10 lg:px-16">
-        
-        {/* Top-level Promise Header */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-10 lg:mb-14">
           <div className="lg:col-span-8">
             <span className="text-[11px] font-bold tracking-[0.16em] text-accent uppercase flex items-center gap-3 mb-4">
@@ -157,9 +82,8 @@ export default function QualityPromise() {
           </div>
         </div>
 
-        {/* 3-Column Quality Promise Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {promises.map((promise, idx) => (
+          {QUALITY_PROMISES_DATA.map((promise, idx) => (
             <motion.div
               key={promise.title}
               layout
@@ -171,7 +95,6 @@ export default function QualityPromise() {
             >
               <TiltCard3D maxTilt={7} className="h-full">
                 <div className="border border-border-luxury rounded-[24px] p-8 bg-bg-luxury/80 backdrop-blur-md shadow-3d-md specular-border flex flex-col gap-6 h-full preserve-3d">
-                  {/* Graphic Element resembling CAD dimension line */}
                   <div className="flex items-center gap-4 translate-z-10">
                     <span className="w-2 h-2 rounded-full bg-accent" />
                     <div className="flex-1 h-[1px] bg-border-luxury" />
@@ -189,11 +112,11 @@ export default function QualityPromise() {
                     </p>
                   </div>
 
-                  {/* Expand Trigger Button */}
                   <div className="mt-auto pt-2 translate-z-10">
                     <button
-                      onClick={() => setExpandedCard(expandedCard === idx ? null : idx)}
+                      onClick={() => toggleExpandedCard(idx)}
                       className="group/btn flex items-center gap-2 text-[11px] font-bold tracking-[0.12em] text-accent uppercase hover:text-accent/80 transition-colors focus:outline-none cursor-pointer"
+                      aria-expanded={expandedCard === idx}
                     >
                       <span>{expandedCard === idx ? "Hide Details" : "View Detailed Specs"}</span>
                       <motion.svg
@@ -207,7 +130,6 @@ export default function QualityPromise() {
                     </button>
                   </div>
 
-                  {/* Expandable Specifications Drawer */}
                   <AnimatePresence initial={false}>
                     {expandedCard === idx && (
                       <motion.div

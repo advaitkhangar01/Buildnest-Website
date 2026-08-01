@@ -3,8 +3,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import TiltCard3D from "@/components/TiltCard3D";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useParallax } from "@/lib/animations/useParallax";
 
 interface Testimonial {
   id: string;
@@ -85,46 +84,9 @@ export default function Testimonials() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const shape1Ref = useRef<HTMLDivElement>(null);
   const shape2Ref = useRef<HTMLDivElement>(null);
-  const autoplayTimerRef = useRef<NodeJS.Timeout | null>(null);
 
-  useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
-
-    let ctx = gsap.context(() => {
-      if (shape1Ref.current) {
-        gsap.fromTo(shape1Ref.current,
-          { y: -110 },
-          {
-            y: 110,
-            ease: "none",
-            scrollTrigger: {
-              trigger: sectionRef.current,
-              start: "top bottom",
-              end: "bottom top",
-              scrub: true,
-            }
-          }
-        );
-      }
-      if (shape2Ref.current) {
-        gsap.fromTo(shape2Ref.current,
-          { y: -60 },
-          {
-            y: 60,
-            ease: "none",
-            scrollTrigger: {
-              trigger: sectionRef.current,
-              start: "top bottom",
-              end: "bottom top",
-              scrub: true,
-            }
-          }
-        );
-      }
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
+  useParallax({ triggerRef: sectionRef, targetRef: shape1Ref, yFrom: -110, yTo: 110 });
+  useParallax({ triggerRef: sectionRef, targetRef: shape2Ref, yFrom: -60, yTo: 60 });
 
   const nextTestimonial = useCallback(() => {
     setActiveIndex((prev) => (prev + 1) % testimonials.length);
@@ -134,17 +96,14 @@ export default function Testimonials() {
     setActiveIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
   }, []);
 
-  // Autoplay timer logic
   useEffect(() => {
     if (!isAutoplay) return;
 
-    autoplayTimerRef.current = setInterval(() => {
+    const timer = setInterval(() => {
       nextTestimonial();
     }, 7000);
 
-    return () => {
-      if (autoplayTimerRef.current) clearInterval(autoplayTimerRef.current);
-    };
+    return () => clearInterval(timer);
   }, [isAutoplay, nextTestimonial]);
 
   const current = testimonials[activeIndex];
@@ -157,9 +116,7 @@ export default function Testimonials() {
       onMouseLeave={() => setIsAutoplay(true)}
       className="relative py-24 sm:py-28 lg:py-32 bg-bg-luxury border-b border-border-luxury/50 overflow-hidden"
     >
-      {/* Background Graphics & Ambient Atmospheric Lighting */}
       <div className="absolute inset-0 pointer-events-none select-none overflow-hidden">
-        {/* Soft Radial Glows - optimized to radial gradients (no blur filter rasterization) */}
         <div 
           style={{ background: "radial-gradient(circle at center, rgba(15, 92, 105, 0.06) 0%, transparent 70%)" }}
           className="absolute top-[15%] right-[-8%] w-[600px] h-[600px] rounded-full pointer-events-none" 
@@ -169,12 +126,10 @@ export default function Testimonials() {
           className="absolute bottom-[10%] left-[-10%] w-[500px] h-[500px] rounded-full pointer-events-none" 
         />
 
-        {/* CAD Grid Metadata Tag */}
         <div className="absolute top-[8%] left-[6%] text-text-luxury/15 text-[10px] font-mono tracking-[0.25em] uppercase hidden sm:block">
           SYS_COMM: 07_TESTIMONIALS // VERIFIED_COMMISSIONS
         </div>
 
-        {/* Concentric Architectural Compass Rings */}
         <div
           ref={shape1Ref}
           className="absolute right-[5%] top-[5%] w-[550px] h-[550px] rounded-full border border-primary/5 flex items-center justify-center opacity-70 pointer-events-none [will-change:transform]"
@@ -184,7 +139,6 @@ export default function Testimonials() {
           </div>
         </div>
 
-        {/* Architectural drafting line */}
         <div
           ref={shape2Ref}
           className="absolute left-[12%] bottom-[12%] w-[350px] h-[1px] bg-gradient-to-r from-transparent via-accent/15 to-transparent rotate-[25deg] pointer-events-none [will-change:transform]"
@@ -192,8 +146,6 @@ export default function Testimonials() {
       </div>
 
       <div className="mx-auto max-w-[1440px] px-5 sm:px-10 lg:px-16 relative z-10">
-        
-        {/* Top Header Block */}
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-12 sm:mb-16">
           <div className="flex flex-col gap-4 max-w-[700px]">
             <div className="flex items-center gap-3">
@@ -210,7 +162,6 @@ export default function Testimonials() {
             </p>
           </div>
 
-          {/* Top Trust Summary Stats Badge */}
           <div className="flex items-center gap-6 p-4 sm:p-5 rounded-2xl bg-white/60 border border-border-luxury/70 backdrop-blur-md shadow-sm shrink-0 self-start lg:self-auto">
             <div className="flex flex-col">
               <div className="flex items-center gap-1.5 text-amber-500 text-sm font-bold">
@@ -233,10 +184,7 @@ export default function Testimonials() {
           </div>
         </div>
 
-        {/* Main Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
-          
-          {/* Left Column: Interactive Client Selector List */}
           <div className="lg:col-span-4 flex flex-col gap-3">
             <span className="text-[10px] font-bold tracking-[0.2em] text-muted-luxury/80 uppercase font-mono px-1">
               Select Client Story ({String(activeIndex + 1).padStart(2, "0")} / {String(testimonials.length).padStart(2, "0")})
@@ -254,8 +202,8 @@ export default function Testimonials() {
                         ? "bg-white border-accent/60 shadow-3d-sm specular-border translate-x-1"
                         : "bg-white/40 border-border-luxury/50 hover:bg-white/70 hover:border-border-luxury hover:translate-x-0.5"
                     }`}
+                    aria-selected={isActive}
                   >
-                    {/* Active Indicator Bar on Left */}
                     {isActive && (
                       <motion.div
                         layoutId="activeIndicator"
@@ -265,7 +213,6 @@ export default function Testimonials() {
                     )}
 
                     <div className="flex items-center gap-3.5">
-                      {/* Client Avatar Initials */}
                       <div
                         className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-xs shrink-0 transition-colors duration-300 ${
                           isActive
@@ -289,7 +236,6 @@ export default function Testimonials() {
                         </span>
                       </div>
 
-                      {/* Right Chevron / Arrow indicator */}
                       <svg
                         className={`w-4 h-4 shrink-0 transition-transform duration-300 ${
                           isActive ? "stroke-accent translate-x-0.5" : "stroke-text-luxury/30 group-hover:stroke-text-luxury/60"
@@ -305,9 +251,7 @@ export default function Testimonials() {
               })}
             </div>
 
-            {/* Navigation & Controls Bar */}
             <div className="flex items-center justify-between mt-4 p-3 bg-white/50 border border-border-luxury/60 rounded-2xl backdrop-blur-sm">
-              {/* Prev / Next Buttons */}
               <div className="flex items-center gap-2">
                 <button
                   onClick={prevTestimonial}
@@ -329,7 +273,6 @@ export default function Testimonials() {
                 </button>
               </div>
 
-              {/* Animated Progress indicator & Autoplay Status */}
               <div className="flex items-center gap-3">
                 <span className="text-[11px] font-mono font-bold text-muted-luxury uppercase">
                   {isAutoplay ? "Auto-Play" : "Paused"}
@@ -353,12 +296,9 @@ export default function Testimonials() {
             </div>
           </div>
 
-          {/* Right Column: Main Featured 3D Glassmorphism Showcase Card */}
           <div className="lg:col-span-8 relative">
             <TiltCard3D maxTilt={5} className="w-full">
               <div className="p-8 sm:p-12 bg-white/95 rounded-[32px] border border-border-luxury shadow-3d-lg specular-border relative preserve-3d overflow-hidden">
-                
-                {/* Subtle Card Background Accent Watermark */}
                 <div className="absolute top-0 right-0 p-8 opacity-5 font-mono text-[120px] font-extrabold select-none leading-none text-accent pointer-events-none">
                   0{activeIndex + 1}
                 </div>
@@ -372,9 +312,7 @@ export default function Testimonials() {
                     transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                     className="flex flex-col gap-6 relative z-10 preserve-3d"
                   >
-                    {/* Top Row: Ratings + Specs Pill Badges */}
                     <div className="flex flex-wrap items-center justify-between gap-3 pb-6 border-b border-border-luxury/40 translate-z-10">
-                      {/* Star Rating & Verified Pill */}
                       <div className="flex items-center gap-3">
                         <div className="flex items-center gap-1 text-amber-500 text-sm">
                           {Array.from({ length: current.rating }).map((_, i) => (
@@ -388,13 +326,11 @@ export default function Testimonials() {
                         </span>
                       </div>
 
-                      {/* Project Specs Pill */}
                       <div className="text-[11px] font-semibold tracking-wider text-muted-luxury uppercase font-mono px-3 py-1 rounded-full bg-bg-luxury border border-border-luxury/60">
                         {current.specs}
                       </div>
                     </div>
 
-                    {/* Decorative Quotation Mark & Main Quote */}
                     <div className="relative pt-2">
                       <span className="text-[100px] leading-[0.1] text-accent/20 font-serif block select-none translate-z-10 -ml-2 mb-4">
                         “
@@ -405,7 +341,6 @@ export default function Testimonials() {
                       </blockquote>
                     </div>
 
-                    {/* Highlight Tags Bar */}
                     <div className="flex flex-wrap items-center gap-2 pt-2 translate-z-20">
                       {current.tags.map((tag, idx) => (
                         <span
@@ -417,10 +352,8 @@ export default function Testimonials() {
                       ))}
                     </div>
 
-                    {/* Bottom Author Card Footer */}
                     <div className="flex items-center justify-between pt-6 border-t border-border-luxury/40 mt-2 translate-z-20">
                       <div className="flex items-center gap-4">
-                        {/* Avatar */}
                         <div className="w-12 h-12 rounded-full bg-gradient-to-br from-accent to-primary text-white flex items-center justify-center font-bold text-sm shadow-md ring-4 ring-white shrink-0 font-heading">
                           {current.initials}
                         </div>
@@ -436,7 +369,6 @@ export default function Testimonials() {
                         </div>
                       </div>
 
-                      {/* Micro Badge for Highlight */}
                       <div className="hidden sm:flex flex-col items-end text-right">
                         <span className="text-[10px] font-mono font-bold tracking-widest text-muted-luxury uppercase">
                           Key Outcome
@@ -451,7 +383,6 @@ export default function Testimonials() {
               </div>
             </TiltCard3D>
           </div>
-
         </div>
       </div>
     </section>

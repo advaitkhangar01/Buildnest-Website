@@ -6,13 +6,15 @@ import { motion, useMotionValue, useSpring, useTransform, useMotionTemplate } fr
 interface TiltCard3DProps {
   children: React.ReactNode;
   className?: string;
-  maxTilt?: number; // max tilt angle in degrees, default 6
-  perspective?: number; // perspective distance in px, default 1000
+  maxTilt?: number;
+  perspective?: number;
   glare?: boolean;
   depthShadow?: boolean;
 }
 
-export default function TiltCard3D({
+const springConfig = { damping: 25, stiffness: 200, mass: 0.5 };
+
+const TiltCard3D = React.memo(function TiltCard3D({
   children,
   className = "",
   maxTilt = 6,
@@ -24,12 +26,11 @@ export default function TiltCard3D({
   const rectRef = useRef<DOMRect | null>(null);
   const [isHovered, setIsHovered] = useState(false);
 
-  // Mouse relative coordinates from -0.5 to 0.5
+  // Mouse relative coordinates (-0.5 to 0.5)
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
   // Spring physics setup for smooth luxury feel
-  const springConfig = { damping: 25, stiffness: 200, mass: 0.5 };
   const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [maxTilt, -maxTilt]), springConfig);
   const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-maxTilt, maxTilt]), springConfig);
 
@@ -45,12 +46,12 @@ export default function TiltCard3D({
   const glareBackground = useMotionTemplate`radial-gradient(circle at ${glareX}% ${glareY}%, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0) 65%)`;
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!isHovered) return;
     const rect = rectRef.current;
     if (!rect) return;
     const width = rect.width;
     const height = rect.height;
     
-    // Normalized x, y from -0.5 to 0.5
     const x = (e.clientX - rect.left) / width - 0.5;
     const y = (e.clientY - rect.top) / height - 0.5;
     
@@ -59,7 +60,6 @@ export default function TiltCard3D({
   };
 
   const handleMouseEnter = () => {
-    // Only enable 3D tilt on devices with fine cursor pointer (hover supported)
     if (typeof window !== "undefined" && !window.matchMedia("(hover: hover)").matches) {
       return;
     }
@@ -96,7 +96,6 @@ export default function TiltCard3D({
       >
         {children}
 
-        {/* Dynamic Specular Light Glare Overlay */}
         {glare && isHovered && (
           <motion.div
             style={{
@@ -107,16 +106,17 @@ export default function TiltCard3D({
         )}
       </motion.div>
 
-      {/* Dynamic 3D Depth Shadow drop underneath */}
-      {depthShadow && (
+      {depthShadow && isHovered && (
         <motion.div
           style={{
             x: shadowX,
             y: shadowY,
           }}
-          className="absolute inset-2 bg-primary/10 rounded-[inherit] blur-2xl -z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+          className="absolute inset-2 bg-primary/10 rounded-[inherit] blur-2xl -z-10 opacity-100 transition-opacity duration-500 pointer-events-none"
         />
       )}
     </div>
   );
-}
+});
+
+export default TiltCard3D;

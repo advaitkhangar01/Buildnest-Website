@@ -2,37 +2,31 @@
 
 import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
+import { initGSAP, gsap, ScrollTrigger } from "@/lib/animations/gsapInit";
 
 export default function LenisProvider({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const lenisRef = useRef<Lenis | null>(null);
 
   useEffect(() => {
-    // Register GSAP ScrollTrigger plugin
-    gsap.registerPlugin(ScrollTrigger);
+    initGSAP();
 
     // Check user preference for reduced motion
     const prefersReducedMotion =
       typeof window !== "undefined" &&
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    // Enable GSAP lag smoothing to prevent stuttering under CPU spikes
-    gsap.ticker.lagSmoothing(500, 33);
-
-    // Detect touch / mobile device
-    const isTouchDevice =
-      typeof window !== "undefined" &&
-      ("ontouchstart" in window || navigator.maxTouchPoints > 0 || window.innerWidth < 768);
-
     if (prefersReducedMotion) {
       ScrollTrigger.refresh();
       return;
     }
 
-    // Initialize Lenis scroller with autoRaf false so GSAP ticker exclusively drives the frame loop
+    const isTouchDevice =
+      typeof window !== "undefined" &&
+      ("ontouchstart" in window || navigator.maxTouchPoints > 0 || window.innerWidth < 768);
+
+    // Initialize Lenis with autoRaf: false so GSAP ticker exclusively drives the animation frame loop
     const lenis = new Lenis({
       duration: isTouchDevice ? 0.7 : 0.9,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -46,15 +40,15 @@ export default function LenisProvider({ children }: { children: React.ReactNode 
 
     lenisRef.current = lenis;
 
-    // Synchronize ScrollTrigger with Lenis scroll events
+    // Update ScrollTrigger calculations when Lenis scrolls
     const handleScroll = () => {
       ScrollTrigger.update();
     };
     lenis.on("scroll", handleScroll);
 
-    // Bind GSAP ticker to Lenis RAF (time in milliseconds)
-    const tickHandler = (time: number) => {
-      lenis.raf(time * 1000);
+    // Bind GSAP ticker to drive Lenis RAF using high-resolution millisecond timestamps
+    const tickHandler = () => {
+      lenis.raf(performance.now());
     };
 
     gsap.ticker.add(tickHandler);
@@ -79,7 +73,7 @@ export default function LenisProvider({ children }: { children: React.ReactNode 
     // Refresh ScrollTrigger layout calculations after Lenis mounts
     ScrollTrigger.refresh();
 
-    // Store in global window for debugging & window.lenis access
+    // Attach to global window object for debugging & external access
     (window as unknown as { lenis: Lenis }).lenis = lenis;
 
     return () => {
@@ -102,4 +96,3 @@ export default function LenisProvider({ children }: { children: React.ReactNode 
 
   return <>{children}</>;
 }
-

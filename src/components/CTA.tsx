@@ -1,11 +1,10 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import { motion } from "framer-motion";
 import TiltCard3D from "@/components/TiltCard3D";
 import dynamic from "next/dynamic";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useParallax } from "@/lib/animations/useParallax";
 
 const MapBox = dynamic(() => import("@/components/MapBox"), {
   ssr: false,
@@ -26,50 +25,13 @@ export default function CTA() {
   const shape1Ref = useRef<HTMLDivElement>(null);
   const shape2Ref = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
+  useParallax({ triggerRef: sectionRef, targetRef: shape1Ref, yFrom: -80, yTo: 80 });
+  useParallax({ triggerRef: sectionRef, targetRef: shape2Ref, yFrom: -130, yTo: 130 });
 
-    let ctx = gsap.context(() => {
-      if (shape1Ref.current) {
-        gsap.fromTo(shape1Ref.current,
-          { y: -80 },
-          {
-            y: 80,
-            ease: "none",
-            scrollTrigger: {
-              trigger: sectionRef.current,
-              start: "top bottom",
-              end: "bottom top",
-              scrub: true,
-            }
-          }
-        );
-      }
-      if (shape2Ref.current) {
-        gsap.fromTo(shape2Ref.current,
-          { y: -130 },
-          {
-            y: 130,
-            ease: "none",
-            scrollTrigger: {
-              trigger: sectionRef.current,
-              start: "top bottom",
-              end: "bottom top",
-              scrub: true,
-            }
-          }
-        );
-      }
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault();
-    // Simulate premium submit transition
     setSubmitted(true);
-  };
+  }, []);
 
   return (
     <section
@@ -77,7 +39,6 @@ export default function CTA() {
       ref={sectionRef}
       className="relative py-20 sm:py-24 lg:py-32 bg-text-luxury text-bg-luxury border-b border-border-luxury/10 overflow-hidden"
     >
-      {/* Background radial lighting glow in top-right - optimized to radial gradients (no blur filter rasterization) */}
       <div 
         style={{ background: "radial-gradient(circle at center, rgba(15, 92, 105, 0.15) 0%, transparent 70%)" }}
         className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full pointer-events-none" 
@@ -87,20 +48,16 @@ export default function CTA() {
         className="absolute bottom-0 left-0 w-[300px] h-[300px] rounded-full pointer-events-none" 
       />
       
-      {/* Background Graphics & Depth Lights */}
       <div className="absolute inset-0 pointer-events-none select-none overflow-hidden z-0 opacity-40">
-        {/* CAD Grid Coordinates */}
         <div className="absolute top-[8%] left-[5%] text-white/20 text-[9px] font-mono tracking-[0.2em] uppercase">
           SYS_COMM: 08_CTA // NAGPUR_HQ
         </div>
 
-        {/* Diagonal wireframe line cutting across (Strong high contrast element) */}
         <div
           ref={shape1Ref}
           className="absolute left-[-10%] top-[40%] w-[120%] h-[1px] bg-gradient-to-r from-transparent via-white/15 to-transparent rotate-[-15deg] pointer-events-none [will-change:transform]"
         />
 
-        {/* Floating concentric outline circle */}
         <div
           ref={shape2Ref}
           className="absolute left-[5%] bottom-[10%] w-[400px] h-[400px] rounded-full border border-dashed border-white/10 flex items-center justify-center pointer-events-none [will-change:transform]"
@@ -111,8 +68,6 @@ export default function CTA() {
 
       <div className="relative z-10 mx-auto max-w-[1440px] px-5 sm:px-10 lg:px-16">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-stretch">
-          
-          {/* Left Column: Heading, Contact Meta & MapBox */}
           <div className="lg:col-span-6 flex flex-col justify-between gap-6 text-left">
             <div className="space-y-4">
               <span className="text-[11px] font-bold tracking-[0.16em] text-accent uppercase flex items-center gap-3">
@@ -128,7 +83,6 @@ export default function CTA() {
                 We accept a limited number of commissions annually to ensure our uncompromising standards of craftsmanship are maintained.
               </p>
 
-              {/* Grid for Studio Address & Direct Inquiries */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4 pt-2 text-[13px] font-light">
                 <div className="bg-white/5 border border-white/10 p-3.5 rounded-2xl">
                   <span className="text-[10px] font-bold tracking-[0.15em] text-accent uppercase block mb-1">
@@ -150,17 +104,14 @@ export default function CTA() {
               </div>
             </div>
 
-            {/* Maps Box in Left Column */}
             <MapBox variant="dark" mapHeightClass="h-[190px] sm:h-[230px]" className="mt-2" />
           </div>
 
-          {/* Right Column: Premium Form with 3D Monolith Depth */}
           <div className="lg:col-span-6">
             <TiltCard3D maxTilt={5} className="w-full h-full">
               <div className="bg-white/5 border border-white/15 rounded-[24px] sm:rounded-[32px] p-5 sm:p-8 backdrop-blur-xl shadow-3d-dark specular-border-dark preserve-3d h-full flex flex-col justify-center">
                 {!submitted ? (
                   <form onSubmit={handleSubmit} className="flex flex-col gap-6 text-left preserve-3d">
-                    {/* Name */}
                     <div className="flex flex-col gap-2 translate-z-10">
                       <label htmlFor="name" className="text-[10px] font-bold tracking-[0.15em] text-accent uppercase">
                         Your Name
@@ -176,7 +127,6 @@ export default function CTA() {
                       />
                     </div>
 
-                    {/* Email / Number */}
                     <div className="flex flex-col gap-2 translate-z-10">
                       <label htmlFor="email" className="text-[10px] font-bold tracking-[0.15em] text-accent uppercase">
                         Contact Email / Phone
@@ -192,7 +142,6 @@ export default function CTA() {
                       />
                     </div>
 
-                    {/* Service Dropdown */}
                     <div className="flex flex-col gap-2 translate-z-10">
                       <label htmlFor="service" className="text-[10px] font-bold tracking-[0.15em] text-accent uppercase">
                         Commission Type
@@ -210,7 +159,6 @@ export default function CTA() {
                       </select>
                     </div>
 
-                    {/* Message */}
                     <div className="flex flex-col gap-2 translate-z-10">
                       <label htmlFor="message" className="text-[10px] font-bold tracking-[0.15em] text-accent uppercase">
                         Brief Project Vision
@@ -226,7 +174,6 @@ export default function CTA() {
                       />
                     </div>
 
-                    {/* Magnetic Submit Button */}
                     <button
                       type="submit"
                       className="magnetic-button relative overflow-hidden bg-accent hover:bg-accent/95 px-8 py-[18px] text-[11px] font-bold tracking-[0.12em] text-white uppercase text-center mt-6 transition-all duration-300 cursor-pointer card-3d-lift translate-z-30 shadow-3d-dark"
@@ -256,7 +203,6 @@ export default function CTA() {
               </div>
             </TiltCard3D>
           </div>
-
         </div>
       </div>
     </section>

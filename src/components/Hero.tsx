@@ -3,55 +3,18 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { useEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useRef } from "react";
 import TiltCard3D from "@/components/TiltCard3D";
+import { useParallax } from "@/lib/animations/useParallax";
 
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
   const bgRef = useRef<HTMLDivElement>(null);
   const cadLinesRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
+  useParallax({ triggerRef: containerRef, targetRef: bgRef, yFrom: 0, yTo: 80, start: "top top", end: "bottom top" });
+  useParallax({ triggerRef: containerRef, targetRef: cadLinesRef, yFrom: 0, yTo: 140, start: "top top", end: "bottom top" });
 
-    let ctx = gsap.context(() => {
-      if (bgRef.current && containerRef.current) {
-        gsap.to(bgRef.current, {
-          yPercent: 18,
-          ease: "none",
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: "top top",
-            end: "bottom top",
-            scrub: true,
-          },
-        });
-      }
-
-      if (cadLinesRef.current && containerRef.current) {
-        gsap.fromTo(cadLinesRef.current,
-          { y: 0, opacity: 0.3 },
-          {
-            y: 140,
-            opacity: 0.12,
-            ease: "none",
-            scrollTrigger: {
-              trigger: containerRef.current,
-              start: "top top",
-              end: "bottom top",
-              scrub: true,
-            }
-          }
-        );
-      }
-    }, containerRef);
-
-    return () => ctx.revert();
-  }, []);
-
-  // Text lines for reveal animation
   const line1 = "Building";
   const line2 = "Timeless";
   const line3 = "Spaces.";
@@ -62,7 +25,6 @@ export default function Hero() {
       ref={containerRef}
       className="relative min-h-[100dvh] w-full overflow-hidden bg-black flex flex-col justify-between pt-28 sm:pt-36 pb-16 perspective-1500 preserve-3d"
     >
-      {/* Background Image with Ken Burns Zoom & Parallax */}
       <motion.div
         ref={bgRef}
         initial={{ scale: 1.15, opacity: 0 }}
@@ -78,13 +40,11 @@ export default function Hero() {
           sizes="100vw"
           className="object-cover object-center"
         />
-        {/* Multi-layered Vignette & Cinematic Lighting Gradients */}
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-black/20" />
         <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/30 to-transparent" />
         <div className="absolute inset-0 bg-radial-gradient(circle at 70% 30%, transparent 20%, rgba(0,0,0,0.85) 90%)" />
       </motion.div>
 
-      {/* Volumetric Ambient Lighting Orbs - optimized to radial gradients (no blur filter rasterization) */}
       <div className="absolute inset-0 pointer-events-none select-none overflow-hidden z-2">
         <div
           style={{ background: "radial-gradient(circle at center, rgba(166, 107, 61, 0.18) 0%, rgba(166, 107, 61, 0) 70%)" }}
@@ -100,47 +60,24 @@ export default function Hero() {
         />
       </div>
 
-      {/* Background CAD Lines */}
       <div
         ref={cadLinesRef}
         className="absolute inset-0 z-5 pointer-events-none select-none opacity-30 preserve-3d [will-change:transform]"
       >
-        {/* Architectural Vector Grid overlay lines */}
         <div className="absolute top-[38%] left-0 w-full h-[0.5px] bg-gradient-to-r from-transparent via-white/20 to-transparent" />
         <div className="absolute top-0 left-[20%] w-[0.5px] h-full bg-gradient-to-b from-transparent via-white/15 to-transparent" />
         <div className="hidden md:block absolute top-0 left-[68%] w-[0.5px] h-full bg-gradient-to-b from-transparent via-white/10 to-transparent" />
         
-        {/* Concentric vector circle overlay */}
         <div className="hidden lg:flex absolute top-[42%] left-[76%] -translate-x-1/2 -translate-y-1/2 w-[420px] h-[420px] rounded-full border border-dashed border-white/15 items-center justify-center [transform:rotateX(35deg)_rotateY(-20deg)]">
           <div className="w-[280px] h-[280px] rounded-full border border-white/10" />
           <div className="w-[140px] h-[140px] rounded-full border border-accent/30" />
         </div>
       </div>
 
-      {/* Main Hero Container */}
       <div className="relative z-10 mx-auto w-full max-w-[1440px] px-5 sm:px-10 lg:px-16 my-auto preserve-3d">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center preserve-3d">
           
-          {/* Left Column: Heading, Subtitle & CTAs */}
           <div className="lg:col-span-7 text-left preserve-3d">
-            
-            {/* Glass Tag / Status Pill */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.1 }}
-              className="inline-flex items-center gap-2.5 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-full bg-white/5 backdrop-blur-xl specular-border-dark mb-8 sm:mb-12 max-w-full overflow-hidden"
-            >
-              <span className="relative flex h-2 w-2 shrink-0">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
-              </span>
-              <span className="text-[9.5px] sm:text-[11px] font-mono tracking-[0.18em] sm:tracking-[0.25em] text-white/90 uppercase font-semibold truncate">
-                ✦ ARCHITECTURE &amp; INTERIOR MASTERPIECES
-              </span>
-            </motion.div>
-
-            {/* Staggered Heading Reveal */}
             <h1 className="hero-heading text-[clamp(40px,7.8vw,115px)] leading-[0.92] text-bg-luxury font-bold tracking-[-0.04em] uppercase mb-8 sm:mb-12 translate-z-30">
               <span className="block overflow-hidden relative h-[1.2em] py-0.5">
                 <motion.span
@@ -174,7 +111,6 @@ export default function Hero() {
               </span>
             </h1>
 
-             {/* Paragraph Fade Up */}
             <motion.p
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
@@ -184,7 +120,6 @@ export default function Hero() {
               Crafting bespoke residences, luxury interiors, and iconic commercial landmarks engineered with precision, spatial harmony, and architectural permanence.
             </motion.p>
 
-            {/* Action Buttons */}
             <motion.div
               initial={{ opacity: 0, y: 25 }}
               animate={{ opacity: 1, y: 0 }}
@@ -215,7 +150,6 @@ export default function Hero() {
               </Link>
             </motion.div>
 
-            {/* Key Metrics Strip (Mobile + Desktop) */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -235,13 +169,9 @@ export default function Hero() {
                 <div className="text-[9px] sm:text-[11px] font-mono uppercase text-white/60 tracking-wider mt-0.5 leading-snug">Precision</div>
               </div>
             </motion.div>
-
           </div>
 
-          {/* Right Column: 3D Floating Showcase Cards (Desktop & Tablet) */}
           <div className="lg:col-span-5 relative flex flex-col items-center lg:items-end justify-center preserve-3d mt-2 lg:mt-0">
-            
-            {/* Card 1: Featured Project Spotlight */}
             <motion.div
               initial={{ opacity: 0, scale: 0.9, x: 40 }}
               animate={{ opacity: 1, scale: 1, x: 0 }}
@@ -250,8 +180,6 @@ export default function Hero() {
             >
               <TiltCard3D maxTilt={10} perspective={1200} glare={true}>
                 <div className="relative p-4 rounded-xl bg-black/60 backdrop-blur-xl border border-white/15 shadow-2xl overflow-hidden group">
-                  
-                  {/* Image Preview */}
                   <div className="relative h-44 w-full rounded-lg overflow-hidden mb-3">
                     <Image
                       src="/images/project_1.webp"
@@ -260,14 +188,11 @@ export default function Hero() {
                       className="object-cover transition-transform duration-700 group-hover:scale-105"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                    
-                    {/* Badge */}
                     <div className="absolute top-3 left-3 bg-black/70 backdrop-blur-md px-2.5 py-1 rounded text-[9px] font-mono text-accent uppercase tracking-wider border border-accent/40">
                       ★ Featured Landmark
                     </div>
                   </div>
 
-                  {/* Details */}
                   <div className="flex items-center justify-between">
                     <div>
                       <h4 className="text-sm font-bold text-white uppercase tracking-wider font-heading">The Skyline Villa</h4>
@@ -285,7 +210,6 @@ export default function Hero() {
               </TiltCard3D>
             </motion.div>
 
-            {/* Card 2: Floating Rating & BIM Precision Badge */}
             <motion.div
               initial={{ opacity: 0, scale: 0.9, x: -30 }}
               animate={{ opacity: 1, scale: 1, x: 0 }}
@@ -307,13 +231,10 @@ export default function Hero() {
                 </div>
               </TiltCard3D>
             </motion.div>
-
           </div>
-
         </div>
       </div>
 
-      {/* Bottom Hero Strip: Accreditation Logos */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -321,8 +242,6 @@ export default function Hero() {
         className="relative z-10 w-full border-t border-white/10 bg-black/30 backdrop-blur-md py-4 px-5 sm:px-10 lg:px-16"
       >
         <div className="mx-auto max-w-[1440px] flex items-center justify-center">
-          
-          {/* Luxury Accreditation Badges Strip */}
           <div className="flex items-center flex-wrap justify-center gap-x-6 gap-y-2 text-[10px] font-mono text-white/40 uppercase tracking-widest text-center">
             <span>RIBA MEMBER</span>
             <span className="text-accent/40">•</span>
@@ -332,11 +251,8 @@ export default function Hero() {
             <span className="text-accent/40">•</span>
             <span>IIA ACCREDITED</span>
           </div>
-
         </div>
       </motion.div>
-
     </section>
   );
 }
-

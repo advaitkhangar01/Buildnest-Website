@@ -3,10 +3,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { useRef, useEffect } from "react";
+import { useRef } from "react";
 import TiltCard3D from "@/components/TiltCard3D";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useParallax } from "@/lib/animations/useParallax";
 
 const projects = [
   {
@@ -48,44 +47,8 @@ export default function Projects() {
   const shape1Ref = useRef<HTMLDivElement>(null);
   const shape2Ref = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
-
-    let ctx = gsap.context(() => {
-      if (shape1Ref.current) {
-        gsap.fromTo(shape1Ref.current,
-          { y: -70 },
-          {
-            y: 70,
-            ease: "none",
-            scrollTrigger: {
-              trigger: sectionRef.current,
-              start: "top bottom",
-              end: "bottom top",
-              scrub: true,
-            }
-          }
-        );
-      }
-      if (shape2Ref.current) {
-        gsap.fromTo(shape2Ref.current,
-          { y: -120 },
-          {
-            y: 120,
-            ease: "none",
-            scrollTrigger: {
-              trigger: sectionRef.current,
-              start: "top bottom",
-              end: "bottom top",
-              scrub: true,
-            }
-          }
-        );
-      }
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
+  useParallax({ triggerRef: sectionRef, targetRef: shape1Ref, yFrom: -70, yTo: 70 });
+  useParallax({ triggerRef: sectionRef, targetRef: shape2Ref, yFrom: -120, yTo: 120 });
 
   return (
     <section
@@ -93,32 +56,27 @@ export default function Projects() {
       ref={sectionRef}
       className="relative py-20 sm:py-24 lg:py-32 bg-bg-luxury border-b border-border-luxury/50 overflow-hidden"
     >
-      {/* Background Graphics & Depth Lights */}
       <div className="absolute inset-0 pointer-events-none select-none overflow-hidden">
-        {/* Soft Radial Ambient Lights - optimized to radial gradients (no blur filter rasterization) */}
         <div 
           style={{ background: "radial-gradient(circle at center, rgba(15, 92, 105, 0.05) 0%, transparent 70%)" }}
-          className="absolute top-[-10%] left-[20%] w-[500px] h-[500px] rounded-full [transform:translateZ(0)] pointer-events-none" 
+          className="absolute top-[-10%] left-[20%] w-[500px] h-[500px] rounded-full pointer-events-none" 
         />
         <div 
           style={{ background: "radial-gradient(circle at center, rgba(166, 107, 61, 0.05) 0%, transparent 70%)" }}
-          className="absolute bottom-[-10%] right-[10%] w-[400px] h-[400px] rounded-full [transform:translateZ(0)] pointer-events-none" 
+          className="absolute bottom-[-10%] right-[10%] w-[400px] h-[400px] rounded-full pointer-events-none" 
         />
         
-        {/* Horizontal structural axis line */}
         <div
           ref={shape1Ref}
           className="absolute top-[45%] left-0 w-full h-[0.5px] bg-gradient-to-r from-transparent via-text-luxury/5 to-transparent pointer-events-none [will-change:transform]"
         />
 
-        {/* CAD Layout Marks */}
         <div className="absolute left-[3%] top-[15%] flex flex-col gap-12 text-text-luxury/10 text-[9px] font-mono tracking-[0.2em] uppercase">
           <span>AXIS_A // L.01</span>
           <span>AXIS_B // L.02</span>
           <span>AXIS_C // L.03</span>
         </div>
 
-        {/* Floating geometric wireframes (CAD elevation blocks) */}
         <div
           ref={shape2Ref}
           className="absolute right-[5%] top-[10%] w-[320px] h-[320px] rounded-[50px] border border-dashed border-accent/10 flex items-center justify-center opacity-60 pointer-events-none [will-change:transform]"
@@ -128,8 +86,6 @@ export default function Projects() {
       </div>
 
       <div className="mx-auto max-w-[1440px] px-5 sm:px-10 lg:px-16">
-        
-        {/* Header */}
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-6 lg:mb-8">
           <div className="flex flex-col gap-5 max-w-[640px]">
             <span className="text-xs font-bold tracking-[0.16em] text-accent uppercase flex items-center gap-3">
@@ -150,7 +106,6 @@ export default function Projects() {
                 className="w-4 h-4 stroke-text-luxury group-hover:stroke-accent transition-colors duration-300 transform group-hover:translate-x-1"
                 fill="none"
                 viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
               >
                 <path
                   strokeLinecap="round"
@@ -163,7 +118,6 @@ export default function Projects() {
           </div>
         </div>
 
-        {/* Editorial Masonry Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
           {projects.map((project, idx) => (
             <motion.div
@@ -177,7 +131,6 @@ export default function Projects() {
               <TiltCard3D maxTilt={7} className="h-full">
                 <Link href={`/projects/${project.slug}`} className="block h-full cursor-pointer">
                   <div className="relative w-full h-full overflow-hidden rounded-[20px] bg-border-luxury group preserve-3d shadow-3d-md specular-border">
-                    {/* Image Container with Parallax Zoom */}
                     <div className="relative w-full h-full overflow-hidden">
                       <Image
                         src={project.image}
@@ -186,12 +139,9 @@ export default function Projects() {
                         sizes="(max-width: 1024px) 100vw, 50vw"
                         className="object-cover transition-transform duration-[2.5s] ease-[0.16, 1, 0.3, 1] group-hover:scale-105"
                       />
-                      
-                      {/* Soft Vignette and Gradient Overlay */}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/10 opacity-70 group-hover:opacity-90 transition-opacity duration-500 ease-in-out" />
                     </div>
 
-                    {/* Text Info - Bottom Left Floating on Z-Axis */}
                     <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-8 flex flex-col justify-end text-bg-luxury z-10 preserve-3d">
                       <span className="text-[11px] sm:text-xs font-bold tracking-[0.15em] text-accent uppercase mb-1.5 translate-z-20">
                         {project.category}
@@ -201,7 +151,6 @@ export default function Projects() {
                         {project.title}
                       </h3>
                       
-                      {/* Hidden Meta Information revealed on Hover (Visible by default on mobile) */}
                       <div className="h-auto opacity-95 mt-2 lg:mt-0 lg:h-0 lg:opacity-0 lg:group-hover:h-auto lg:group-hover:opacity-95 overflow-hidden transition-all duration-500 ease-out flex items-center justify-between translate-z-20">
                         <span className="text-sm font-medium tracking-wide text-bg-luxury">
                           {project.location}
@@ -213,7 +162,6 @@ export default function Projects() {
                             className="w-3.5 h-3.5 stroke-white"
                             fill="none"
                             viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg"
                           >
                             <path
                               strokeLinecap="round"
@@ -226,7 +174,6 @@ export default function Projects() {
                       </div>
                     </div>
 
-                    {/* Accent Highlight lines */}
                     <div className="absolute inset-0 border border-white/10 pointer-events-none rounded-[20px] transition-all duration-500 group-hover:border-accent/40 translate-z-10" />
                   </div>
                 </Link>

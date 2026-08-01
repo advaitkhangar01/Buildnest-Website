@@ -5,8 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { initGSAP, gsap } from "@/lib/animations/gsapInit";
 
 const navItems = [
   { name: "Home", href: "/", code: "01" },
@@ -22,10 +21,9 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
   const progressRef = useRef<HTMLDivElement>(null);
+  const headerRef = useRef<HTMLElement>(null);
 
   const isHomePage = pathname === "/";
-  // Light text (white) is ONLY used when on the homepage at the top of the page when closed.
-  // On all subpages or when scrolled/open, dark luxury text is used over frosted glass.
   const isLightText = isHomePage && !isScrolled && !isOpen;
 
   useEffect(() => {
@@ -40,25 +38,29 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
+    initGSAP();
 
-    const tween = gsap.fromTo(progressRef.current,
-      { scaleX: 0 },
-      {
-        scaleX: 1,
-        ease: "none",
-        scrollTrigger: {
-          trigger: "body",
-          start: "top top",
-          end: "bottom bottom",
-          scrub: true,
-        }
+    const ctx = gsap.context(() => {
+      if (progressRef.current) {
+        gsap.fromTo(
+          progressRef.current,
+          { scaleX: 0 },
+          {
+            scaleX: 1,
+            ease: "none",
+            scrollTrigger: {
+              trigger: "body",
+              start: "top top",
+              end: "bottom bottom",
+              scrub: true,
+            },
+          }
+        );
       }
-    );
+    }, headerRef);
 
     return () => {
-      tween.scrollTrigger?.kill();
-      tween.kill();
+      ctx.revert();
     };
   }, []);
 
@@ -82,6 +84,7 @@ export default function Navbar() {
   return (
     <>
       <header
+        ref={headerRef}
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-in-out ${
           isOpen
             ? "h-[96px] sm:h-[108px] bg-[#0E1013] border-b border-white/10"
@@ -90,14 +93,12 @@ export default function Navbar() {
             : "h-[96px] sm:h-[108px] bg-transparent border-b border-white/10"
         }`}
       >
-        {/* Scroll Progress Line (Bronze) */}
         <div
           ref={progressRef}
           className="absolute top-0 left-0 right-0 h-[3px] bg-accent origin-left z-50 scale-x-0 [will-change:transform]"
         />
 
         <div className="mx-auto h-full max-w-[1440px] px-4 sm:px-10 lg:px-16 flex items-center justify-between">
-          {/* Logo */}
           <Link
             href="/"
             className="relative z-50 flex items-center gap-3.5 sm:gap-5 group/logo"
@@ -114,7 +115,6 @@ export default function Navbar() {
               />
             </div>
 
-            {/* Vertical line separator */}
             <span
               className={`h-9 sm:h-11 w-[2.5px] origin-center transition-all duration-500 ease-out group-hover/logo:scale-y-110 ${
                 isOpen || !isLightText
@@ -123,7 +123,6 @@ export default function Navbar() {
               }`}
             />
 
-            {/* Creative Typography */}
             <div
               className={`flex items-center font-heading-excn text-[24px] sm:text-[30px] md:text-[34px] font-black tracking-[0.2em] sm:tracking-[0.24em] select-none overflow-hidden h-10 sm:h-12 transition-all duration-500 ${
                 isOpen || !isLightText ? "text-text-luxury" : "text-white"
@@ -135,7 +134,6 @@ export default function Navbar() {
               }
             >
               <div className="flex items-center h-10 sm:h-12">
-                {/* BUILD */}
                 <span className="relative flex flex-col overflow-hidden h-10 sm:h-12">
                   <span className={`font-black leading-10 sm:leading-12 transition-transform duration-500 ease-out group-hover/logo:-translate-y-full ${isOpen ? "text-white" : ""}`}>
                     BUILD
@@ -145,7 +143,6 @@ export default function Navbar() {
                   </span>
                 </span>
 
-                {/* NEST */}
                 <span className="relative flex flex-col overflow-hidden h-10 sm:h-12 ml-[4px] sm:ml-[6px] pr-[4px]">
                   <span className="font-light leading-10 sm:leading-12 text-accent transition-transform duration-500 ease-out delay-75 group-hover/logo:-translate-y-full">
                     NEST<span className={isOpen ? "text-white" : !isLightText ? "text-text-luxury" : "text-white"}>.</span>
@@ -159,7 +156,6 @@ export default function Navbar() {
             </div>
           </Link>
 
-          {/* Center Nav Links (Desktop) */}
           <nav className="hidden md:flex items-center gap-8">
             {navItems.map((item) => {
               const isActive = pathname === item.href;
@@ -186,7 +182,6 @@ export default function Navbar() {
             })}
           </nav>
 
-          {/* Right CTA & Mobile Toggle */}
           <div className="flex items-center gap-3 sm:gap-4">
             <div className="hidden sm:flex">
               <Link
@@ -201,7 +196,6 @@ export default function Navbar() {
               </Link>
             </div>
 
-            {/* Custom Hamburger Button */}
             <button
               onClick={() => setIsOpen(!isOpen)}
               className={`md:hidden relative z-50 p-2.5 rounded-full border transition-all duration-300 flex items-center justify-center ${
@@ -212,6 +206,7 @@ export default function Navbar() {
                   : "border-white/25 bg-black/20 backdrop-blur-md text-white hover:border-white"
               }`}
               aria-label="Toggle Navigation Menu"
+              aria-expanded={isOpen}
             >
               <div className="w-5 h-5 flex flex-col justify-center items-center gap-1">
                 <span
@@ -235,7 +230,6 @@ export default function Navbar() {
         </div>
       </header>
 
-      {/* Redesigned Full-Screen Mobile Drawer */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -245,12 +239,10 @@ export default function Navbar() {
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
             className="fixed inset-0 z-40 flex flex-col justify-between bg-[#0E1013] text-white px-5 sm:px-10 pt-24 pb-6 md:hidden overflow-y-auto"
           >
-            {/* Ambient Lighting & CAD Overlay */}
             <div className="absolute inset-0 blueprint-grid opacity-[0.05] pointer-events-none" />
             <div className="absolute top-1/4 right-0 w-[300px] h-[300px] bg-accent/10 rounded-full blur-[100px] pointer-events-none" />
             <div className="absolute bottom-10 left-0 w-[250px] h-[250px] bg-primary/15 rounded-full blur-[90px] pointer-events-none" />
 
-            {/* Top Dispatch Pill */}
             <div className="relative z-10 flex items-center justify-between border-b border-white/10 pb-4 mb-4">
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
@@ -263,7 +255,6 @@ export default function Navbar() {
               </span>
             </div>
 
-            {/* Main Navigation Links */}
             <nav className="relative z-10 flex flex-col gap-2 my-auto py-2">
               {navItems.map((item, idx) => {
                 const isActive = pathname === item.href;
@@ -303,7 +294,6 @@ export default function Navbar() {
               })}
             </nav>
 
-            {/* Quick Action Hub inside Mobile Drawer */}
             <div className="relative z-10 flex flex-col gap-4 mt-6 pt-5 border-t border-white/10">
               <div className="grid grid-cols-2 gap-3">
                 <a
@@ -330,7 +320,6 @@ export default function Navbar() {
                 Start Your Project ↗
               </Link>
 
-              {/* Mobile Social Links */}
               <div className="flex justify-center gap-4 py-2.5 border-b border-t border-white/10">
                 <a
                   href="https://www.linkedin.com/in/rohan-shahoo-880068423/"
@@ -360,7 +349,6 @@ export default function Navbar() {
                 </a>
               </div>
 
-              {/* Studio Info Footer inside Menu */}
               <div className="flex items-center justify-between text-[10px] font-mono text-white/50 pt-2">
                 <span>📍 CIVIL LINES, NAGPUR</span>
                 <span>MON - SAT 09:30 - 19:30</span>
@@ -372,4 +360,3 @@ export default function Navbar() {
     </>
   );
 }
-
