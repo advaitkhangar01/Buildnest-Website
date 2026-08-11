@@ -38,6 +38,10 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
+    const isSmall = typeof window !== "undefined" && window.innerWidth < 1024;
+    const prefersReducedMotion = typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (isSmall || prefersReducedMotion) return;
+
     initGSAP();
 
     const ctx = gsap.context(() => {
@@ -49,7 +53,7 @@ export default function Navbar() {
             scaleX: 1,
             ease: "none",
             scrollTrigger: {
-              trigger: "body",
+              trigger: document.body,
               start: "top top",
               end: "bottom bottom",
               scrub: true,
@@ -101,7 +105,7 @@ export default function Navbar() {
         <div className="mx-auto h-full max-w-[1440px] px-4 sm:px-10 lg:px-16 flex items-center justify-between">
           <Link
             href="/"
-            className="relative z-50 flex items-center gap-3.5 sm:gap-5 group/logo"
+            className="relative z-50 flex items-center gap-2.5 min-[390px]:gap-3.5 sm:gap-5 group/logo"
             onClick={() => setIsOpen(false)}
           >
             <div className="relative flex items-center shrink-0">
@@ -110,13 +114,13 @@ export default function Navbar() {
                 alt="Buildnest Logo"
                 width={160}
                 height={145}
-                className="h-15 sm:h-18 md:h-22 w-auto object-contain transition-transform duration-500 ease-out group-hover/logo:scale-105 filter drop-shadow-md"
+                className="h-12 min-[390px]:h-15 sm:h-18 md:h-22 w-auto object-contain transition-transform duration-500 ease-out group-hover/logo:scale-105 filter drop-shadow-md"
                 priority
               />
             </div>
 
             <span
-              className={`h-9 sm:h-11 w-[2.5px] origin-center transition-all duration-500 ease-out group-hover/logo:scale-y-110 ${
+              className={`h-7 sm:h-11 w-[2px] sm:w-[2.5px] origin-center transition-all duration-500 ease-out group-hover/logo:scale-y-110 ${
                 isOpen || !isLightText
                   ? "bg-border-luxury/80 group-hover/logo:bg-accent/60"
                   : "bg-white/30 group-hover/logo:bg-accent"
@@ -124,7 +128,7 @@ export default function Navbar() {
             />
 
             <div
-              className={`flex items-center font-heading-excn text-[24px] sm:text-[30px] md:text-[34px] font-black tracking-[0.2em] sm:tracking-[0.24em] select-none overflow-hidden h-10 sm:h-12 transition-all duration-500 ${
+              className={`flex items-center font-heading-excn text-[19px] min-[390px]:text-[24px] sm:text-[30px] md:text-[34px] font-black tracking-[0.16em] min-[390px]:tracking-[0.2em] sm:tracking-[0.24em] select-none overflow-hidden h-9 sm:h-12 transition-all duration-500 ${
                 isOpen || !isLightText ? "text-text-luxury" : "text-white"
               }`}
               style={
@@ -133,21 +137,21 @@ export default function Navbar() {
                   : {}
               }
             >
-              <div className="flex items-center h-10 sm:h-12">
-                <span className="relative flex flex-col overflow-hidden h-10 sm:h-12">
-                  <span className={`font-black leading-10 sm:leading-12 transition-transform duration-500 ease-out group-hover/logo:-translate-y-full ${isOpen ? "text-white" : ""}`}>
+              <div className="flex items-center h-9 sm:h-12">
+                <span className="relative flex flex-col overflow-hidden h-9 sm:h-12">
+                  <span className={`font-black leading-9 sm:leading-12 transition-transform duration-500 ease-out group-hover/logo:-translate-y-full ${isOpen ? "text-white" : ""}`}>
                     BUILD
                   </span>
-                  <span className="absolute left-0 top-0 font-black leading-10 sm:leading-12 text-accent transition-transform duration-500 ease-out translate-y-full group-hover/logo:translate-y-0">
+                  <span className="absolute left-0 top-0 font-black leading-9 sm:leading-12 text-accent transition-transform duration-500 ease-out translate-y-full group-hover/logo:translate-y-0">
                     BUILD
                   </span>
                 </span>
 
-                <span className="relative flex flex-col overflow-hidden h-10 sm:h-12 ml-[4px] sm:ml-[6px] pr-[4px]">
-                  <span className="font-light leading-10 sm:leading-12 text-accent transition-transform duration-500 ease-out delay-75 group-hover/logo:-translate-y-full">
+                <span className="relative flex flex-col overflow-hidden h-9 sm:h-12 ml-[3px] sm:ml-[6px] pr-[3px]">
+                  <span className="font-light leading-9 sm:leading-12 text-accent transition-transform duration-500 ease-out delay-75 group-hover/logo:-translate-y-full">
                     NEST<span className={isOpen ? "text-white" : !isLightText ? "text-text-luxury" : "text-white"}>.</span>
                   </span>
-                  <span className="absolute left-0 top-0 font-light leading-10 sm:leading-12 transition-transform duration-500 ease-out delay-75 translate-y-full group-hover/logo:translate-y-0">
+                  <span className="absolute left-0 top-0 font-light leading-9 sm:leading-12 transition-transform duration-500 ease-out delay-75 translate-y-full group-hover/logo:translate-y-0">
                     <span className={isOpen ? "text-white" : !isLightText ? "text-text-luxury" : "text-white"}>NEST</span>
                     <span className="text-accent">.</span>
                   </span>
@@ -156,7 +160,7 @@ export default function Navbar() {
             </div>
           </Link>
 
-          <nav className="hidden md:flex items-center gap-8">
+          <nav className="hidden lg:flex items-center gap-8">
             {navItems.map((item) => {
               const isActive = pathname === item.href;
               return (
@@ -198,7 +202,7 @@ export default function Navbar() {
 
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className={`md:hidden relative z-50 p-2.5 rounded-full border transition-all duration-300 flex items-center justify-center ${
+              className={`lg:hidden relative z-50 p-2.5 rounded-full border transition-all duration-300 flex items-center justify-center ${
                 isOpen
                   ? "border-accent bg-accent/15 text-accent shadow-[0_0_15px_rgba(166,107,61,0.3)]"
                   : !isLightText
@@ -237,7 +241,7 @@ export default function Navbar() {
             animate={{ opacity: 1, clipPath: "circle(150% at 95% 40px)" }}
             exit={{ opacity: 0, clipPath: "circle(0% at 95% 40px)" }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed inset-0 z-40 flex flex-col justify-between bg-[#0E1013] text-white px-5 sm:px-10 pt-24 pb-6 md:hidden overflow-y-auto"
+            className="fixed inset-0 z-40 flex flex-col justify-between bg-[#0E1013] text-white px-5 sm:px-10 pt-24 pb-6 lg:hidden overflow-y-auto"
           >
             <div className="absolute inset-0 blueprint-grid opacity-[0.05] pointer-events-none" />
             <div className="absolute top-1/4 right-0 w-[300px] h-[300px] bg-accent/10 rounded-full blur-[100px] pointer-events-none" />

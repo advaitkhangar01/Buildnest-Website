@@ -13,7 +13,7 @@ export default function BlogSection() {
   return (
     <section
       id="blog"
-      className="relative py-20 sm:py-24 lg:py-32 bg-bg-luxury border-b border-border-luxury/60 overflow-hidden"
+      className="relative py-12 sm:py-16 lg:py-32 bg-bg-luxury border-b border-border-luxury/60 overflow-hidden"
     >
       {/* Ambient Depth Elements */}
       <div className="absolute inset-0 pointer-events-none select-none overflow-hidden">
@@ -126,6 +126,7 @@ export default function BlogSection() {
                             src={post.author.avatar}
                             alt={post.author.name}
                             fill
+                            sizes="28px"
                             className="object-cover"
                           />
                         </div>

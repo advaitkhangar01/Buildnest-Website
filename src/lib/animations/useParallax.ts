@@ -25,7 +25,15 @@ export function useParallax({
   useEffect(() => {
     initGSAP();
 
-    if (!triggerRef.current || !targetRef.current) return;
+    const prefersReducedMotion =
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    const isSmallViewportOrTouch =
+      typeof window !== "undefined" &&
+      (window.innerWidth < 1024 || "ontouchstart" in window || navigator.maxTouchPoints > 0);
+
+    if (!triggerRef.current || !targetRef.current || prefersReducedMotion || isSmallViewportOrTouch) return;
 
     const ctx = gsap.context(() => {
       if (targetRef.current && triggerRef.current) {

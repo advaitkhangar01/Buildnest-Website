@@ -85,7 +85,7 @@ export default function Services() {
     <section
       id="services"
       ref={sectionRef}
-      className="relative py-20 sm:py-24 lg:py-32 bg-white border-b border-border-luxury/50 overflow-hidden"
+      className="relative py-12 sm:py-16 lg:py-32 bg-white border-b border-border-luxury/50 overflow-hidden"
     >
       <div className="absolute inset-0 blueprint-grid opacity-[0.2]" />
 
@@ -99,7 +99,7 @@ export default function Services() {
           className="absolute bottom-[10%] right-[-10%] w-[450px] h-[450px] rounded-full pointer-events-none" 
         />
 
-        <div className="absolute top-[8%] left-[5%] text-text-luxury/10 text-[9px] font-mono tracking-[0.2em] uppercase">
+        <div className="hidden sm:block absolute top-[8%] left-[5%] text-text-luxury/10 text-[9px] font-mono tracking-[0.2em] uppercase">
           SYS_BLOCK: 02_SERVICES // MATRIX_LIAISON
         </div>
 
@@ -285,9 +285,9 @@ export default function Services() {
                               <div className="w-[30px] h-[0.5px] bg-white/20" />
                               <div className="h-[30px] w-[0.5px] bg-white/20 absolute" />
                             </div>
-                            <div className="absolute bottom-4 left-4 right-4 flex justify-between items-center text-[10px] font-mono text-white/80 bg-primary/80 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/10">
-                              <span>COORD: 21.14° N, 79.08° E</span>
-                              <span>{service.technicalSpecs.label}: {service.technicalSpecs.value}</span>
+                            <div className="absolute bottom-3 left-3 right-3 sm:bottom-4 sm:left-4 sm:right-4 flex flex-col min-[390px]:flex-row justify-between items-start min-[390px]:items-center gap-1 text-[9.5px] font-mono text-white/80 bg-primary/85 backdrop-blur-md px-2.5 py-1.5 rounded-lg border border-white/10">
+                              <span className="truncate max-w-full">COORD: 21.14° N, 79.08° E</span>
+                              <span className="text-accent font-semibold truncate max-w-full">{service.technicalSpecs.label}: {service.technicalSpecs.value}</span>
                             </div>
                           </div>
                         </div>

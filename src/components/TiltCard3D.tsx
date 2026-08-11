@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { motion, useMotionValue, useSpring, useTransform, useMotionTemplate } from "framer-motion";
 
 interface TiltCard3DProps {
@@ -25,6 +25,16 @@ const TiltCard3D = React.memo(function TiltCard3D({
   const cardRef = useRef<HTMLDivElement>(null);
   const rectRef = useRef<DOMRect | null>(null);
   const [isHovered, setIsHovered] = useState(false);
+  const [canTilt, setCanTilt] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const supportsHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+      const isDesktop = window.innerWidth >= 1024;
+      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      setCanTilt(supportsHover && isDesktop && !prefersReducedMotion);
+    }
+  }, []);
 
   // Mouse relative coordinates (-0.5 to 0.5)
   const mouseX = useMotionValue(0);
@@ -45,6 +55,10 @@ const TiltCard3D = React.memo(function TiltCard3D({
   // Dynamic template for CSS glare gradient
   const glareBackground = useMotionTemplate`radial-gradient(circle at ${glareX}% ${glareY}%, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0) 65%)`;
 
+  if (!canTilt) {
+    return <div className={`relative group ${className}`}>{children}</div>;
+  }
+
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!isHovered) return;
     const rect = rectRef.current;
@@ -60,9 +74,6 @@ const TiltCard3D = React.memo(function TiltCard3D({
   };
 
   const handleMouseEnter = () => {
-    if (typeof window !== "undefined" && !window.matchMedia("(hover: hover)").matches) {
-      return;
-    }
     setIsHovered(true);
     if (cardRef.current) {
       rectRef.current = cardRef.current.getBoundingClientRect();

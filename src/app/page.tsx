@@ -35,19 +35,29 @@ export default function Home() {
         <Process />
 
         {/* 05 / Why Buildnest */}
-        <WhyBuildnest />
+        <div className="cv-auto">
+          <WhyBuildnest />
+        </div>
 
         {/* 06 / Quality Promise */}
-        <QualityPromise />
+        <div className="cv-auto">
+          <QualityPromise />
+        </div>
 
         {/* 07 / Testimonials quote slider */}
-        <Testimonials />
+        <div className="cv-auto">
+          <Testimonials />
+        </div>
 
         {/* 08 / Editorial & Journal Insights */}
-        <BlogSection />
+        <div className="cv-auto">
+          <BlogSection />
+        </div>
 
         {/* 09 / Dark luxury contact CTA block */}
-        <CTA />
+        <div className="cv-auto">
+          <CTA />
+        </div>
       </main>
 
       {/* 12-Column Footer */}

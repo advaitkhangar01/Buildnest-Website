@@ -23,7 +23,7 @@ export default function Hero() {
     <section
       id="home"
       ref={containerRef}
-      className="relative min-h-[100dvh] w-full overflow-hidden bg-black flex flex-col justify-between pt-28 sm:pt-36 pb-16 perspective-1500 preserve-3d"
+      className="relative min-h-[100dvh] w-full overflow-hidden bg-black flex flex-col justify-between pt-36 sm:pt-40 lg:pt-36 pb-12 sm:pb-16 perspective-1500 preserve-3d"
     >
       <motion.div
         ref={bgRef}
@@ -74,12 +74,12 @@ export default function Hero() {
         </div>
       </div>
 
-      <div className="relative z-10 mx-auto w-full max-w-[1440px] px-5 sm:px-10 lg:px-16 my-auto preserve-3d">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center preserve-3d">
+      <div className="relative z-10 mx-auto w-full max-w-[1440px] px-4 sm:px-10 lg:px-16 my-6 lg:my-auto preserve-3d">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center preserve-3d">
           
           <div className="lg:col-span-7 text-left preserve-3d">
-            <h1 className="hero-heading text-[clamp(40px,7.8vw,115px)] leading-[0.92] text-bg-luxury font-bold tracking-[-0.04em] uppercase mb-8 sm:mb-12 translate-z-30">
-              <span className="block overflow-hidden relative h-[1.2em] py-0.5">
+            <h1 className="hero-heading text-[clamp(32px,8.2vw,115px)] leading-[0.96] sm:leading-[0.92] text-bg-luxury font-bold tracking-[-0.03em] sm:tracking-[-0.04em] uppercase mb-6 sm:mb-12 translate-z-30">
+              <span className="block overflow-hidden relative py-0.5">
                 <motion.span
                   initial={{ y: "100%" }}
                   animate={{ y: 0 }}
@@ -89,7 +89,7 @@ export default function Hero() {
                   {line1}
                 </motion.span>
               </span>
-              <span className="block overflow-hidden relative h-[1.2em] py-0.5">
+              <span className="block overflow-hidden relative py-0.5">
                 <motion.span
                   initial={{ y: "100%" }}
                   animate={{ y: 0 }}
@@ -99,7 +99,7 @@ export default function Hero() {
                   {line2}
                 </motion.span>
               </span>
-              <span className="block overflow-hidden relative h-[1.2em] py-0.5">
+              <span className="block overflow-hidden relative py-0.5">
                 <motion.span
                   initial={{ y: "100%" }}
                   animate={{ y: 0 }}
@@ -115,7 +115,7 @@ export default function Hero() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, delay: 0.7, ease: [0.16, 1, 0.3, 1] }}
-              className="text-white/80 text-[15px] sm:text-[19px] font-normal leading-[1.7] tracking-[0.02em] mb-10 sm:mb-16 max-w-[560px] translate-z-20"
+              className="text-white/80 text-[14px] sm:text-[19px] font-normal leading-[1.65] sm:leading-[1.7] tracking-[0.01em] sm:tracking-[0.02em] mb-8 sm:mb-16 max-w-[560px] translate-z-20"
             >
               Crafting bespoke residences, luxury interiors, and iconic commercial landmarks engineered with precision, spatial harmony, and architectural permanence.
             </motion.p>
@@ -124,11 +124,11 @@ export default function Hero() {
               initial={{ opacity: 0, y: 25 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, delay: 0.9, ease: [0.16, 1, 0.3, 1] }}
-              className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 sm:gap-4 translate-z-40 mb-12 sm:mb-20"
+              className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 translate-z-40 mb-10 sm:mb-20"
             >
               <Link
                 href="#contact"
-                className="magnetic-button group relative overflow-hidden bg-accent hover:bg-accent/90 px-7 py-4 sm:py-[18px] text-[11px] font-bold tracking-[0.14em] text-bg-luxury uppercase text-center transition-all duration-300 shadow-3d-dark card-3d-lift flex items-center justify-center gap-3 rounded-none active:scale-98"
+                className="magnetic-button group relative overflow-hidden bg-accent hover:bg-accent/90 px-6 sm:px-7 py-3.5 sm:py-[18px] text-[11px] font-bold tracking-[0.14em] text-bg-luxury uppercase text-center transition-all duration-300 shadow-3d-dark card-3d-lift flex items-center justify-center gap-3 rounded-none active:scale-98"
               >
                 <span>Start Your Project</span>
                 <svg
@@ -143,7 +143,7 @@ export default function Hero() {
               
               <Link
                 href="#projects"
-                className="magnetic-button group relative overflow-hidden specular-border-dark bg-white/5 backdrop-blur-md hover:bg-white/15 px-7 py-4 sm:py-[18px] text-[11px] font-bold tracking-[0.14em] text-white uppercase text-center transition-all duration-300 card-3d-lift flex items-center justify-center gap-3 rounded-none active:scale-98"
+                className="magnetic-button group relative overflow-hidden specular-border-dark bg-white/5 backdrop-blur-md hover:bg-white/15 px-6 sm:px-7 py-3.5 sm:py-[18px] text-[11px] font-bold tracking-[0.14em] text-white uppercase text-center transition-all duration-300 card-3d-lift flex items-center justify-center gap-3 rounded-none active:scale-98"
               >
                 <span>Explore Portfolio</span>
                 <span className="w-1.5 h-1.5 rounded-full bg-accent group-hover:scale-150 transition-transform duration-300" />
@@ -154,19 +154,19 @@ export default function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 1.1 }}
-              className="grid grid-cols-3 gap-2.5 sm:gap-4 pt-6 sm:pt-10 border-t border-white/10 max-w-[560px]"
+              className="grid grid-cols-3 gap-2 min-[390px]:gap-4 pt-5 sm:pt-10 border-t border-white/10 max-w-[560px]"
             >
               <div>
-                <div className="text-xl sm:text-3xl font-bold font-heading text-white tracking-tight">150+</div>
-                <div className="text-[9px] sm:text-[11px] font-mono uppercase text-white/60 tracking-wider mt-0.5 leading-snug">Projects Built</div>
+                <div className="text-lg min-[390px]:text-xl sm:text-3xl font-bold font-heading text-white tracking-tight">150+</div>
+                <div className="text-[8.5px] min-[390px]:text-[9.5px] sm:text-[11px] font-mono uppercase text-white/60 tracking-wider mt-0.5 leading-snug">Projects Built</div>
               </div>
               <div>
-                <div className="text-xl sm:text-3xl font-bold font-heading text-accent tracking-tight">15+ Yrs</div>
-                <div className="text-[9px] sm:text-[11px] font-mono uppercase text-white/60 tracking-wider mt-0.5 leading-snug">Architecture</div>
+                <div className="text-lg min-[390px]:text-xl sm:text-3xl font-bold font-heading text-accent tracking-tight">15+ Yrs</div>
+                <div className="text-[8.5px] min-[390px]:text-[9.5px] sm:text-[11px] font-mono uppercase text-white/60 tracking-wider mt-0.5 leading-snug">Architecture</div>
               </div>
               <div>
-                <div className="text-xl sm:text-3xl font-bold font-heading text-white tracking-tight">100%</div>
-                <div className="text-[9px] sm:text-[11px] font-mono uppercase text-white/60 tracking-wider mt-0.5 leading-snug">Precision</div>
+                <div className="text-lg min-[390px]:text-xl sm:text-3xl font-bold font-heading text-white tracking-tight">100%</div>
+                <div className="text-[8.5px] min-[390px]:text-[9.5px] sm:text-[11px] font-mono uppercase text-white/60 tracking-wider mt-0.5 leading-snug">Precision</div>
               </div>
             </motion.div>
           </div>

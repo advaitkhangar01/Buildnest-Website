@@ -89,7 +89,7 @@ export default function Process() {
     <section
       ref={pinSectionRef}
       id="process"
-      className="relative lg:h-screen bg-white lg:overflow-hidden border-b border-border-luxury/50 py-20 lg:py-0"
+      className="relative lg:h-screen bg-white lg:overflow-hidden border-b border-border-luxury/50 py-12 lg:py-0"
     >
       <div className="absolute inset-0 blueprint-grid opacity-[0.1]" />
 
@@ -117,7 +117,7 @@ export default function Process() {
 
       <div
         ref={trackRef}
-        className="relative z-10 flex flex-col lg:flex-row items-center gap-10 lg:gap-32 w-full px-5 sm:px-10 lg:px-0 lg:w-max"
+        className="relative z-10 flex flex-col lg:flex-row items-center gap-10 lg:gap-32 w-full px-5 sm:px-10 lg:px-0 lg:w-max before:absolute before:left-1/2 before:-translate-x-1/2 before:top-8 before:bottom-8 before:w-[2px] before:bg-border-luxury/70 before:z-0 lg:before:hidden"
         style={isDesktop ? { paddingLeft: "30vw", paddingRight: "30vw" } : {}}
       >
         <div 

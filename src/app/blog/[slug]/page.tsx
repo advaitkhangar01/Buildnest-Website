@@ -82,6 +82,7 @@ export default async function BlogDetailPage({
                     src={post.author.avatar}
                     alt={post.author.name}
                     fill
+                    sizes="44px"
                     className="object-cover"
                   />
                 </div>
@@ -190,6 +191,7 @@ export default async function BlogDetailPage({
                             src={block.imageSrc}
                             alt={block.caption || "Article visual"}
                             fill
+                            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 80vw, 720px"
                             className="object-cover"
                           />
                         </div>

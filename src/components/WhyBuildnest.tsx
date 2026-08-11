@@ -18,7 +18,7 @@ export default function WhyBuildnest() {
     <section
       id="why-us"
       ref={sectionRef}
-      className="relative py-20 sm:py-24 lg:py-28 bg-bg-luxury border-b border-border-luxury/50 overflow-hidden"
+      className="relative py-12 sm:py-16 lg:py-28 bg-bg-luxury border-b border-border-luxury/50 overflow-hidden"
     >
       <div className="absolute inset-0 pointer-events-none select-none overflow-hidden">
         <div 

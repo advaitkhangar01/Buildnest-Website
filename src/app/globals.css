@@ -15,6 +15,7 @@
 
   --animate-pulse-slow: pulse 8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   --animate-orb-float: orb-float 10s ease-in-out infinite;
+  --animate-line-shimmer: line-shimmer 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 
   @keyframes orb-float {
     0%, 100% {
@@ -24,6 +25,15 @@
     50% {
       transform: scale(1.2) translateZ(0);
       opacity: 0.4;
+    }
+  }
+
+  @keyframes line-shimmer {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(200%);
     }
   }
 }
@@ -116,7 +126,19 @@ html.lenis body {
   }
 }
 
-/* Reduced Motion & Battery Saver Safeguards */
+/* Reduced Motion, Low Spec & Mobile Performance Safeguards */
+.cv-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 800px;
+}
+
+@media (max-width: 1023px) {
+  .animate-orb-float,
+  .animate-pulse-slow {
+    animation: none !important;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, ::before, ::after {
     animation-duration: 0.01ms !important;

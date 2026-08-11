@@ -12,23 +12,23 @@ export default function LenisProvider({ children }: { children: React.ReactNode 
   useEffect(() => {
     initGSAP();
 
-    // Check user preference for reduced motion
+    // Check user preference for reduced motion & low spec / mobile conditions
     const prefersReducedMotion =
       typeof window !== "undefined" &&
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    if (prefersReducedMotion) {
+    const nav = typeof navigator !== "undefined" ? (navigator as unknown as { hardwareConcurrency?: number; deviceMemory?: number }) : {};
+    const isLowPower = Boolean((nav.hardwareConcurrency && nav.hardwareConcurrency <= 4) || (nav.deviceMemory && nav.deviceMemory <= 4));
+    const isTouchOrMobile = typeof window !== "undefined" && ("ontouchstart" in window || navigator.maxTouchPoints > 0 || window.innerWidth < 1024);
+
+    if (prefersReducedMotion || isLowPower || isTouchOrMobile) {
       ScrollTrigger.refresh();
       return;
     }
 
-    const isTouchDevice =
-      typeof window !== "undefined" &&
-      ("ontouchstart" in window || navigator.maxTouchPoints > 0 || window.innerWidth < 768);
-
     // Initialize Lenis with autoRaf: false so GSAP ticker exclusively drives the animation frame loop
     const lenis = new Lenis({
-      duration: isTouchDevice ? 0.7 : 0.9,
+      duration: 0.9,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: "vertical",
       gestureOrientation: "vertical",

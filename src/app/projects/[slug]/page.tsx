@@ -341,6 +341,7 @@ export default async function ProjectDetailPage({
                       src={prev.heroImage}
                       alt={prev.title}
                       fill
+                      sizes="96px"
                       className="object-cover group-hover:scale-110 transition-transform duration-500"
                     />
                   </div>
@@ -377,6 +378,7 @@ export default async function ProjectDetailPage({
                       src={next.heroImage}
                       alt={next.title}
                       fill
+                      sizes="96px"
                       className="object-cover group-hover:scale-110 transition-transform duration-500"
                     />
                   </div>

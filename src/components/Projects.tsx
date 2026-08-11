@@ -9,19 +9,19 @@ import { useParallax } from "@/lib/animations/useParallax";
 
 const projects = [
   {
-    title: "The Glass Ribbon Facade",
-    slug: "the-glass-ribbon-facade",
-    category: "Commercial Architecture",
-    image: "/images/project_1.webp",
-    location: "Nagpur, Commercial District",
-    span: "lg:col-span-7 aspect-[4/3] sm:aspect-[16/11] lg:aspect-[3/2.2]",
-  },
-  {
     title: "Residence of Concrete Elements",
     slug: "residence-of-concrete-elements",
     category: "Bespoke Residence",
-    image: "/images/project_2.webp",
+    image: "/images/projects/property-1/img_3882.webp",
     location: "Nagpur, Civil Lines",
+    span: "lg:col-span-7 aspect-[4/3] sm:aspect-[16/11] lg:aspect-[3/2.2]",
+  },
+  {
+    title: "Corporate Innovation HQ",
+    slug: "corporate-innovation-hq",
+    category: "Commercial Architecture",
+    image: "/images/projects/office-site/img_3630.webp",
+    location: "Nagpur, MIHAN SEZ",
     span: "lg:col-span-5 aspect-[4/3] sm:aspect-[4/5]",
   },
   {
@@ -54,7 +54,7 @@ export default function Projects() {
     <section
       id="projects"
       ref={sectionRef}
-      className="relative py-20 sm:py-24 lg:py-32 bg-bg-luxury border-b border-border-luxury/50 overflow-hidden"
+      className="relative py-12 sm:py-16 lg:py-32 bg-bg-luxury border-b border-border-luxury/50 overflow-hidden"
     >
       <div className="absolute inset-0 pointer-events-none select-none overflow-hidden">
         <div 

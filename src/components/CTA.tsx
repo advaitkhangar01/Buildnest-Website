@@ -37,7 +37,7 @@ export default function CTA() {
     <section
       id="contact"
       ref={sectionRef}
-      className="relative py-20 sm:py-24 lg:py-32 bg-text-luxury text-bg-luxury border-b border-border-luxury/10 overflow-hidden"
+      className="relative py-12 sm:py-16 lg:py-32 bg-text-luxury text-bg-luxury border-b border-border-luxury/10 overflow-hidden"
     >
       <div 
         style={{ background: "radial-gradient(circle at center, rgba(15, 92, 105, 0.15) 0%, transparent 70%)" }}

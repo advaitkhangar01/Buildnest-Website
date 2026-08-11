@@ -23,7 +23,7 @@ export default function QualityPromise() {
     <section
       id="quality"
       ref={sectionRef}
-      className="relative py-20 sm:py-24 lg:py-28 bg-white border-b border-border-luxury/50 overflow-hidden"
+      className="relative py-12 sm:py-16 lg:py-28 bg-white border-b border-border-luxury/50 overflow-hidden"
     >
       <div className="absolute inset-0 blueprint-grid opacity-[0.2]" />
 

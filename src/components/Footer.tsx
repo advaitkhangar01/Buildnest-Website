@@ -159,7 +159,7 @@ export default function Footer() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-        className="mx-auto max-w-[1600px] px-5 sm:px-8 lg:px-12 py-16 sm:py-20 lg:py-24 flex flex-col gap-16 relative z-10"
+        className="mx-auto max-w-[1600px] px-5 sm:px-8 lg:px-12 pt-16 pb-32 sm:py-20 lg:py-24 flex flex-col gap-16 relative z-10"
       >
         {/* ROW 1: COMPANY CARD + MAIN COLUMNS */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-12 lg:gap-16 items-start">

@@ -15,7 +15,11 @@ export function useHorizontalScroll({
   enabled = true,
 }: HorizontalScrollConfig) {
   useEffect(() => {
-    if (!enabled) return;
+    const prefersReducedMotion =
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (!enabled || prefersReducedMotion) return;
 
     initGSAP();
 
@@ -157,7 +161,7 @@ export function useHorizontalScroll({
           },
         });
       });
-    }, pinSectionRef);
+    });
 
     return () => {
       ctx.revert();

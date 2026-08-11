@@ -85,7 +85,7 @@ export default function BrandIntro() {
     <section
       id="about"
       ref={sectionRef}
-      className="relative py-20 sm:py-24 lg:py-32 bg-bg-luxury border-b border-border-luxury/50 overflow-hidden"
+      className="relative py-12 sm:py-16 lg:py-32 bg-bg-luxury border-b border-border-luxury/50 overflow-hidden"
     >
       <div className="absolute inset-0 pointer-events-none select-none overflow-hidden">
         <div 
@@ -97,7 +97,7 @@ export default function BrandIntro() {
           className="absolute bottom-[-10%] left-[-10%] w-[400px] h-[400px] rounded-full [transform:translateZ(0)]" 
         />
         
-        <div className="absolute top-[8%] right-[5%] text-text-luxury/10 text-[9px] font-mono tracking-[0.2em] uppercase">
+        <div className="hidden sm:block absolute top-[8%] right-[5%] text-text-luxury/10 text-[9px] font-mono tracking-[0.2em] uppercase">
           SEC: 01_INTRO // NAGPUR_CIVIL // 21.1458° N, 79.0882° E
         </div>
         
