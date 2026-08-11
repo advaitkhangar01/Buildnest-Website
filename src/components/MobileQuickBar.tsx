@@ -33,7 +33,7 @@ export default function MobileQuickBar() {
         >
           <div className="bg-[#121518]/92 backdrop-blur-2xl border border-white/20 p-1.5 min-[375px]:p-2 rounded-2xl shadow-3d-dark flex items-center justify-between gap-1.5 min-[375px]:gap-2 specular-border-dark">
             <a
-              href="https://wa.me/919823000000?text=Hello%20Buildnest%20Team,%20I%20would%20like%20to%20inquire%20about%20a%20new%20project."
+              href="https://wa.me/919424708016?text=Hello%20Buildnest%20Team,%20I%20would%20like%20to%20inquire%20about%20a%20new%20project."
               target="_blank"
               rel="noopener noreferrer"
               className="flex-1 py-2.5 px-2 min-[375px]:px-3 bg-emerald-600/90 hover:bg-emerald-600 rounded-xl text-white text-[10px] min-[375px]:text-[11px] font-mono font-bold uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all active:scale-95 shadow-sm"
@@ -42,7 +42,7 @@ export default function MobileQuickBar() {
             </a>
 
             <a
-              href="tel:+919823000000"
+              href="tel:+919424708016"
               className="flex-1 py-2.5 px-2 min-[375px]:px-3 bg-white/10 hover:bg-white/20 rounded-xl text-white text-[10px] min-[375px]:text-[11px] font-mono font-bold uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all active:scale-95 border border-white/10"
             >
               <span>📞</span> Call Studio

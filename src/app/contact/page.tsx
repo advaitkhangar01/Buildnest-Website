@@ -149,7 +149,7 @@ export default function ContactPage() {
                 {/* Direct Channel Quick Pills */}
                 <div className="pt-2 flex flex-wrap items-center gap-3 text-xs font-mono font-bold">
                   <a
-                    href="https://wa.me/919823000000?text=Hello%20Buildnest%20Team,%20I%20would%20like%20to%20inquire%20about%20a%20new%20project."
+                    href="https://wa.me/919424708016?text=Hello%20Buildnest%20Team,%20I%20would%20like%20to%20inquire%20about%20a%20new%20project."
                     target="_blank"
                     rel="noopener noreferrer"
                     className="px-4 py-2 bg-emerald-600 border border-emerald-500 text-white hover:bg-white hover:text-text-luxury transition-all flex items-center gap-2"
@@ -157,10 +157,10 @@ export default function ContactPage() {
                     <span>💬</span> WhatsApp Direct
                   </a>
                   <a
-                    href="tel:+919823000000"
+                    href="tel:+919424708016"
                     className="px-4 py-2 bg-white/10 border border-white/20 text-white hover:bg-white hover:text-text-luxury transition-all flex items-center gap-2"
                   >
-                    <span>📞</span> Call +91 98230 00000
+                    <span>📞</span> Call +91 94247 08016
                   </a>
                   <span className="px-4 py-2 bg-white/10 border border-white/20 text-bg-luxury flex items-center gap-2 font-bold">
                     <span>⚡</span> 24-Hr Response Guarantee
@@ -303,7 +303,7 @@ export default function ContactPage() {
                         <input
                           type="tel"
                           required
-                          placeholder="+91 98765 43210"
+                          placeholder="+91 94247 08016"
                           value={formData.phone}
                           onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                           className="w-full bg-bg-luxury border border-border-luxury px-3.5 py-2.5 text-xs font-semibold text-text-luxury focus:outline-none focus:border-accent"
@@ -422,7 +422,7 @@ export default function ContactPage() {
 
                       <div>
                         <span className="block font-bold text-white uppercase tracking-wider text-[10px] mb-1">Direct Lines</span>
-                        <p className="font-mono font-bold text-accent">+91 98230 00000 / +91 712 2500000</p>
+                        <p className="font-mono font-bold text-accent">+91 94247 08016 / +91 712 2500000</p>
                       </div>
 
                       <div>
@@ -438,7 +438,7 @@ export default function ContactPage() {
 
                     <div className="pt-3 border-t border-white/20 flex flex-col sm:flex-row items-center gap-4">
                       <a
-                        href="https://wa.me/919823000000?text=Hello%20Buildnest%20Team,%20I%20would%20like%20to%20inquire%20about%20a%20new%20project."
+                        href="https://wa.me/919424708016?text=Hello%20Buildnest%20Team,%20I%20would%20like%20to%20inquire%20about%20a%20new%20project."
                         target="_blank"
                         rel="noopener noreferrer"
                         className="w-full sm:w-auto flex-grow text-center py-3 bg-accent text-white font-bold text-xs uppercase tracking-widest hover:bg-white hover:text-text-luxury transition-all rounded-xl"

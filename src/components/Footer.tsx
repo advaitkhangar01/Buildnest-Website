@@ -182,9 +182,9 @@ export default function Footer() {
             </p>
 
             <div className="flex flex-col gap-3.5 text-[13.5px] font-light text-muted-luxury mt-2">
-              <a href="tel:+919876543210" className="flex items-center gap-2.5 hover:text-accent transition-colors duration-250 ease-out w-fit">
+              <a href="tel:+919424708016" className="flex items-center gap-2.5 hover:text-accent transition-colors duration-250 ease-out w-fit">
                 <Phone className="w-4 h-4 text-accent shrink-0" />
-                <span>+91 98765 43210</span>
+                <span>+91 94247 08016</span>
               </a>
               <a href="mailto:info@buildnestnagpur.com" className="flex items-center gap-2.5 hover:text-accent transition-colors duration-250 ease-out w-fit">
                 <Mail className="w-4 h-4 text-accent shrink-0" />

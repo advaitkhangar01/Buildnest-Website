@@ -301,7 +301,7 @@ export default function Navbar() {
             <div className="relative z-10 flex flex-col gap-4 mt-6 pt-5 border-t border-white/10">
               <div className="grid grid-cols-2 gap-3">
                 <a
-                  href="https://wa.me/919823000000?text=Hello%20Buildnest%20Team,%20I%20would%20like%20to%20inquire%20about%20a%20new%20project."
+                  href="https://wa.me/919424708016?text=Hello%20Buildnest%20Team,%20I%20would%20like%20to%20inquire%20about%20a%20new%20project."
                   target="_blank"
                   rel="noopener noreferrer"
                   className="px-4 py-3 bg-emerald-600/90 hover:bg-emerald-600 border border-emerald-500/50 rounded-xl text-white text-xs font-bold font-mono uppercase tracking-wider flex items-center justify-center gap-2 transition-all shadow-md active:scale-95"
@@ -309,7 +309,7 @@ export default function Navbar() {
                   <span>💬</span> WhatsApp
                 </a>
                 <a
-                  href="tel:+919823000000"
+                  href="tel:+919424708016"
                   className="px-4 py-3 bg-white/10 hover:bg-white/20 border border-white/15 rounded-xl text-white text-xs font-bold font-mono uppercase tracking-wider flex items-center justify-center gap-2 transition-all shadow-md active:scale-95"
                 >
                   <span>📞</span> Call Studio

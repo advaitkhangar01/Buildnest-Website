@@ -38,7 +38,7 @@ export const SOCIAL_LINKS: SocialLink[] = [
   { 
     name: "WhatsApp", 
     iconType: "whatsapp", 
-    href: "https://wa.me/919823000000?text=Hello%20Buildnest%20Team,%20I%20would%20like%20to%20inquire%20about%20a%20new%20project.",
+    href: "https://wa.me/919424708016?text=Hello%20Buildnest%20Team,%20I%20would%20like%20to%20inquire%20about%20a%20new%20project.",
     hoverBg: "hover:bg-[#25D366] hover:text-white hover:border-transparent hover:shadow-[0_0_15px_rgba(37,211,102,0.3)]",
     color: "text-[#25D366]"
   },

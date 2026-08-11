@@ -97,8 +97,8 @@ export default function CTA() {
                   <a href="mailto:info@buildnestnagpur.com" className="hover:text-accent transition-colors text-xs truncate">
                     info@buildnestnagpur.com
                   </a>
-                  <a href="tel:+919876543210" className="hover:text-accent transition-colors text-xs font-mono mt-0.5">
-                    +91 98765 43210
+                  <a href="tel:+919424708016" className="hover:text-accent transition-colors text-xs font-mono mt-0.5">
+                    +91 94247 08016
                   </a>
                 </div>
               </div>
