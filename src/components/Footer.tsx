@@ -168,12 +168,12 @@ export default function Footer() {
               <Image
                 src="/images/logo.png"
                 alt="Buildnest Logo"
-                width={160}
-                height={145}
-                className="h-16 sm:h-22 md:h-24 w-auto object-contain transition-transform duration-500 group-hover/logo:scale-105 filter drop-shadow-md"
+                width={112}
+                height={100}
+                className="h-11 sm:h-15 md:h-17 w-auto object-contain transition-transform duration-500 group-hover/logo:scale-105 filter drop-shadow-md"
               />
-              <span className="h-10 sm:h-12 w-[2.5px] bg-border-luxury" />
-              <span className="font-heading-excn text-[26px] sm:text-[32px] font-black tracking-[0.22em] text-text-luxury">
+              <span className="h-7 sm:h-9 w-[2px] bg-border-luxury" />
+              <span className="font-heading-excn text-[19px] sm:text-[23px] font-black tracking-[0.22em] text-text-luxury">
                 BUILD<span className="font-light text-accent">NEST</span>.
               </span>
             </Link>

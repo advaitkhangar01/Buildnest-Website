@@ -112,15 +112,15 @@ export default function Navbar() {
               <Image
                 src="/images/logo.png"
                 alt="Buildnest Logo"
-                width={160}
-                height={145}
-                className="h-12 min-[390px]:h-15 sm:h-18 md:h-22 w-auto object-contain transition-transform duration-500 ease-out group-hover/logo:scale-105 filter drop-shadow-md"
+                width={112}
+                height={100}
+                className="h-8.5 min-[390px]:h-10.5 sm:h-13 md:h-15 w-auto object-contain transition-transform duration-500 ease-out group-hover/logo:scale-105 filter drop-shadow-md"
                 priority
               />
             </div>
 
             <span
-              className={`h-7 sm:h-11 w-[2px] sm:w-[2.5px] origin-center transition-all duration-500 ease-out group-hover/logo:scale-y-110 ${
+              className={`h-5 sm:h-8 w-[2px] origin-center transition-all duration-500 ease-out group-hover/logo:scale-y-110 ${
                 isOpen || !isLightText
                   ? "bg-border-luxury/80 group-hover/logo:bg-accent/60"
                   : "bg-white/30 group-hover/logo:bg-accent"
@@ -128,7 +128,7 @@ export default function Navbar() {
             />
 
             <div
-              className={`flex items-center font-heading-excn text-[19px] min-[390px]:text-[24px] sm:text-[30px] md:text-[34px] font-black tracking-[0.16em] min-[390px]:tracking-[0.2em] sm:tracking-[0.24em] select-none overflow-hidden h-9 sm:h-12 transition-all duration-500 ${
+              className={`flex items-center font-heading-excn text-[15px] min-[390px]:text-[18px] sm:text-[22px] md:text-[25px] font-black tracking-[0.16em] min-[390px]:tracking-[0.2em] sm:tracking-[0.24em] select-none overflow-hidden h-7 sm:h-9 transition-all duration-500 ${
                 isOpen || !isLightText ? "text-text-luxury" : "text-white"
               }`}
               style={
@@ -137,21 +137,21 @@ export default function Navbar() {
                   : {}
               }
             >
-              <div className="flex items-center h-9 sm:h-12">
-                <span className="relative flex flex-col overflow-hidden h-9 sm:h-12">
-                  <span className={`font-black leading-9 sm:leading-12 transition-transform duration-500 ease-out group-hover/logo:-translate-y-full ${isOpen ? "text-white" : ""}`}>
+              <div className="flex items-center h-7 sm:h-9">
+                <span className="relative flex flex-col overflow-hidden h-7 sm:h-9">
+                  <span className={`font-black leading-7 sm:leading-9 transition-transform duration-500 ease-out group-hover/logo:-translate-y-full ${isOpen ? "text-white" : ""}`}>
                     BUILD
                   </span>
-                  <span className="absolute left-0 top-0 font-black leading-9 sm:leading-12 text-accent transition-transform duration-500 ease-out translate-y-full group-hover/logo:translate-y-0">
+                  <span className="absolute left-0 top-0 font-black leading-7 sm:leading-9 text-accent transition-transform duration-500 ease-out translate-y-full group-hover/logo:translate-y-0">
                     BUILD
                   </span>
                 </span>
 
-                <span className="relative flex flex-col overflow-hidden h-9 sm:h-12 ml-[3px] sm:ml-[6px] pr-[3px]">
-                  <span className="font-light leading-9 sm:leading-12 text-accent transition-transform duration-500 ease-out delay-75 group-hover/logo:-translate-y-full">
+                <span className="relative flex flex-col overflow-hidden h-7 sm:h-9 ml-[2.5px] sm:ml-[5px] pr-[2.5px]">
+                  <span className="font-light leading-7 sm:leading-9 text-accent transition-transform duration-500 ease-out delay-75 group-hover/logo:-translate-y-full">
                     NEST<span className={isOpen ? "text-white" : !isLightText ? "text-text-luxury" : "text-white"}>.</span>
                   </span>
-                  <span className="absolute left-0 top-0 font-light leading-9 sm:leading-12 transition-transform duration-500 ease-out delay-75 translate-y-full group-hover/logo:translate-y-0">
+                  <span className="absolute left-0 top-0 font-light leading-7 sm:leading-9 transition-transform duration-500 ease-out delay-75 translate-y-full group-hover/logo:translate-y-0">
                     <span className={isOpen ? "text-white" : !isLightText ? "text-text-luxury" : "text-white"}>NEST</span>
                     <span className="text-accent">.</span>
                   </span>

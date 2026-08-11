@@ -14,9 +14,9 @@ export default function Loading() {
           <Image
             src="/images/logo.png"
             alt="Buildnest Logo"
-            width={120}
-            height={108}
-            className="h-16 sm:h-20 w-auto object-contain filter drop-shadow-[0_4px_20px_rgba(0,0,0,0.4)] animate-[pulse_3s_ease-in-out_infinite]"
+            width={84}
+            height={75}
+            className="h-11 sm:h-14 w-auto object-contain filter drop-shadow-[0_4px_20px_rgba(0,0,0,0.4)] animate-[pulse_3s_ease-in-out_infinite]"
             priority
           />
         </div>

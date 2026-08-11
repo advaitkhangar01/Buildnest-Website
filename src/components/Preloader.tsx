@@ -98,9 +98,9 @@ export default function Preloader() {
           <Image
             src="/images/logo.png"
             alt="Buildnest Logo"
-            width={120}
-            height={108}
-            className="h-16 sm:h-20 w-auto object-contain filter drop-shadow-[0_4px_20px_rgba(0,0,0,0.4)]"
+            width={84}
+            height={75}
+            className="h-11 sm:h-14 w-auto object-contain filter drop-shadow-[0_4px_20px_rgba(0,0,0,0.4)]"
             priority
           />
         </div>
