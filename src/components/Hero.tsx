@@ -78,8 +78,8 @@ export default function Hero() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center preserve-3d">
           
           <div className="lg:col-span-7 text-left preserve-3d">
-            <h1 className="hero-heading text-[clamp(32px,8.2vw,115px)] leading-[0.96] sm:leading-[0.92] text-bg-luxury font-bold tracking-[-0.03em] sm:tracking-[-0.04em] uppercase mb-6 sm:mb-12 translate-z-30">
-              <span className="block overflow-hidden relative py-0.5">
+            <h1 className="hero-heading text-[clamp(32px,8.2vw,115px)] leading-[0.96] sm:leading-[0.92] text-bg-luxury font-bold tracking-[-0.03em] sm:tracking-[-0.04em] uppercase mb-6 sm:mb-12 lg:translate-z-30">
+              <span className="block overflow-hidden relative py-0.5 px-1.5">
                 <motion.span
                   initial={{ y: "100%" }}
                   animate={{ y: 0 }}
@@ -89,7 +89,7 @@ export default function Hero() {
                   {line1}
                 </motion.span>
               </span>
-              <span className="block overflow-hidden relative py-0.5">
+              <span className="block overflow-hidden relative py-0.5 px-1.5">
                 <motion.span
                   initial={{ y: "100%" }}
                   animate={{ y: 0 }}
@@ -99,7 +99,7 @@ export default function Hero() {
                   {line2}
                 </motion.span>
               </span>
-              <span className="block overflow-hidden relative py-0.5">
+              <span className="block overflow-hidden relative py-0.5 px-1.5">
                 <motion.span
                   initial={{ y: "100%" }}
                   animate={{ y: 0 }}
@@ -115,7 +115,7 @@ export default function Hero() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, delay: 0.7, ease: [0.16, 1, 0.3, 1] }}
-              className="text-white/80 text-[14px] sm:text-[19px] font-normal leading-[1.65] sm:leading-[1.7] tracking-[0.01em] sm:tracking-[0.02em] mb-8 sm:mb-16 max-w-[560px] translate-z-20"
+              className="text-white/80 text-[14px] sm:text-[19px] font-normal leading-[1.65] sm:leading-[1.7] tracking-[0.01em] sm:tracking-[0.02em] mb-8 sm:mb-16 max-w-[560px] lg:translate-z-20"
             >
               Crafting bespoke residences, luxury interiors, and iconic commercial landmarks engineered with precision, spatial harmony, and architectural permanence.
             </motion.p>
@@ -124,7 +124,7 @@ export default function Hero() {
               initial={{ opacity: 0, y: 25 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, delay: 0.9, ease: [0.16, 1, 0.3, 1] }}
-              className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 translate-z-40 mb-10 sm:mb-20"
+              className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 lg:translate-z-40 mb-10 sm:mb-20"
             >
               <Link
                 href="#contact"
