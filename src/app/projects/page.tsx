@@ -258,7 +258,7 @@ export default function ProjectsPage() {
                       <TiltCard3D maxTilt={7} className="h-full">
                         <div className="group flex flex-col bg-white border border-border-luxury rounded-2xl overflow-hidden shadow-3d-md specular-border transition-all duration-500 preserve-3d h-full">
                           {/* Project Image Box */}
-                          <Link href={`/projects/${proj.slug}`} className="relative block aspect-[4/3] overflow-hidden bg-bg-luxury">
+                          <Link href={`/projects/${proj.slug}`} className={`relative block ${proj.aspectRatio || "aspect-[4/3]"} overflow-hidden bg-bg-luxury`}>
                             <Image
                               src={proj.heroImage}
                               alt={proj.title}

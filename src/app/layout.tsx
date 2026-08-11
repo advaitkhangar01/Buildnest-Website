@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import LenisProvider from "@/components/LenisProvider";
-import DevPerformanceHUD from "@/components/dev/DevPerformanceHUD";
 
 const avenir = localFont({
   src: [
@@ -109,7 +108,6 @@ export default function RootLayout({
         <LenisProvider>
           {children}
           <MobileQuickBar />
-          <DevPerformanceHUD />
         </LenisProvider>
       </body>
     </html>

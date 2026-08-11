@@ -25,6 +25,7 @@ export interface ProjectData {
   services: string[];
   heroImage: string;
   galleryImages: string[];
+  aspectRatio?: string;
   overview: string;
   challenge: string;
   solution: string;
@@ -117,7 +118,10 @@ export const PROJECTS_DATA: Record<string, ProjectData> = {
       "/images/projects/property-1/img_3887.webp",
       "/images/projects/property-1/img_3889.webp",
       "/images/projects/property-1/img_3893.webp",
+      "/images/project_2.webp",
+      "/images/services/interior.webp",
     ],
+    aspectRatio: "aspect-[3/4]",
     overview:
       "A serene luxury sanctuary constructed with raw board-formed concrete walls, natural basalt stone surfaces, and custom teakwood panels. Every zone opens up to landscaped internal courtyards that foster natural cross-ventilation and thermal comfort.",
     challenge:
@@ -350,7 +354,11 @@ export const PROJECTS_DATA: Record<string, ProjectData> = {
       "/images/projects/office-site/img_3636.webp",
       "/images/projects/office-site/img_3637.webp",
       "/images/projects/office-site/img_3638.webp",
+      "/images/project_1.webp",
+      "/images/services/project_management.webp",
+      "/images/services/liaisoning.webp",
     ],
+    aspectRatio: "aspect-[16/11]",
     overview:
       "A state-of-the-art tech campus engineered to foster collaboration and innovation. The 35,000 sq ft headquarters integrates open-plan workspaces, acoustic breakout pods, high-efficiency mechanical systems, and solar shading louvers.",
     challenge:

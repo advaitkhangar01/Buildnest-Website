@@ -127,7 +127,7 @@ export default async function ProjectDetailPage({
         {/* Hero Image Frame Showcase */}
         <section className="py-10 bg-text-luxury text-bg-luxury border-b border-white/10">
           <div className="mx-auto max-w-[1440px] px-5 sm:px-10 lg:px-16">
-            <div className="relative aspect-[16/9] w-full overflow-hidden border border-white/20 shadow-3d-lg group">
+            <div className={`relative ${project.aspectRatio && project.aspectRatio.includes("3/4") ? "aspect-[4/3] sm:aspect-[16/10] max-h-[700px]" : "aspect-[16/9]"} w-full overflow-hidden border border-white/20 shadow-3d-lg group bg-black/40`}>
               <Image
                 src={project.heroImage}
                 alt={project.title}
