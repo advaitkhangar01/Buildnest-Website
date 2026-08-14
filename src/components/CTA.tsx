@@ -88,7 +88,7 @@ export default function CTA() {
                   <span className="text-[10px] font-bold tracking-[0.15em] text-accent uppercase block mb-1">
                     Design Studio
                   </span>
-                  <span className="text-white text-xs">Civil Lines / Ramdaspeth, Nagpur, MS India</span>
+                  <span className="text-white text-xs">Narendra Nagar, Somalwada, Nagpur, MS India</span>
                 </div>
                 <div className="bg-white/5 border border-white/10 p-3.5 rounded-2xl flex flex-col">
                   <span className="text-[10px] font-bold tracking-[0.15em] text-accent uppercase block mb-1">

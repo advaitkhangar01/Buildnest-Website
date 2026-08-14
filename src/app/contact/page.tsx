@@ -217,7 +217,7 @@ export default function ContactPage() {
                       <span className="text-accent font-bold text-base">📍</span>
                       <div>
                         <span className="block text-white font-bold uppercase text-xs">Location</span>
-                        <span>Civil Lines / Ramdaspeth Main Road, Nagpur</span>
+                        <span>Plot No. 8, Panchtara Society, Behind Orivision Hospital, Narendra Nagar, Somalwada, Nagpur – 440015</span>
                       </div>
                     </div>
 
@@ -417,7 +417,7 @@ export default function ContactPage() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs text-bg-luxury font-medium">
                       <div>
                         <span className="block font-bold text-white uppercase tracking-wider text-[10px] mb-1">Studio Address</span>
-                        <p>Civil Lines / Ramdaspeth Main Road, Nagpur, MS - 440001</p>
+                        <p>Plot No. 8, Panchtara Society, Behind Orivision Hospital, Narendra Nagar, Somalwada, Nagpur – 440015</p>
                       </div>
 
                       <div>

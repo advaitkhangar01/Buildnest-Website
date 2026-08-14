@@ -5,11 +5,38 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import TiltCard3D from "@/components/TiltCard3D";
 import { getBlogPostBySlug, getRelatedPosts, BLOG_POSTS } from "@/data/blogData";
+import { Metadata } from "next";
 
 export async function generateStaticParams() {
   return BLOG_POSTS.map((post) => ({
     slug: post.slug,
   }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const post = getBlogPostBySlug(slug);
+
+  if (!post) {
+    return {
+      title: "Article Not Found",
+    };
+  }
+
+  return {
+    title: `${post.title} | Buildnest Journal`,
+    description: post.subtitle,
+    keywords: [
+      ...(post.tags || []),
+      post.category,
+      "Buildnest Blog",
+      "Nagpur Architecture Journal"
+    ],
+  };
 }
 
 export default async function BlogDetailPage({
@@ -26,8 +53,38 @@ export default async function BlogDetailPage({
 
   const relatedPosts = getRelatedPosts(slug, 3);
 
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": post.title,
+    "description": post.subtitle,
+    "image": `https://buildnestnagpur.com${post.heroImage || "/images/logo.png"}`,
+    "datePublished": post.publishDate,
+    "author": {
+      "@type": "Person",
+      "name": post.author.name,
+      "jobTitle": post.author.role
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Buildnest",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://buildnestnagpur.com/images/logo.png"
+      }
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": `https://buildnestnagpur.com/blog/${post.slug}`
+    }
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+      />
       <Navbar />
       <main className="min-h-screen bg-bg-luxury text-text-luxury pt-28 pb-20">
         

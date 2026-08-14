@@ -11,11 +11,39 @@ import {
   getNextAndPrevProjects,
   PROJECTS_DATA,
 } from "@/data/projectsData";
+import { Metadata } from "next";
 
 export async function generateStaticParams() {
   return Object.keys(PROJECTS_DATA).map((slug) => ({
     slug: slug,
   }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const project = getProjectBySlug(slug);
+
+  if (!project) {
+    return {
+      title: "Project Not Found",
+    };
+  }
+
+  return {
+    title: `${project.title} | Projects by Buildnest in Nagpur`,
+    description: `${project.subtitle} Explore the design overview, challenges, solutions, specifications, and details of this ${project.category.toLowerCase()} located in ${project.location}.`,
+    keywords: [
+      project.title,
+      project.category,
+      project.location,
+      "Buildnest Projects",
+      "Nagpur Architecture"
+    ],
+  };
 }
 
 export default async function ProjectDetailPage({
@@ -33,8 +61,41 @@ export default async function ProjectDetailPage({
   const { next, prev } = getNextAndPrevProjects(slug);
   const relatedProjects = getRelatedProjects(slug, 3);
 
+  const projectSchema = {
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    "name": project.title,
+    "description": project.subtitle,
+    "image": `https://buildnestnagpur.com${project.heroImage}`,
+    "author": {
+      "@type": "Architect",
+      "name": "Buildnest",
+      "url": "https://buildnestnagpur.com"
+    },
+    "locationCreated": {
+      "@type": "Place",
+      "name": project.location,
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Nagpur",
+        "addressRegion": "Maharashtra",
+        "addressCountry": "IN"
+      }
+    },
+    "dateCreated": project.year,
+    "provider": {
+      "@type": "LocalBusiness",
+      "name": "Buildnest",
+      "telephone": "+919424708016"
+    }
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(projectSchema) }}
+      />
       <Navbar />
       <main className="min-h-screen bg-bg-luxury text-text-luxury pt-24 pb-20">
         

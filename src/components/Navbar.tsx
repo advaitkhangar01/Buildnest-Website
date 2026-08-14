@@ -354,7 +354,7 @@ export default function Navbar() {
               </div>
 
               <div className="flex items-center justify-between text-[10px] font-mono text-white/50 pt-2">
-                <span>📍 CIVIL LINES, NAGPUR</span>
+                <span>📍 SOMALWADA, NAGPUR</span>
                 <span>MON - SAT 09:30 - 19:30</span>
               </div>
             </div>

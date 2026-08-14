@@ -14,16 +14,16 @@ export default function MapBox({
   variant = "dark",
   className = "",
   title = "Buildnest Design HQ",
-  subtitle = "Civil Lines / Ramdaspeth Main Road, Nagpur, MS 440001",
+  subtitle = "Plot No. 8, Panchtara Society, Behind Orivision Hospital, Narendra Nagar, Somalwada, Nagpur – 440015",
   mapHeightClass = "h-[240px] sm:h-[280px]",
 }: MapBoxProps) {
   const isDark = variant === "dark";
 
   const mapEmbedUrl =
-    "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d59518.84711681283!2d79.040183!3d21.161027!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x34440938f0d86927%3A0x633519c52250165b!2sCivil%20Lines%2C%20Nagpur%2C%20Maharashtra!5e0!3m2!1sen!2sin!4v1710000000000!5m2!1sen!2sin";
+    "https://maps.google.com/maps?q=Plot%20No.%208,%20Panchtara%20Society,%20Behind%20Orivision%20Hospital,%20Narendra%20Nagar,%20Somalwada,%20Nagpur%20%E2%80%93%20440015&t=&z=15&ie=UTF8&iwloc=&output=embed";
 
   const directionsUrl =
-    "https://www.google.com/maps/search/?api=1&query=Civil+Lines+Nagpur+Maharashtra";
+    "https://www.google.com/maps/search/?api=1&query=Plot+No.+8%2C+Panchtara+Society%2C+Behind+Orivision+Hospital%2C+Narendra+Nagar%2C+Somalwada%2C+Nagpur+%E2%80%93+440015";
 
   return (
     <div

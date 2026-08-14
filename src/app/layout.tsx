@@ -57,9 +57,21 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://buildnestnagpur.com"),
-  title: "Buildnest | Premium Architecture, Interior & Construction Solutions",
-  description: "Buildnest offers bespoke turnkey architecture, construction, and interior design solutions in Nagpur. Crafting timeless spaces with engineering precision.",
-  keywords: ["Architecture", "Interior Design", "Construction", "Nagpur", "Premium", "Turnkey Projects", "Buildnest"],
+  title: "Buildnest | Architects, Interior Design & Construction in Nagpur",
+  description: "Buildnest offers bespoke turnkey architecture, civil construction, and interior design solutions in Nagpur. Crafting timeless luxury spaces and villas with engineering precision.",
+  keywords: [
+    "architects in Nagpur",
+    "best architects in Nagpur",
+    "architect in Nagpur",
+    "architecture firms in Nagpur",
+    "interior designers in Nagpur",
+    "architect and interior designer Nagpur",
+    "turnkey construction Nagpur",
+    "residential architects Nagpur",
+    "villa architects Nagpur",
+    "Buildnest",
+    "Buildnest Nagpur"
+  ],
   authors: [{ name: "Buildnest" }],
   icons: {
     icon: [
@@ -73,8 +85,8 @@ export const metadata: Metadata = {
   },
   manifest: "/site.webmanifest",
   openGraph: {
-    title: "Buildnest | Premium Architecture, Interior & Construction Solutions",
-    description: "Bespoke turnkey architecture, construction, and interior design in Nagpur. Crafting timeless spaces with engineering precision.",
+    title: "Buildnest | Architects, Interior Design & Construction in Nagpur",
+    description: "Bespoke turnkey architecture, civil construction, and luxury interior design in Nagpur. Crafting timeless residential & commercial spaces.",
     url: "https://buildnestnagpur.com",
     siteName: "Buildnest",
     images: [
@@ -93,6 +105,62 @@ export const metadata: Metadata = {
 import MobileQuickBar from "@/components/MobileQuickBar";
 import Preloader from "@/components/Preloader";
 
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Buildnest",
+  "url": "https://buildnestnagpur.com",
+  "logo": "https://buildnestnagpur.com/images/logo.png",
+  "sameAs": [
+    "https://www.instagram.com/buildnest_nagpur/",
+    "https://www.facebook.com/profile.php?id=61591824793874",
+    "https://www.linkedin.com/in/rohan-shahoo-880068423/"
+  ]
+};
+
+const localBusinessSchema = {
+  "@context": "https://schema.org",
+  "@type": "Architect",
+  "@id": "https://buildnestnagpur.com/#architect",
+  "name": "Buildnest",
+  "image": "https://buildnestnagpur.com/images/hero_bg.webp",
+  "url": "https://buildnestnagpur.com",
+  "telephone": "+919424708016",
+  "priceRange": "$$$",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Plot No. 8, Panchtara Society, Behind Orivision Hospital, Narendra Nagar, Somalwada",
+    "addressLocality": "Nagpur",
+    "addressRegion": "Maharashtra",
+    "postalCode": "440015",
+    "addressCountry": "IN"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": 21.1009,
+    "longitude": 79.0684
+  },
+  "openingHoursSpecification": {
+    "@type": "OpeningHoursSpecification",
+    "dayOfWeek": [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday"
+    ],
+    "opens": "09:00",
+    "closes": "19:00"
+  },
+  "areaServed": [
+    {
+      "@type": "AdministrativeArea",
+      "name": "Nagpur"
+    }
+  ]
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -104,6 +172,14 @@ export default function RootLayout({
       className={`${avenir.variable} ${montserrat.variable} ${oswald.variable} antialiased`}
     >
       <body className="min-h-full flex flex-col blueprint-grid">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
+        />
         <Preloader />
         <LenisProvider>
           {children}

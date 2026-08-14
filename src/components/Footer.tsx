@@ -192,7 +192,7 @@ export default function Footer() {
               </a>
               <div className="flex items-start gap-2.5 leading-relaxed">
                 <MapPin className="w-4 h-4 text-accent shrink-0 mt-0.5" />
-                <span>12, Architectural Row, Civil Lines, Nagpur, MH, India - 440001</span>
+                <span>Plot No. 8, Panchtara Society, Behind Orivision Hospital, Narendra Nagar, Somalwada, Nagpur – 440015</span>
               </div>
               <div className="flex items-start gap-2.5">
                 <Clock className="w-4 h-4 text-accent shrink-0 mt-0.5" />
