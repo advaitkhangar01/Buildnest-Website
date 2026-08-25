@@ -72,31 +72,35 @@ export default function CTA() {
             <div className="space-y-4">
               <span className="text-[11px] font-bold tracking-[0.16em] text-accent uppercase flex items-center gap-3">
                 <span className="w-6 h-[1px] bg-accent inline-block" />
-                08 / Commissions
+                Direct Architect Consultation
               </span>
               <h2 className="hero-heading text-[clamp(30px,5vw,64px)] text-white font-bold leading-[1.02] uppercase">
-                Start Your <br />
-                <span className="text-accent">Project.</span>
+                Build Your <br />
+                <span className="text-accent">Dream Home.</span>
               </h2>
               
               <p className="text-bg-luxury/70 text-[14px] sm:text-[15px] leading-[1.7] font-light max-w-[46ch]">
-                We accept a limited number of commissions annually to ensure our uncompromising standards of craftsmanship are maintained.
+                Planning to build your house in Nagpur in the next 3 to 6 months? Get a clear 3D plan and a transparent, fixed-cost estimate before spending a single rupee.
               </p>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4 pt-2 text-[13px] font-light">
-                <div className="bg-white/5 border border-white/10 p-3.5 rounded-2xl">
+                <a
+                  href="https://wa.me/919424708016?text=Hi%20Architect%20Rohan%20Shahoo,%20I%20want%20to%20discuss%20building%20my%20home%20in%20Nagpur."
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-emerald-600/20 border border-emerald-500/40 p-3.5 rounded-2xl flex flex-col hover:bg-emerald-600/30 transition-colors"
+                >
+                  <span className="text-[10px] font-bold tracking-[0.15em] text-emerald-400 uppercase block mb-1">
+                    🟢 Instant WhatsApp
+                  </span>
+                  <span className="text-white text-xs font-semibold">Click to Chat Direct</span>
+                  <span className="text-white/60 text-[11px] font-mono mt-0.5">+91 94247 08016</span>
+                </a>
+                <div className="bg-white/5 border border-white/10 p-3.5 rounded-2xl flex flex-col">
                   <span className="text-[10px] font-bold tracking-[0.15em] text-accent uppercase block mb-1">
                     Design Studio
                   </span>
-                  <span className="text-white text-xs">Narendra Nagar, Somalwada, Nagpur, MS India</span>
-                </div>
-                <div className="bg-white/5 border border-white/10 p-3.5 rounded-2xl flex flex-col">
-                  <span className="text-[10px] font-bold tracking-[0.15em] text-accent uppercase block mb-1">
-                    Direct Inquiries
-                  </span>
-                  <a href="mailto:info@buildnestnagpur.com" className="hover:text-accent transition-colors text-xs truncate">
-                    info@buildnestnagpur.com
-                  </a>
+                  <span className="text-white text-xs">Narendra Nagar, Somalwada, Nagpur</span>
                   <a href="tel:+919424708016" className="hover:text-accent transition-colors text-xs font-mono mt-0.5">
                     +91 94247 08016
                   </a>

@@ -3,44 +3,44 @@ export interface PromiseDetail {
   desc: string;
 }
 
+export const QUALITY_PROMISES_DATA: QualityPromiseItem[] = [
+  {
+    title: "120+ Quality Checks Before Every Stage",
+    description: "Every foundation pour, column, and brick wall undergoes multi-stage structural testing overseen by senior engineers so your home stays crack-free and damp-free for decades.",
+    details: [
+      { label: "7, 14 & 28-Day Concrete Cube Tests", desc: "Lab testing of concrete samples to guarantee maximum strength." },
+      { label: "Laser-Guided Column Alignment", desc: "Ensures vertical columns are 100% straight and balanced." },
+      { label: "Exact Steel Cover Block Check", desc: "Prevents steel rebar from rusting inside concrete walls." },
+      { label: "48-Hour Waterproofing Flood Test", desc: "Testing all roof slabs and bathrooms before laying floor tiles." },
+      { label: "Digital Wall Spirit Level Checks", desc: "Guarantees perfectly square masonry walls for flawless tile alignment." }
+    ]
+  },
+  {
+    title: "Complete Material Transparency & Store Bills",
+    description: "We don't just promise top brands—we prove it. You receive store purchase bills, weight receipts, and manufacturer quality certificates for every delivery.",
+    details: [
+      { label: "Store Purchase Bills Provided", desc: "Original invoices shared for every truckload of steel and cement." },
+      { label: "24/7 Live Site CCTV Feeds", desc: "View live camera streams of your home construction anytime on your phone." },
+      { label: "Manufacturer Strength Certificates", desc: "Certified steel & cement strength reports from the factory." },
+      { label: "Direct Weighbridge Receipts", desc: "Exact weight validation logs for every steel delivery." },
+      { label: "Weekly WhatsApp Progress Updates", desc: "Photos, video walk-throughs, and work logs delivered every Saturday." }
+    ]
+  },
+  {
+    title: "100% Certified Brand Materials Only",
+    description: "We only use India's most trusted building brands. No local unbranded steel, no cheap cement, and no sub-standard piping.",
+    details: [
+      { label: "Structural Rebar Steel", desc: "Tata Tiscon SD, JSW Neosteel (Fe-550 SD Grade)" },
+      { label: "Grade 53 Construction Cement", desc: "UltraTech, Ambuja, ACC Gold" },
+      { label: "Concealed Plumbing & Piping", desc: "Astral, Ashirvad (Lead-free CPVC/UPVC)" },
+      { label: "Flame-Retardant Wiring", desc: "Finolex, Polycab, Havells" },
+      { label: "Termite-Proof Teak & Wood", desc: "Seasoned Teakwood & BWR-Grade Plywood" }
+    ]
+  },
+];
+
 export interface QualityPromiseItem {
   title: string;
   description: string;
   details: PromiseDetail[];
 }
-
-export const QUALITY_PROMISES_DATA: QualityPromiseItem[] = [
-  {
-    title: "120+ Quality checkpoints",
-    description: "From concrete slump tests to structural alignment audits, we execute a rigorous, multi-stage inspection plan overseen by certified structural consultants.",
-    details: [
-      { label: "Concrete Slump & Cube Tests", desc: "Compression testing at 7, 14, and 28 days." },
-      { label: "Structural Alignment", desc: "Laser-guided vertical column and slab levelling audits." },
-      { label: "Cover Block Verification", desc: "Ensures exact rebar positioning prior to concrete pours." },
-      { label: "48-Hour Waterproofing Test", desc: "Flood testing of bathrooms, balconies, and slabs." },
-      { label: "Wall Plumb & Squareness", desc: "Digital spirit level verification of all masonry walls." }
-    ]
-  },
-  {
-    title: "Absolute Supply Transparency",
-    description: "Every metric ton of steel and bag of cement is tracked. Clients receive material test certificates and have full access to live site CCTV feeds.",
-    details: [
-      { label: "BuildTrack CRM Portal", desc: "24/7 client dashboard tracking material dispatches and inventory." },
-      { label: "Live CCTV Streams", desc: "High-definition camera feeds overlooking concrete and steel storage zones." },
-      { label: "Mill Test Certificates", desc: "Certified manufacturer strength/metallurgy reports uploaded per batch." },
-      { label: "Digital Weighbridge Receipts", desc: "Exact tonnage validation logs shared instantly." },
-      { label: "Blockchain Ledger", desc: "Immutable supply-chain stamps tracking cement and reinforcement steel." }
-    ]
-  },
-  {
-    title: "Certified A-Grade Materials Only",
-    description: "We use only FE-550 grade reinforcement bars, OPC 53 concrete blends, premium lead-free plumbing systems, and kiln-dried seasoned hardwoods.",
-    details: [
-      { label: "Structural Steel (Fe-550 SD)", desc: "Tata Tiscon SD, JSW Neosteel" },
-      { label: "Cement (OPC 53)", desc: "UltraTech, Ambuja, ACC Gold" },
-      { label: "Plumbing & Pipes", desc: "Astral, Ashirvad (Lead-free CPVC/UPVC)" },
-      { label: "Electrical Wiring", desc: "Finolex, Polycab, Havells" },
-      { label: "Hardwoods & Timber", desc: "Premium Kiln-dried Teak & Seasoned Sal wood" }
-    ]
-  },
-];

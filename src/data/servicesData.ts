@@ -12,98 +12,98 @@ export interface ServiceItem {
 export const SERVICES_DATA: ServiceItem[] = [
   {
     index: "01",
-    title: "Architecture",
-    tagline: "Spatial choreography & modern forms.",
+    title: "House Architecture & Vastu",
+    tagline: "Vastu-compliant plans & spacious home layouts.",
     description:
-      "Bespoke spatial design combining structural expression, contextual response, and timeless modernist forms.",
+      "Custom bungalow and house floor plans designed specifically for Nagpur's hot summer climate, natural air ventilation, and maximum family comfort.",
     image: "/images/services/architecture.webp",
     highlights: [
-      "Contextual & bioclimatic site analysis",
-      "High-fidelity 3D modeling & cinematic VR",
-      "Comprehensive municipal permit blueprints",
-      "Curated masonry & structural specifications"
+      "Vastu-compliant family space planning",
+      "3D elevation design before work starts",
+      "NMC & NIT municipal sanction drawings",
+      "Spacious rooms with natural sunlight & air"
     ],
-    technicalSpecs: { label: "Design Tolerance", value: "±0.00mm" },
+    technicalSpecs: { label: "Vastu Alignment", value: "100% Compliant" },
     iconType: "architecture",
   },
   {
     index: "02",
-    title: "Construction",
-    tagline: "Precision civil engineering & load dynamics.",
+    title: "A-Grade House Construction",
+    tagline: "Strong civil structure built for generations.",
     description:
-      "Precision civil engineering utilizing high-grade materials, structural safety audits, and flawless masonry.",
+      "Civil construction using tested Tata Tiscon SD steel, UltraTech 53 cement, and 120+ quality audits to guarantee zero cracks or dampness.",
     image: "/images/services/construction.webp",
     highlights: [
-      "High-strength reinforced concrete core",
-      "Micro-precision masonry alignment checks",
-      "Seismic safety load audits & grading",
-      "Advanced waterproofing & thermal insulation"
+      "Certified Tata Tiscon & UltraTech cement",
+      "48-hour bathroom & roof flood testing",
+      "Laser-level column & wall levelling checks",
+      "Earthquake resistant foundation & structure"
     ],
-    technicalSpecs: { label: "Concrete Grade", value: "M25/M30 Standard" },
+    technicalSpecs: { label: "Structural Warranty", value: "10-Year Guarantee" },
     iconType: "construction",
   },
   {
     index: "03",
-    title: "Interior Design",
-    tagline: "Curated material palettes & bespoke millwork.",
+    title: "Custom Home Interiors",
+    tagline: "Durable woodwork, kitchens & marble finishing.",
     description:
-      "Curated material palettes, custom millwork, ambient lighting design, and ergonomic luxury space planning.",
+      "Complete home interior design including termite-proof modular kitchens, custom wardrobes, Italian marble flooring, and elegant warm lighting.",
     image: "/images/services/interior.webp",
     highlights: [
-      "Ergonomic high-end space planning",
-      "Bespoke veneer, marble, & brass millwork",
-      "Custom luxury ambient lighting choreography",
-      "Premium upholstery & hardware sourcing"
+      "Termite-proof & water-resistant woodwork",
+      "Modular kitchen & wardrobe planning",
+      "Italian marble & anti-skid tile fitting",
+      "Warm ambient ceiling & wall lighting"
     ],
-    technicalSpecs: { label: "Veneer Finish", value: "100% Polyurethane" },
+    technicalSpecs: { label: "Woodwork Warranty", value: "100% Termite Proof" },
     iconType: "interior",
   },
   {
     index: "04",
-    title: "Turnkey Solutions",
-    tagline: "End-to-end single point accountability.",
+    title: "Turnkey House Building",
+    tagline: "One team handles everything. Fixed budget guarantee.",
     description:
-      "End-to-end design-and-build responsibility, absolute budget guarantee, and fully integrated management.",
+      "Total responsibility from foundation to key handover. Zero multi-contractor clashes, zero budget escalation, and guaranteed move-in date.",
     image: "/images/services/turnkey.webp",
     highlights: [
-      "Absolute lock-in cost guarantee",
-      "Zero vendor conflict project management",
-      "Strict material quality inspection checks",
-      "Handover in ready-to-move-in condition"
+      "100% Fixed-price contract (0 extra costs)",
+      "Single point of contact (No contractor games)",
+      "Material test reports provided for every stage",
+      "Move-in ready home handover on promised date"
     ],
-    technicalSpecs: { label: "Cost Variance", value: "0% Overrun" },
+    technicalSpecs: { label: "Cost Escalation", value: "0% Extra Charged" },
     iconType: "turnkey",
   },
   {
     index: "05",
-    title: "Liaisoning",
-    tagline: "Navigating complex municipal regulations.",
+    title: "NMC / NIT Map Sanctions",
+    tagline: "Fast municipal approvals with zero hassle.",
     description:
-      "Securing municipal sanctions, structural permits, environmental NOCs, and legal clearances.",
+      "We handle all government paperwork, sanction drawings, NIT & NMC clearances, and structural stability certificates so your build stays 100% legal.",
     image: "/images/services/liaisoning.webp",
     highlights: [
-      "NIT & NMC sanction drawing approvals",
-      "Environmental & fire safety clearances",
-      "Structural stability certificates",
-      "Occupancy & completion certificates"
+      "NMC & NIT building permit approvals",
+      "Structural stability engineer clearance",
+      "Water & electricity connection assistance",
+      "Complete legal documentation peace of mind"
     ],
-    technicalSpecs: { label: "Compliance Rate", value: "100% Guaranteed" },
+    technicalSpecs: { label: "Legal Status", value: "100% Sanctioned" },
     iconType: "liaisoning",
   },
   {
     index: "06",
-    title: "Project Management",
-    tagline: "Rigorous milestone audits & cost controls.",
+    title: "Site Progress Supervision",
+    tagline: "Weekly phone updates & live CCTV site access.",
     description:
-      "Independent engineering oversight, material testing audits, contractor management, and BOQ cost tracking.",
+      "Dedicated architect oversight, multi-point material testing, and weekly video digests sent straight to your phone so you don't have to visit daily.",
     image: "/images/services/project_management.webp",
     highlights: [
-      "Real-time Gantt schedule tracking",
-      "Multi-stage concrete & masonry testing",
-      "On-site resource & cost optimization",
-      "Detailed weekly digital progress reporting"
+      "Weekly WhatsApp photo & video digests",
+      "Live 24/7 site CCTV stream access",
+      "On-site material quality inspection",
+      "Fixed milestone timeline monitoring"
     ],
-    technicalSpecs: { label: "Safety Record", value: "Zero Incidents" },
+    technicalSpecs: { label: "Site Monitoring", value: "24/7 Live CCTV" },
     iconType: "pmc",
   },
 ];

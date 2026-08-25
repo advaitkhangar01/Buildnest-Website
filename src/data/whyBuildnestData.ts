@@ -5,15 +5,19 @@ export interface ParameterItem {
 
 export const WHY_BUILDNEST_DATA: ParameterItem[] = [
   {
-    title: "Engineering Precision",
-    desc: "We build to structural tolerances tighter than the industry standard. Every concrete pour, steel reinforcement joint, and masonry line undergoes laser-level inspection.",
+    title: "100% Fixed Price Contract",
+    desc: "Once your construction contract is signed, your budget is locked. Even if cement or steel prices increase during construction, we absorb the cost. You pay zero extra rupees.",
   },
   {
-    title: "Absolute Cost Lock",
-    desc: "Our turnkey models operate under strict cost locking. Once the Bill of Quantities (BOQ) is signed, we absorb all material price volatility. No escalation fees, ever.",
+    title: "Written On-Time Handover",
+    desc: "We provide a legally binding possession date in the contract with a daily financial penalty clause if delayed. Your family home will be ready on time.",
   },
   {
-    title: "Bespoke Material Curation",
-    desc: "We deal directly with quarries and direct importers to source A-grade premium woods, custom stones, and structural steel, avoiding retail markups and sub-standard grades.",
+    title: "Original Brand Material Bills",
+    desc: "We only use Tata Tiscon SD Steel, UltraTech 53-Grade Cement, Astral Pipes, and Polycab Wires. You receive original store bills and lab test certificates for every dispatch.",
+  },
+  {
+    title: "No Daily Site Visits Needed",
+    desc: "You focus on your daily business while we build your home. Receive weekly WhatsApp photo updates, progress reports, and live CCTV site access right on your phone.",
   },
 ];

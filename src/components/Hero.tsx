@@ -15,9 +15,9 @@ export default function Hero() {
   useParallax({ triggerRef: containerRef, targetRef: bgRef, yFrom: 0, yTo: 80, start: "top top", end: "bottom top" });
   useParallax({ triggerRef: containerRef, targetRef: cadLinesRef, yFrom: 0, yTo: 140, start: "top top", end: "bottom top" });
 
-  const line1 = "Building";
-  const line2 = "Timeless";
-  const line3 = "Spaces.";
+  const line1 = "BUILD YOUR";
+  const line2 = "DREAM HOME";
+  const line3 = "ON TIME.";
 
   return (
     <section
@@ -117,7 +117,7 @@ export default function Hero() {
               transition={{ duration: 1, delay: 0.7, ease: [0.16, 1, 0.3, 1] }}
               className="text-white/80 text-[14px] sm:text-[19px] font-normal leading-[1.65] sm:leading-[1.7] tracking-[0.01em] sm:tracking-[0.02em] mb-8 sm:mb-16 max-w-[560px] lg:translate-z-20"
             >
-              Crafting bespoke residences, luxury interiors, and iconic commercial landmarks engineered with precision, spatial harmony, and architectural permanence.
+              Nagpur’s trusted residential architect & turnkey home builder. We design and build custom bungalows and family houses on a 100% fixed budget, written possession timeline, and zero contractor drama.
             </motion.p>
 
             <motion.div
@@ -130,7 +130,7 @@ export default function Hero() {
                 href="#contact"
                 className="magnetic-button group relative overflow-hidden bg-accent hover:bg-accent/90 px-6 sm:px-7 py-3.5 sm:py-[18px] text-[11px] font-bold tracking-[0.14em] text-bg-luxury uppercase text-center transition-all duration-300 shadow-3d-dark card-3d-lift flex items-center justify-center gap-3 rounded-none active:scale-98"
               >
-                <span>Start Your Project</span>
+                <span>Get Fixed Home Estimate</span>
                 <svg
                   className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1"
                   fill="none"
@@ -141,13 +141,15 @@ export default function Hero() {
                 </svg>
               </Link>
               
-              <Link
-                href="#projects"
+              <a
+                href="https://wa.me/919424708016?text=Hi%20Architect%20Rohan%20Shahoo,%20I%20want%20to%20discuss%20building%20my%20home%20in%20Nagpur."
+                target="_blank"
+                rel="noopener noreferrer"
                 className="magnetic-button group relative overflow-hidden specular-border-dark bg-white/5 backdrop-blur-md hover:bg-white/15 px-6 sm:px-7 py-3.5 sm:py-[18px] text-[11px] font-bold tracking-[0.14em] text-white uppercase text-center transition-all duration-300 card-3d-lift flex items-center justify-center gap-3 rounded-none active:scale-98"
               >
-                <span>Explore Portfolio</span>
-                <span className="w-1.5 h-1.5 rounded-full bg-accent group-hover:scale-150 transition-transform duration-300" />
-              </Link>
+                <span>Chat on WhatsApp</span>
+                <span className="w-2 h-2 rounded-full bg-emerald-500 group-hover:scale-150 transition-transform duration-300" />
+              </a>
             </motion.div>
 
             <motion.div
@@ -158,15 +160,15 @@ export default function Hero() {
             >
               <div>
                 <div className="text-lg min-[390px]:text-xl sm:text-3xl font-bold font-heading text-white tracking-tight">150+</div>
-                <div className="text-[8.5px] min-[390px]:text-[9.5px] sm:text-[11px] font-mono uppercase text-white/60 tracking-wider mt-0.5 leading-snug">Projects Built</div>
+                <div className="text-[8.5px] min-[390px]:text-[9.5px] sm:text-[11px] font-mono uppercase text-white/60 tracking-wider mt-0.5 leading-snug">Homes Built</div>
               </div>
               <div>
-                <div className="text-lg min-[390px]:text-xl sm:text-3xl font-bold font-heading text-accent tracking-tight">15+ Yrs</div>
-                <div className="text-[8.5px] min-[390px]:text-[9.5px] sm:text-[11px] font-mono uppercase text-white/60 tracking-wider mt-0.5 leading-snug">Architecture</div>
+                <div className="text-lg min-[390px]:text-xl sm:text-3xl font-bold font-heading text-accent tracking-tight">100%</div>
+                <div className="text-[8.5px] min-[390px]:text-[9.5px] sm:text-[11px] font-mono uppercase text-white/60 tracking-wider mt-0.5 leading-snug">Fixed Budget</div>
               </div>
               <div>
-                <div className="text-lg min-[390px]:text-xl sm:text-3xl font-bold font-heading text-white tracking-tight">100%</div>
-                <div className="text-[8.5px] min-[390px]:text-[9.5px] sm:text-[11px] font-mono uppercase text-white/60 tracking-wider mt-0.5 leading-snug">Precision</div>
+                <div className="text-lg min-[390px]:text-xl sm:text-3xl font-bold font-heading text-white tracking-tight">15+ Yrs</div>
+                <div className="text-[8.5px] min-[390px]:text-[9.5px] sm:text-[11px] font-mono uppercase text-white/60 tracking-wider mt-0.5 leading-snug">Residential Craft</div>
               </div>
             </motion.div>
           </div>
